@@ -73,15 +73,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\SceneGraph\SceneNode.cpp" />
     <ClCompile Include="GameOfGames.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="OptionManager.cpp" />
+    <ClCompile Include="SceneGraph\SceneNode.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\SceneGraph\SceneNode.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="OptionManager.h" />
+    <ClInclude Include="SceneGraph\SceneNode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

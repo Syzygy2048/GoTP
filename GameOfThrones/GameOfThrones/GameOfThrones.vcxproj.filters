@@ -24,7 +24,7 @@
     <ClCompile Include="InputHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SceneGraph\SceneNode.cpp">
+    <ClCompile Include="SceneGraph\SceneNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,7 +35,7 @@
     <ClInclude Include="InputHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\SceneGraph\SceneNode.h">
+    <ClInclude Include="SceneGraph\SceneNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

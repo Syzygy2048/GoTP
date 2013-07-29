@@ -31,17 +31,12 @@ public:
 	virtual void tick(double deltaTtime);
 	virtual void draw(double deltaTtime);
 
-	
 	void setTransform(Transform newTransform);
 	void setLocation(Location newLocation);
 	void setScale(Scale newScale);
 	void setLayer(int newLayer);
 	void setRotation(float newRotation);
 	
-	virtual void update(double dT, InputHandler* input);
-	virtual void draw(double dT, glm::mat4 vp);
-
-
 	void addNode(SceneNode* node);
 
 	static enum NodeType

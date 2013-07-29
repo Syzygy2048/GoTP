@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "..\SceneGraph\SceneNode.h"
+#include "SceneGraph\SceneNode.h"
 
 #include <GL\glew.h> //needs to be before glfw include
 #include <GL\glfw.h>
