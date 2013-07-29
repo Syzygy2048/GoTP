@@ -35,4 +35,8 @@ void SceneNode::addNode(SceneNode* node)
 
 SceneNode::~SceneNode(void)
 {
+	for(SceneNode* child : childs)
+	{
+		delete child;
+	}
 }
