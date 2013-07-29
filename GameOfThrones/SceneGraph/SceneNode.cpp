@@ -10,20 +10,19 @@ SceneNode::SceneNode(NodeType type) : type(type)
 	parent = NULL;
 }
 
-
-void SceneNode::update(double dT, InputHandler* input)
+void SceneNode::tick(double dT)
 {
-	for(SceneNode* n : childs)
+	for(SceneNode* node : childs)
 	{
-		n->update(dT, input);
+		node->tick(dT);
 	}
 }
 
-void SceneNode::draw(double dT, glm::mat4 vp)
+void SceneNode::draw(double dT)
 {
-	for(SceneNode* n : childs)
+	for(SceneNode* node : childs)
 	{
-		n->draw(dT, vp);
+		node->draw(dT);
 	}
 }
 
@@ -35,4 +34,8 @@ void SceneNode::addNode(SceneNode* node)
 
 SceneNode::~SceneNode(void)
 {
+	for(SceneNode* node : childs)
+	{
+		delete node;
+	}
 }

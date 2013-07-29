@@ -15,16 +15,24 @@
 
 int GLFWCALL shutDown();
 
-std::vector<SceneNode>;
+std::vector<SceneNode*> rootNodes;
 
 bool running = true;
 
-void tick(double deltaTime)
+void tick(float deltaTime)
 {
+	for each (SceneNode* node in rootNodes)
+	{
+		node->tick(deltaTime);
+	}
 }
 
-void draw (double deltaTime)
+void draw (float deltaTime)
 {
+	for each (SceneNode* node in rootNodes)
+	{
+		node->draw(deltaTime);
+	}
 }
 
 void main(void)
@@ -75,9 +83,14 @@ void main(void)
 	glGetError();	//glew is buggy and throws an openGL error no matter what, this handlies that error by ignoring it.
 
 	glClearColor(0.5,0.5,0.5,0.5);
+
 	glm::vec4 p1Scissor(0,0,om.getResolutionX(), om.getResolutionY());
 
 	double oldTime = 0;
+
+	SceneNode* baseView = new SceneNode();
+
+	rootNodes.push_back(baseView);
 
 	while(running)
 	{
@@ -147,10 +160,16 @@ DEFAULT:
 				{
 					shutDown();
 				}
-			}
-		}
+			}//end of last case
+		}//end of switch
+	}//end of while
+
+	for each (SceneNode* node in rootNodes)
+	{
+		delete node;
 	}
-}
+
+}//end of main
 
 int GLFWCALL shutDown()
 {

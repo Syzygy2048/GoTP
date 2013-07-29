@@ -3,14 +3,41 @@
 
 #include <vector>
 #include <glm\glm.hpp>
+#include <iostream>
 #include "..\GameOfThrones\InputHandler.h"
 
 class SceneNode
 {
 public:
-	virtual void update(double dT, InputHandler* input);
-	virtual void draw(double dT, glm::mat4 vp);
+	struct Location
+	{
+		float X;
+		float Y;
+	};
 
+	struct Scale
+	{
+		float X;
+		float Y;
+	};
+
+	struct Transform
+	{
+		float rotation;
+		int layer;
+		Location location;
+		Scale scale;
+	};
+
+	virtual void tick(double deltaTtime);
+	virtual void draw(double deltaTtime);
+
+	
+	void setTransform(Transform newTransform);
+	void setLocation(Location newLocation);
+	void setScale(Scale newScale);
+	void setLayer(int newLayer);
+	void setRotation(float newRotation);
 
 	void addNode(SceneNode* node);
 
@@ -26,14 +53,14 @@ public:
 	SceneNode();
 	SceneNode(NodeType type);
 	~SceneNode(void);
+
 protected:
 	std::vector<SceneNode*> childs;
+
 private:
-	
+	Transform transform;
 	const NodeType type;
 	SceneNode* parent;
-
-	
 };
 
 #endif
