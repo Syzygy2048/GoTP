@@ -3,13 +3,11 @@
 
 #include <vector>
 #include <glm\glm.hpp>
-#include "..\InputHandler.h"
+#include "..\GameOfThrones\InputHandler.h"
 
 class SceneNode
 {
 public:
-	
-	
 	virtual void update(double dT, InputHandler* input);
 	virtual void draw(double dT, glm::mat4 vp);
 

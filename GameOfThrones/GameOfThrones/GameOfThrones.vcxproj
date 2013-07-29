@@ -73,11 +73,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\SceneGraph\SceneNode.cpp" />
     <ClCompile Include="GameOfGames.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="OptionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\SceneGraph\SceneNode.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="OptionManager.h" />
   </ItemGroup>

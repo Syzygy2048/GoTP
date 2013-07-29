@@ -1,5 +1,9 @@
 #include <iostream>
 
+#include <vector>
+
+#include "..\SceneGraph\SceneNode.h"
+
 #include <GL\glew.h> //needs to be before glfw include
 #include <GL\glfw.h>
 
@@ -11,15 +15,25 @@
 
 int GLFWCALL shutDown();
 
+std::vector<SceneNode>;
+
 bool running = true;
+
+void tick(double deltaTime)
+{
+}
+
+void draw (double deltaTime)
+{
+}
 
 void main(void)
 {
 	OptionManager om;
-	InputHandler input;		//input(om); for later use with button mapping/rebindable keys
+	InputHandler input;	//input(om); for later use with button mapping/rebindable keys
 
 	glfwInit(); //needs to be before glew calls
-	
+
 	//block deprecated openGL calls (fixed function pipeline < 3.0)
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3);	//openGL 3.
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 3);	//openGL x.3
@@ -37,7 +51,7 @@ void main(void)
 	}
 	else
 	{
-		if ( !glfwOpenWindow(om.getResolutionX(), om.getResolutionY(), 0, 0, 0, 0, 24, 8, GLFW_WINDOW)) 
+		if ( !glfwOpenWindow(om.getResolutionX(), om.getResolutionY(), 0, 0, 0, 0, 24, 8, GLFW_WINDOW))
 		{
 			std::cerr << "Could not create window" << std::endl;
 			glfwTerminate();
@@ -52,52 +66,88 @@ void main(void)
 
 	glewExperimental = true;	//otherwise the openGL context doesn't seem to properly initialize and openGL related functions are null pointers. also needed for opengl core profile
 	if (glewInit() != GLEW_OK)
-	{		
+	{	
 		std::cerr << "Could not init glew" << std::endl;
 		system("PAUSE");
 		return;
-	} 
-	glGetError();		//glew is buggy and throws an openGL error no matter what, this handlies that error by ignoring it.
+	}
+
+	glGetError();	//glew is buggy and throws an openGL error no matter what, this handlies that error by ignoring it.
 
 	glClearColor(0.5,0.5,0.5,0.5);
 	glm::vec4 p1Scissor(0,0,om.getResolutionX(), om.getResolutionY());
-
 
 	double oldTime = 0;
 
 	while(running)
 	{
-
 		switch(glGetError())
 		{
-			case GL_INVALID_ENUM: std::cerr << "ogl error: GL_INVALID_ENUM" << std::endl; break;
-			case GL_INVALID_VALUE: std::cerr << "ogl error: GL_INVALID_VALUE" << std::endl; break;
-			case GL_INVALID_OPERATION: std::cerr << "ogl error: GL_INVALID_OPERATION" << std::endl; break;
-			case GL_INVALID_FRAMEBUFFER_OPERATION: std::cerr << "ogl error: GL_INVALID_FRAMEBUFFER_OPERATION" << std::endl; break;
-			case GL_OUT_OF_MEMORY: std::cerr << "ogl error: GL_OUT_OF_MEMORY" << std::endl; break;
-			case GL_STACK_UNDERFLOW: std::cerr << "ogl error: GL_STACK_UNDERFLOW" << std::endl; break;
-			case GL_STACK_OVERFLOW: std::cerr << "ogl error: GL_STACK_OVERFLOW" << std::endl;break;
-			case GL_NO_ERROR: 
-			DEFAULT:
+		case GL_INVALID_ENUM:
+			{
+				std::cerr << "ogl error: GL_INVALID_ENUM" << std::endl;
+				break;
+			}
+
+		case GL_INVALID_VALUE:
+			{
+				std::cerr << "ogl error: GL_INVALID_VALUE" << std::endl;
+				break;
+			}
+
+		case GL_INVALID_OPERATION:
+			{
+				std::cerr << "ogl error: GL_INVALID_OPERATION" << std::endl;
+				break;
+			}
+
+		case GL_INVALID_FRAMEBUFFER_OPERATION:
+			{
+				std::cerr << "ogl error: GL_INVALID_FRAMEBUFFER_OPERATION" << std::endl;
+				break;
+			}
+
+		case GL_OUT_OF_MEMORY:
+			{
+				std::cerr << "ogl error: GL_OUT_OF_MEMORY" << std::endl;
+				break;
+			}
+
+		case GL_STACK_UNDERFLOW:
+			{
+				std::cerr << "ogl error: GL_STACK_UNDERFLOW" << std::endl;
+				break;
+			}
+
+		case GL_STACK_OVERFLOW:
+			{
+				std::cerr << "ogl error: GL_STACK_OVERFLOW" << std::endl;
+				break;
+			}
+
+		case GL_NO_ERROR:
+DEFAULT:
+			{
 				double newTime = glfwGetTime();
-			
-			
 
+				double cachedDelta = newTime - oldTime;
 
-				while ( oldTime < newTime )
+				while (oldTime < newTime)
 				{
-				//	update(TimeStep);
+					tick(TimeStep);
 					oldTime += TimeStep;
-				
 				}
 
-				//draw(TimeStep)
+				draw(cachedDelta);
 
 				glfwSwapBuffers(); //actually draws the frame
 				glClear(GL_COLOR_BUFFER_BIT);
-				
+
 				if(input.esc)
+				{
 					shutDown();
+				}
+			}
 		}
 	}
 }

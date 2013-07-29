@@ -16,3 +16,5 @@ fullscreen = 0
 vsync = 0
 fullscreen = 0
 vsync = 0
+fullscreen = 0
+vsync = 0
