@@ -138,8 +138,8 @@ void main(void)
 				break;
 			}
 
-		case GL_NO_ERROR:
-DEFAULT:
+		case GL_NO_ERROR:{}
+		DEFAULT:
 			{
 				double newTime = glfwGetTime();
 
@@ -168,7 +168,6 @@ DEFAULT:
 	{
 		delete node;
 	}
-
 }//end of main
 
 int GLFWCALL shutDown()
