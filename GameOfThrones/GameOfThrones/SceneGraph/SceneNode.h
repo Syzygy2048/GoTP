@@ -3,8 +3,7 @@
 
 #include <vector>
 #include <glm\glm.hpp>
-#include <iostream>
-#include "..\GameOfThrones\InputHandler.h"
+#include "..\InputHandler.h"
 
 class SceneNode
 {
@@ -38,6 +37,10 @@ public:
 	void setScale(Scale newScale);
 	void setLayer(int newLayer);
 	void setRotation(float newRotation);
+	
+	virtual void update(double dT, InputHandler* input);
+	virtual void draw(double dT, glm::mat4 vp);
+
 
 	void addNode(SceneNode* node);
 
@@ -53,14 +56,14 @@ public:
 	SceneNode();
 	SceneNode(NodeType type);
 	~SceneNode(void);
-
 protected:
 	std::vector<SceneNode*> childs;
-
 private:
-	Transform transform;
+	
 	const NodeType type;
 	SceneNode* parent;
+
+	
 };
 
 #endif
