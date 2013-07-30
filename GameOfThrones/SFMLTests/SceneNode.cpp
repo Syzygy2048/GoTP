@@ -18,23 +18,12 @@ void SceneNode::tick(float deltaTime)
 	}
 }
 
-void SceneNode::superDraw(float deltaTime, sf::RenderWindow* target)
+void SceneNode::draw(float deltaTime, sf::RenderWindow* target)
 {
-	draw(deltaTime, target);
-
 	for(SceneNode* node : childs)
 	{
 		node->draw(deltaTime,target);
 	}
-}
-
-void SceneNode::draw(float deltaTime, sf::RenderWindow* target)
-{
-}
-
-void SceneNode::initSprite()
-{
-	std::cerr << "node" << std::endl;
 }
 
 void SceneNode::addNode(SceneNode* node)

@@ -20,7 +20,7 @@ void draw (float deltaTime, sf::RenderWindow* target)
 {
 	for each (SceneNode* node in rootNodes)
 	{
-		node->superDraw(deltaTime, target);
+		node->draw(deltaTime, target);
 	}
 }
 
@@ -33,8 +33,6 @@ int main()
 	SceneNode* baseView = new SceneNode();
 
 	TestChar* newChar = new TestChar();
-
-	newChar->initSprite();
 
 	baseView->addNode(newChar);
 
