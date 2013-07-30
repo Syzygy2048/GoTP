@@ -1,5 +1,11 @@
 bin/build
 
+*.tlog
+*.log
+*.obj
+*.idb
+*.pdb
+*.lastbuildstate
 *.sdf
 *.suo
 *.user
