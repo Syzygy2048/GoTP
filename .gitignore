@@ -1,0 +1,15 @@
+bin/build
+
+*.sdf
+*.suo
+*.user
+*.obj
+*.tlog
+*.idq
+*.pdb
+*.log
+*.lastbuildstate
+*.ilk
+*.exe
+*.idb
+*.opensdf
