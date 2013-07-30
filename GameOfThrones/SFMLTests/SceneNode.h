@@ -27,8 +27,6 @@ public:
 	};
 
 	virtual void tick(float deltaTtime);
-	virtual void initSprite();
-	void superDraw(float deltaTtime, sf::RenderWindow* target);
 	virtual void draw(float deltaTime, sf::RenderWindow* target);
 
 	void setTransform(Transform newTransform);
@@ -37,10 +35,9 @@ public:
 	void setLayer(int newLayer);
 	void setRotation(float newRotation);
 
-	SceneNode();
-
 	void addNode(SceneNode* node);
 
+	SceneNode();
 	~SceneNode(void);
 protected:
 	std::vector<SceneNode*> childs;

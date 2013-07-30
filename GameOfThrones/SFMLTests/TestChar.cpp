@@ -1,6 +1,6 @@
 #include "TestChar.h"
 
-void TestChar::initSprite()
+TestChar::TestChar()
 {
 	if (texture.loadFromFile("caipira.png"))
 	{
@@ -13,4 +13,6 @@ void TestChar::initSprite()
 void TestChar::draw(float deltaTime, sf::RenderWindow* target)
 {
 	target->draw(sprite);
+
+	SceneNode::draw(deltaTime, target);
 }

@@ -4,7 +4,7 @@
 class TestChar : public SceneNode
 {
 public:
-	void initSprite();
+	TestChar();
 	void draw(float deltaTime, sf::RenderWindow* target);
 
 private:
