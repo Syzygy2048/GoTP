@@ -7,7 +7,6 @@ class SceneNode
 {
 public:
 
-	//
 	struct Transform
 	{
 		float rotation;
@@ -19,8 +18,7 @@ public:
 	//Override and dont forget to call the parent implementation.
 	virtual void tick(float deltaTtime);
 	virtual void draw(float deltaTime, sf::RenderWindow* target);
-	virtual void transformUpdated();
-
+	
 	sf::Vector2f getWorldLocation();
 	sf::Vector2f getTotalScale();
 	float getTotalRotation();
@@ -42,6 +40,9 @@ public:
 	~SceneNode(void);
 
 protected:
+	//Override and dont forget to call the parent implementation.
+	virtual void transformUpdated();
+
 	std::vector<SceneNode*> children;
 
 private:

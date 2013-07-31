@@ -7,15 +7,21 @@ SpriteNode::SpriteNode()
 		texture.setSmooth(true);
 
 		sprite.setTexture(texture);
+
+		updateSprite();
 	}
 }
 
-void SpriteNode::transformUpdated()
+void SpriteNode::updateSprite()
 {
 	sprite.setPosition(getWorldLocation());//TODO calculate correct location based on window site and internal resolution 
 	sprite.setScale(getTotalScale());//and scale
 	sprite.setRotation(getTotalRotation());
+}
 
+void SpriteNode::transformUpdated()
+{
+	updateSprite();
 	SceneNode::transformUpdated();
 }
 
