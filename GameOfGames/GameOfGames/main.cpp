@@ -23,7 +23,7 @@ int main()
 	SpriteNode* miniChar = new SpriteNode();
 	
 	newChar->addNode(miniChar,sf::Vector2f(50.f,50.f));
-	baseView->addNode(newChar,sf::Vector2f(50.f,50.f));//DUMMY LINE
+	baseView->addNode(newChar,sf::Vector2f(50.f,50.f));
 	rootNodes.push_back(baseView);
 
 	float remainingTime = 0;
