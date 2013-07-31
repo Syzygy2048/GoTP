@@ -14,6 +14,7 @@ SpriteNode::SpriteNode()
 
 void SpriteNode::updateSprite()
 {
+	//sprite.setOrigin(getWorldLocation()-getTransform().location);
 	sprite.setPosition(getWorldLocation());//TODO calculate correct location based on window site and internal resolution 
 	sprite.setScale(getTotalScale());//and scale
 	sprite.setRotation(getTotalRotation());

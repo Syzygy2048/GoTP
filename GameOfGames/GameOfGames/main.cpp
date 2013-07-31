@@ -17,7 +17,13 @@ int main()
 	SceneNode* baseView = new SceneNode();
 	SpriteNode* newChar = new SpriteNode();
 
-	baseView->addNode(newChar,sf::Vector2f(20.f,20.f));//DUMMY LINE
+	//newChar->setScale(sf::Vector2f(2.f,2.f));
+	//newChar->setRotation(90.f);
+
+	SpriteNode* miniChar = new SpriteNode();
+	
+	newChar->addNode(miniChar,sf::Vector2f(50.f,50.f));
+	baseView->addNode(newChar,sf::Vector2f(50.f,50.f));//DUMMY LINE
 	rootNodes.push_back(baseView);
 
 	float remainingTime = 0;
@@ -43,7 +49,7 @@ int main()
 
 			for(SceneNode* node : rootNodes)
 			{
-				node->tick(TIMESTEP);
+				node->tick(TIMESTEP);				
 			}
 		}
 

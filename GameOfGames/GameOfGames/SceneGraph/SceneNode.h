@@ -43,10 +43,9 @@ protected:
 	//Override and dont forget to call the parent implementation.
 	virtual void transformUpdated();
 
+	SceneNode* parent;
 	std::vector<SceneNode*> children;
 
 private:
 	Transform transform;
-	SceneNode* parent;
-
 };
