@@ -9,22 +9,6 @@
 
 std::vector<SceneNode*> rootNodes;
 
-void tick(float deltaTime)
-{
-	for each (SceneNode* node in rootNodes)
-	{
-		node->tick(deltaTime);
-	}
-}
-
-void draw (float deltaTime, sf::RenderWindow* target)
-{
-	for each (SceneNode* node in rootNodes)
-	{
-		node->draw(deltaTime, target);
-	}
-}
-
 int main()
 {
 	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(1280, 720), WINDOW_TITLE);//TODO use the window configuration
@@ -35,6 +19,8 @@ int main()
 
 	baseView->addNode(newChar,sf::Vector2f(20.f,20.f));//DUMMY LINE
 	rootNodes.push_back(baseView);
+
+	float remainingTime = 0;
 
 	while (window->isOpen())
 	{
@@ -48,16 +34,28 @@ int main()
 		}
 
 		sf::Time elapsed = clock.restart();
-		float cachedTime = elapsed.asSeconds();
-		
-		while(elapsed.asSeconds() > 0)
+		float timeToConsume = remainingTime + elapsed.asSeconds();
+		float cachedTime = timeToConsume;
+
+		while(timeToConsume >= TIMESTEP)
 		{
-			elapsed = elapsed - sf::seconds(TIMESTEP);
-			tick(TIMESTEP);
+			timeToConsume -= TIMESTEP;
+
+			for each (SceneNode* node in rootNodes)
+			{
+				node->tick(TIMESTEP);
+			}
 		}
 
+		remainingTime = timeToConsume;
+
 		window->clear();
-		draw(cachedTime, window);
+
+		for each (SceneNode* node in rootNodes)
+		{
+			node->draw(cachedTime-remainingTime, window);
+		}
+
 		window->display();
 	}
 
