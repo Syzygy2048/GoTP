@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "SceneNode.h"
-#include "TestChar.h"
+#include "SpriteNode.h"
 
 #define TIMESTEP 0.01666666666f
 #define WINDOW_TITLE "Game of Thrones, Literally!"
@@ -27,12 +27,13 @@ void draw (float deltaTime, sf::RenderWindow* target)
 
 int main()
 {
-	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(1280, 720), WINDOW_TITLE);
+	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(1280, 720), WINDOW_TITLE);//TODO use the window configuration
 	sf::Clock clock;
 
 	SceneNode* baseView = new SceneNode();
-	TestChar* newChar = new TestChar();
-	baseView->addNode(newChar);
+	SpriteNode* newChar = new SpriteNode();
+
+	baseView->addNode(newChar,sf::Vector2f(20.f,20.f));//DUMMY LINE
 	rootNodes.push_back(baseView);
 
 	while (window->isOpen())

@@ -1,11 +1,13 @@
 #pragma once
 #include "SceneNode.h"
 
-class TestChar : public SceneNode
+class SpriteNode : public SceneNode
 {
 public:
-	TestChar();
+	SpriteNode();
 	void draw(float deltaTime, sf::RenderWindow* target);
+	void setSprite(std::string newSource);
+	void transformUpdated();
 
 private:
 	sf::Texture texture;
