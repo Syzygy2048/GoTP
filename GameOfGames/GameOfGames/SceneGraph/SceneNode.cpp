@@ -4,6 +4,7 @@ SceneNode::SceneNode()
 {
 	parent = NULL;
 
+	cachedLocation = new sf::Vector2f(0.f,0.f);
 	cachedScale = sf::Vector2f(1.f,1.f);
 }
 
@@ -39,45 +40,44 @@ void SceneNode::onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transform
 {
 }
 
-void SceneNode::transformUpdated()
-{
-	/*for each (SceneNode* child in children)
-	{
-		child->transformUpdated();
-	}*/
-}
-
 void SceneNode::setLayer(int newLayer)
 {
 	//transform.layer = newLayer;
-
-	transformUpdated();
 }
 
 void SceneNode::setLocation(sf::Vector2f newLocation)
 {
+	move(sf::Vector2f(newLocation.x-cachedLocation->x,newLocation.y-cachedLocation->y));
+}
+
+void SceneNode::move(sf::Vector2f newLocation)
+{
 	transform.rotate(-cachedRotation);
 	transform.scale(1.f/cachedScale.x,1.f/cachedScale.y);
 	
-	//transform.translate(-cachedLocation);
-
-	//cachedLocation=newLocation;
+	cachedLocation->x+=newLocation.x;
+	cachedLocation->y+=newLocation.y;
 
 	transform.translate(newLocation);
 
 	transform.scale(cachedScale);
 	transform.rotate(cachedRotation);
-	
-	transformUpdated();
 }
 
-void SceneNode::setScale(sf::Vector2f newScale)
+void SceneNode::scale(sf::Vector2f newScale)
 {
 	cachedScale = sf::Vector2f(newScale.x*cachedScale.x,newScale.y*cachedScale.y);
 
 	transform.scale(newScale);
-	
-	transformUpdated();
+}
+
+void SceneNode::setScale(sf::Vector2f newScale)
+{
+	transform.scale(1.f/cachedScale.x,1.f/cachedScale.y);
+
+	cachedScale = newScale;
+
+	transform.scale(newScale);
 }
 
 void SceneNode::setRotation(float newRotation)
@@ -87,15 +87,11 @@ void SceneNode::setRotation(float newRotation)
 	cachedRotation = newRotation;
 
 	transform.rotate(newRotation);
-
-	transformUpdated();
 } 
 
 void SceneNode::setTransform(sf::Transform newTransform)
 {
 	transform = newTransform;
-
-	transformUpdated();
 }
 
 sf::Transform SceneNode::getTransform()
@@ -116,4 +112,6 @@ SceneNode::~SceneNode(void)
 	{
 		delete node;
 	}
+
+	delete cachedLocation;
 }

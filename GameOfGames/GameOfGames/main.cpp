@@ -34,8 +34,9 @@ int main()
 
 	miniChar->setScale(sf::Vector2f(2.f,1.f));
 
+	miniChar->setLocation(sf::Vector2f(25.f,0.f));
 
-	//miniChar->setLocation(sf::Vector2f(25.f,0.f));
+	miniChar->scale(sf::Vector2f(0.5,1.f));
 
 	rootNodes.push_back(baseView);
 

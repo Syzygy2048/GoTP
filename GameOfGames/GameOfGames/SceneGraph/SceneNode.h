@@ -14,10 +14,10 @@ public:
 	void draw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform);
 	void draw(float deltaTime, sf::RenderWindow* target);
 
-	//For caching purposes, Ive made so you MUST call the setters. The setters call the transformUpdated method. 
-	//If I were to allow for the transform to be directly set, one could misuse the framework.
 	void setLayer(int newLayer);
+	void move(sf::Vector2f newLocation);
 	void setLocation(sf::Vector2f newLocation);
+	void scale(sf::Vector2f newScale);
 	void setScale(sf::Vector2f newScale);
 	void setRotation(float newRotation);
 	void setTransform(sf::Transform newTransform);
@@ -31,15 +31,13 @@ public:
 	~SceneNode(void);
 
 protected:
-	//Override and dont forget to call the parent implementation.
-	virtual void transformUpdated();
-	
 	SceneNode* parent;
+
 	std::vector<SceneNode*> children;
 
 private:
+	sf::Vector2f* cachedLocation;//had to make a pointer, or else children nodes would not render
 	float cachedRotation;
 	sf::Vector2f cachedScale;
-	//sf::Vector2f cachedLocation;//WTF if I declare it, it breaks the second sprite
 	sf::Transform transform;
 };
