@@ -3,6 +3,8 @@
 SceneNode::SceneNode()
 {
 	parent = NULL;
+
+	cachedScale = sf::Vector2f(1.f,1.f);
 }
 
 void SceneNode::tick(float deltaTime)
@@ -55,23 +57,33 @@ void SceneNode::setLayer(int newLayer)
 void SceneNode::setLocation(sf::Vector2f newLocation)
 {
 	transform.rotate(-cachedRotation);
+	transform.scale(1.f/cachedScale.x,1.f/cachedScale.y);
+	
+	//transform.translate(-cachedLocation);
+
+	//cachedLocation=newLocation;
 
 	transform.translate(newLocation);
 
+	transform.scale(cachedScale);
 	transform.rotate(cachedRotation);
-
+	
 	transformUpdated();
 }
 
 void SceneNode::setScale(sf::Vector2f newScale)
 {
-	transform.scale(newScale);
+	cachedScale = sf::Vector2f(newScale.x*cachedScale.x,newScale.y*cachedScale.y);
 
+	transform.scale(newScale);
+	
 	transformUpdated();
 }
 
 void SceneNode::setRotation(float newRotation)
 {
+	transform.rotate(-cachedRotation);
+
 	cachedRotation = newRotation;
 
 	transform.rotate(newRotation);

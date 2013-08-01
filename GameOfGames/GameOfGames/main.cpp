@@ -17,8 +17,6 @@ int main()
 	SceneNode* baseView = new SceneNode();
 	SpriteNode* newChar = new SpriteNode();
 
-	newChar->setRotation(90.f);
-
 	SpriteNode* miniChar = new SpriteNode();
 
 	sf::Texture defTexture;
@@ -33,6 +31,12 @@ int main()
 
 	newChar->addNode(miniChar,sf::Vector2f(25.f,0.f));
 	baseView->addNode(newChar,sf::Vector2f(100.f,0.f));
+
+	miniChar->setScale(sf::Vector2f(2.f,1.f));
+
+
+	//miniChar->setLocation(sf::Vector2f(25.f,0.f));
+
 	rootNodes.push_back(baseView);
 
 	float remainingTime = 0;

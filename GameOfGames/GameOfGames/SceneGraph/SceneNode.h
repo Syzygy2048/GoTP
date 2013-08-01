@@ -39,5 +39,7 @@ protected:
 
 private:
 	float cachedRotation;
+	sf::Vector2f cachedScale;
+	//sf::Vector2f cachedLocation;//WTF if I declare it, it breaks the second sprite
 	sf::Transform transform;
 };
