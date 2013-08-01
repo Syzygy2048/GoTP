@@ -17,7 +17,9 @@ void SceneNode::draw(float deltaTime, sf::RenderWindow* target)
 {
 	for(SceneNode* node : children)
 	{
-		node->draw(deltaTime,target, transform);
+		sf::Transform totalTransform = transform;
+		node->onDraw(deltaTime,target,totalTransform*node->getTransform());
+		node->draw(deltaTime,target, totalTransform);
 	}
 }
 
@@ -25,16 +27,22 @@ void SceneNode::draw(float deltaTime, sf::RenderWindow* target, sf::Transform pa
 {
 	for(SceneNode* node : children)
 	{
-		node->draw(deltaTime,target, transform*parentTranform);
+		sf::Transform totalTransform = parentTranform*transform;
+		node->onDraw(deltaTime,target,totalTransform*node->getTransform());
+		node->draw(deltaTime,target, totalTransform);
 	}
+}
+
+void SceneNode::onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transform parentTranform)
+{
 }
 
 void SceneNode::transformUpdated()
 {
-	for each (SceneNode* child in children)
+	/*for each (SceneNode* child in children)
 	{
 		child->transformUpdated();
-	}
+	}*/
 }
 
 void SceneNode::setLayer(int newLayer)
@@ -46,7 +54,11 @@ void SceneNode::setLayer(int newLayer)
 
 void SceneNode::setLocation(sf::Vector2f newLocation)
 {
+	transform.rotate(-cachedRotation);
+
 	transform.translate(newLocation);
+
+	transform.rotate(cachedRotation);
 
 	transformUpdated();
 }
@@ -60,6 +72,8 @@ void SceneNode::setScale(sf::Vector2f newScale)
 
 void SceneNode::setRotation(float newRotation)
 {
+	cachedRotation = newRotation;
+
 	transform.rotate(newRotation);
 
 	transformUpdated();

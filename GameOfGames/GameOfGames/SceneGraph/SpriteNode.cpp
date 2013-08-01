@@ -11,16 +11,7 @@ void SpriteNode::setTexture(sf::Texture newTexture)
 	sprite.setTexture(texture);
 }
 
-void SpriteNode::transformUpdated()
+void SpriteNode::onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transform totalTransform)
 {
-	SceneNode::transformUpdated();
-}
-
-void SpriteNode::draw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform)
-{
-	sf::Transform totalTransform = parentTranform * transform;
-
 	target->draw(sprite,totalTransform);
-
-	SceneNode::draw(deltaTime, target, totalTransform);
 }

@@ -9,8 +9,10 @@ public:
 
 	//Override and dont forget to call the parent implementation.
 	virtual void tick(float deltaTtime);
-	virtual void draw(float deltaTime, sf::RenderWindow* target);
-	virtual void draw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform);
+	virtual void onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transform parentTranform);
+	
+	void draw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform);
+	void draw(float deltaTime, sf::RenderWindow* target);
 
 	//For caching purposes, Ive made so you MUST call the setters. The setters call the transformUpdated method. 
 	//If I were to allow for the transform to be directly set, one could misuse the framework.
@@ -31,10 +33,11 @@ public:
 protected:
 	//Override and dont forget to call the parent implementation.
 	virtual void transformUpdated();
-	sf::Transform transform;
+	
 	SceneNode* parent;
 	std::vector<SceneNode*> children;
 
 private:
-	
+	float cachedRotation;
+	sf::Transform transform;
 };
