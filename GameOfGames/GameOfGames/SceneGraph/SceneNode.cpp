@@ -3,8 +3,6 @@
 SceneNode::SceneNode()
 {
 	parent = NULL;
-
-	transform.scale(1.f,1.f);
 }
 
 void SceneNode::tick(float deltaTime)
@@ -19,7 +17,15 @@ void SceneNode::draw(float deltaTime, sf::RenderWindow* target)
 {
 	for(SceneNode* node : children)
 	{
-		node->draw(deltaTime,target);
+		node->draw(deltaTime,target, transform);
+	}
+}
+
+void SceneNode::draw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform)
+{
+	for(SceneNode* node : children)
+	{
+		node->draw(deltaTime,target, transform*parentTranform);
 	}
 }
 
@@ -69,18 +75,6 @@ void SceneNode::setTransform(sf::Transform newTransform)
 sf::Transform SceneNode::getTransform()
 {
 	return transform;
-}
-
-sf::Transform SceneNode::getWorldTransform()
-{
-	if(parent)
-	{
-		return parent->getWorldTransform()*transform;
-	}
-	else
-	{
-		return transform;
-	}
 }
 
 void SceneNode::addNode(SceneNode* node, sf::Vector2f location)

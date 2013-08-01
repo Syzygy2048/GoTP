@@ -17,7 +17,6 @@ int main()
 	SceneNode* baseView = new SceneNode();
 	SpriteNode* newChar = new SpriteNode();
 
-	//newChar->setScale(sf::Vector2f(2.f,2.f));
 	newChar->setRotation(30.f);
 
 	SpriteNode* miniChar = new SpriteNode();
