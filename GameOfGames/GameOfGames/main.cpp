@@ -21,9 +21,19 @@ int main()
 	//newChar->setRotation(90.f);
 
 	SpriteNode* miniChar = new SpriteNode();
+
+	sf::Texture defTexture;
+	sf::Texture secondTexture;
+
+	secondTexture.loadFromFile("preto.png");
+	defTexture.loadFromFile("caipira.png");
 	
-	newChar->addNode(miniChar,sf::Vector2f(50.f,50.f));
-	baseView->addNode(newChar,sf::Vector2f(50.f,50.f));
+	newChar->setTexture(defTexture);
+
+	miniChar->setTexture(secondTexture);
+
+	newChar->addNode(miniChar,sf::Vector2f(25.f,0.f));
+	baseView->addNode(newChar,sf::Vector2f(50.f,00.f));
 	rootNodes.push_back(baseView);
 
 	float remainingTime = 0;

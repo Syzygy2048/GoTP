@@ -2,22 +2,26 @@
 
 SpriteNode::SpriteNode()
 {
-	if (texture.loadFromFile("caipira.png"))
-	{
-		texture.setSmooth(true);
+	updateSprite();
+}
 
-		sprite.setTexture(texture);
+void SpriteNode::setTexture(sf::Texture newTexture)
+{
+	texture = newTexture;
 
-		updateSprite();
-	}
+	sprite.setTexture(texture);
 }
 
 void SpriteNode::updateSprite()
 {
-	//sprite.setOrigin(getWorldLocation()-getTransform().location);
+	sprite.setOrigin(-(getWorldLocation()-getTransform().location));
+
+	
+
 	sprite.setPosition(getWorldLocation());//TODO calculate correct location based on window site and internal resolution 
 	sprite.setScale(getTotalScale());//and scale
 	sprite.setRotation(getTotalRotation());
+	std::cout << sprite.getOrigin().x<< ", "<<sprite.getOrigin().y << " for location:"<< sprite.getPosition().x<<" ,"<<sprite.getPosition().y<< "\n";
 }
 
 void SpriteNode::transformUpdated()

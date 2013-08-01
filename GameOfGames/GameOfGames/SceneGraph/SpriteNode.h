@@ -7,12 +7,13 @@ public:
 	SpriteNode();
 	void draw(float deltaTime, sf::RenderWindow* target);
 	void setSprite(std::string newSource);
+	void setTexture(sf::Texture newTexture);
 
 protected:
 	void transformUpdated();
 
 private:
 	void updateSprite();
-	sf::Texture texture;
 	sf::Sprite sprite;
+	sf::Texture texture;
 };

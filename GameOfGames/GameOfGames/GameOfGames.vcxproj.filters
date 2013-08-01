@@ -37,5 +37,11 @@
     <Image Include="caipira.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="chines.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="preto.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

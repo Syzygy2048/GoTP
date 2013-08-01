@@ -79,6 +79,8 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="caipira.png" />
+    <Image Include="chines.png" />
+    <Image Include="preto.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
