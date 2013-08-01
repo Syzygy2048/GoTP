@@ -14,14 +14,12 @@ void SpriteNode::setTexture(sf::Texture newTexture)
 
 void SpriteNode::updateSprite()
 {
-	sprite.setOrigin(-(getWorldLocation()-getTransform().location));
+	//sprite.setOrigin(-getWorldLocation());
 
-	
-
-	sprite.setPosition(getWorldLocation());//TODO calculate correct location based on window site and internal resolution 
-	sprite.setScale(getTotalScale());//and scale
-	sprite.setRotation(getTotalRotation());
-	std::cout << sprite.getOrigin().x<< ", "<<sprite.getOrigin().y << " for location:"<< sprite.getPosition().x<<" ,"<<sprite.getPosition().y<< "\n";
+	//sprite.setPosition(getWorldLocation());//TODO calculate correct location based on window site and internal resolution 
+	//sprite.setScale(getTotalScale());//and scale
+	//sprite.setRotation(getTotalRotation());
+	//std::cout << sprite.getOrigin().x<< ", "<<sprite.getOrigin().y << " for location:"<< sprite.getPosition().x<<" ,"<<sprite.getPosition().y<< "\n";
 }
 
 void SpriteNode::transformUpdated()
@@ -32,7 +30,7 @@ void SpriteNode::transformUpdated()
 
 void SpriteNode::draw(float deltaTime, sf::RenderWindow* target)
 {
-	target->draw(sprite);
+	target->draw(sprite,getWorldTransform());
 
 	SceneNode::draw(deltaTime, target);
 }
