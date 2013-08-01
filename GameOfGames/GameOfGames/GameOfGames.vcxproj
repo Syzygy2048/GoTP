@@ -69,16 +69,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="InputHandlerSFML.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SceneGraph\SceneNode.cpp" />
     <ClCompile Include="SceneGraph\SpriteNode.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="IHandleInput.h" />
+    <ClInclude Include="InputHandlerSFML.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SceneGraph\SceneNode.h" />
     <ClInclude Include="SceneGraph\SpriteNode.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="caipira.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameOfGames.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

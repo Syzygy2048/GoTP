@@ -3,6 +3,7 @@
 #include <vector>
 #include "SceneGraph/SceneNode.h"
 #include "SceneGraph/SpriteNode.h"
+#include "InputHandlerSFML.h"
 
 #define TIMESTEP 0.01666666666f
 #define WINDOW_TITLE "Game of Thrones"
@@ -19,6 +20,7 @@ int main()
 
 	//newChar->setScale(sf::Vector2f(2.f,2.f));
 	//newChar->setRotation(90.f);
+	std::cerr << space << '\n';
 
 	SpriteNode* miniChar = new SpriteNode();
 	
