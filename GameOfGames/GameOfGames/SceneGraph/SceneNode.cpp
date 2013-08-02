@@ -6,6 +6,10 @@ SceneNode::SceneNode()
 
 	cachedLocation = new sf::Vector2f(0.f,0.f);
 	cachedScale = new sf::Vector2f(1.f,1.f);
+
+	children = new std::vector<SceneNode*>();
+
+	transform = new sf::Transform();
 }
 
 void SceneNode::tick(float deltaTime)
@@ -38,6 +42,11 @@ void SceneNode::draw(float deltaTime, sf::RenderWindow* target, sf::Transform pa
 
 void SceneNode::onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transform parentTranform)
 {
+}
+
+void SceneNode::setScreenRatio(sf::Vector2f* newRatio)
+{
+	screenRatio = newRatio;
 }
 
 void SceneNode::setLayer(int newLayer)
@@ -107,6 +116,7 @@ sf::Transform SceneNode::getTransform()
 void SceneNode::addNode(SceneNode* node, sf::Vector2f location)
 {
 	node->parent = this;
+	node->setScreenRatio(screenRatio);
 	node->setLocation(location);
 	children->push_back(node);
 }

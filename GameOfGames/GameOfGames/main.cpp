@@ -20,6 +20,9 @@ int main()
 	sf::Clock clock;
 
 	SceneNode* baseView = new SceneNode();
+
+	baseView->setScreenRatio(manager->getCachedScreenRatio());
+
 	SpriteNode* newChar = new SpriteNode();
 
 	SpriteNode* miniChar = new SpriteNode();
@@ -45,6 +48,7 @@ int main()
 
 	rootNodes.push_back(baseView);
 
+	
 	float remainingTime = 0;
 
 	while(window->isOpen())
