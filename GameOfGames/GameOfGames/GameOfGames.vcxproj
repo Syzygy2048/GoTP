@@ -69,11 +69,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Input\InputHandlerSFML.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Options\OptionsManager.cpp" />
     <ClCompile Include="SceneGraph\SceneNode.cpp" />
     <ClCompile Include="SceneGraph\SpriteNode.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Input\IHandleInput.h" />
+    <ClInclude Include="Input\InputHandlerSFML.h" />
+    <ClInclude Include="Options\OptionsManager.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SceneGraph\SceneNode.h" />
     <ClInclude Include="SceneGraph\SpriteNode.h" />
   </ItemGroup>
@@ -81,6 +87,9 @@
     <Image Include="caipira.png" />
     <Image Include="chines.png" />
     <Image Include="preto.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="settings.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

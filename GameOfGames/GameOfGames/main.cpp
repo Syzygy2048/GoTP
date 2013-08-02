@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
+#include "Options\OptionsManager.h"
 #include "SceneGraph/SceneNode.h"
 #include "SceneGraph/SpriteNode.h"
 
@@ -11,7 +12,11 @@ std::vector<SceneNode*> rootNodes;
 
 int main()
 {
-	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(1280, 720), WINDOW_TITLE);//TODO use the window configuration
+	OptionsManager* manager = new OptionsManager();
+
+	sf::Vector2i displayResolution = manager->getDisplayResolution();
+
+	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(displayResolution.x,displayResolution.y), WINDOW_TITLE);
 	sf::Clock clock;
 
 	SceneNode* baseView = new SceneNode();

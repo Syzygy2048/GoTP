@@ -24,12 +24,30 @@
     <ClCompile Include="SceneGraph\SpriteNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Options\OptionsManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\InputHandlerSFML.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneGraph\SceneNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SceneGraph\SpriteNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\IHandleInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\InputHandlerSFML.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Options\OptionsManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -43,5 +61,10 @@
     <Image Include="preto.png">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="settings.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
