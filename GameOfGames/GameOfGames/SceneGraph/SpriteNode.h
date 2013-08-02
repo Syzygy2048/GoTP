@@ -6,10 +6,12 @@ class SpriteNode : public SceneNode
 public:
 	SpriteNode();
 	void setSprite(std::string newSource);
-	void setTexture(sf::Texture newTexture);
+	void setTexture(sf::Texture* newTexture);
 	void onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transform parentTranform);
 
+	~SpriteNode(void);
+
 private:
-	sf::Sprite sprite;
-	sf::Texture texture;
+	sf::Sprite* sprite;
+	sf::Texture* texture;
 };

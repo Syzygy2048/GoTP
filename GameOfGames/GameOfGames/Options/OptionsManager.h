@@ -7,8 +7,8 @@ class OptionsManager
 {
 public:
 
-	sf::Vector2i getInternalResolution(){ return internalResolution; };
-	sf::Vector2i getDisplayResolution(){ return displayResolution; };
+	sf::Vector2i* getInternalResolution(){ return internalResolution; };
+	sf::Vector2i getDisplayResolution(){ return *displayResolution; };
 	sf::Vector2f* getFinalScreenRatio();
 	sf::Vector2f* getCachedScreenRatio();
 	int getFullscreen(){ return fullscreen; }
@@ -30,16 +30,16 @@ private:
 	/* Reads all values from a setting file into memory. Called from the constructor. */
 	void read();
 
-	sf::Vector2i internalResolution;
-	sf::Vector2i displayResolution;
+	sf::Vector2i* internalResolution;
+	sf::Vector2i* displayResolution;
 	int fullscreen;
 	int vSync;
 
-	sf::Vector2i defaultInternalResolution;
-	sf::Vector2i defaultDisplayResolution;
+	sf::Vector2i* defaultInternalResolution;
+	sf::Vector2i* defaultDisplayResolution;
 	int defaultFullscreen;
 	int defaultVSync;
 	sf::Vector2f* cachedScreenRatio;
-	std::string path;
+	std::string* path;
 };
 

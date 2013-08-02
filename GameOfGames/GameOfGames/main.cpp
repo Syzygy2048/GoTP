@@ -24,11 +24,11 @@ int main()
 
 	SpriteNode* miniChar = new SpriteNode();
 
-	sf::Texture defTexture;
-	sf::Texture secondTexture;
+	sf::Texture* defTexture = new sf::Texture();
+	sf::Texture* secondTexture = new sf::Texture();
 
-	secondTexture.loadFromFile("Assets\\Sprites\\preto.png");
-	defTexture.loadFromFile("Assets\\Sprites\\caipira.png");
+	secondTexture->loadFromFile("Assets\\Sprites\\preto.png");
+	defTexture->loadFromFile("Assets\\Sprites\\caipira.png");
 	
 	newChar->setTexture(defTexture);
 
