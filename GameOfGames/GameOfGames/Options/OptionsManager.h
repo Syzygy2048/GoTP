@@ -9,6 +9,8 @@ public:
 
 	sf::Vector2i getInternalResolution(){ return internalResolution; };
 	sf::Vector2i getDisplayResolution(){ return displayResolution; };
+	sf::Vector2f* getFinalScreenRatio();
+	sf::Vector2f* getCachedScreenRatio();
 	int getFullscreen(){ return fullscreen; }
 	int getVSync(){ return vSync; }
 
@@ -37,7 +39,7 @@ private:
 	sf::Vector2i defaultDisplayResolution;
 	int defaultFullscreen;
 	int defaultVSync;
-
+	sf::Vector2f* cachedScreenRatio;
 	std::string path;
 };
 

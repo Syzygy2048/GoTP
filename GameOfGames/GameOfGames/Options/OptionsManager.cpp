@@ -22,6 +22,30 @@ OptionsManager::OptionsManager() : path("settings.txt"),defaultDisplayResolution
 	}
 }
 
+sf::Vector2f* OptionsManager::getCachedScreenRatio()
+{
+	if(!cachedScreenRatio)
+	{
+		return getFinalScreenRatio();
+	}
+	else
+	{
+		return cachedScreenRatio;
+	}
+}
+
+sf::Vector2f* OptionsManager::getFinalScreenRatio()
+{
+	if(cachedScreenRatio)
+	{
+		delete cachedScreenRatio;
+	}
+
+	cachedScreenRatio = new sf::Vector2f(displayResolution.x/internalResolution.x, displayResolution.y/internalResolution.y);
+
+	return cachedScreenRatio;
+}
+
 void OptionsManager::read()
 {
 

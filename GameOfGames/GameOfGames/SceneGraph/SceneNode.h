@@ -14,6 +14,8 @@ public:
 	void draw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform);
 	void draw(float deltaTime, sf::RenderWindow* target);
 
+	void setScreenRatio(sf::Vector2f newRatio);
+
 	void setLayer(int newLayer);
 	void move(sf::Vector2f newLocation);
 	void setLocation(sf::Vector2f newLocation);
@@ -32,7 +34,7 @@ public:
 
 protected:
 	SceneNode* parent;
-
+	//sf::Vector2f* screenRatio;//cant declare, otherwise second child wont appear
 	std::vector<SceneNode*> children;
 
 private:
