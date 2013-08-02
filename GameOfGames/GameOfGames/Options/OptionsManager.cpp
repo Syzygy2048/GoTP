@@ -9,6 +9,9 @@ OptionsManager::OptionsManager() : path(new std::string ("settings.txt")),defaul
 	fullscreen = -1;
 	vSync = -1;
 
+	internalResolution = new sf::Vector2i();
+	displayResolution = new sf::Vector2i();
+
 	read();
 
 	if(internalResolution->x == 0 || 
@@ -179,4 +182,12 @@ void OptionsManager::writeChanged()
 
 OptionsManager::~OptionsManager(void)
 {
+	delete internalResolution;
+	delete displayResolution;
+	
+	delete cachedScreenRatio;
+	delete path;
+	delete defaultInternalResolution;
+	delete defaultDisplayResolution;
+
 }

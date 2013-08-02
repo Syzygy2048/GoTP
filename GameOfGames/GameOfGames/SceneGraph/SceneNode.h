@@ -34,7 +34,7 @@ public:
 
 protected:
 	SceneNode* parent;
-	sf::Vector2f* screenRatio;//cant declare, otherwise second child wont appear
+	sf::Vector2f* screenRatio;
 	std::vector<SceneNode*>* children;
 
 private:
