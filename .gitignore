@@ -1,5 +1,8 @@
 bin/build
 
+*.res
+*.aps
+*.rc
 *.tlog
 *.log
 *.obj
