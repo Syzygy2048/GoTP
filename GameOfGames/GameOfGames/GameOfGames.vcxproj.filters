@@ -52,13 +52,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="caipira.png">
+    <Image Include="Assets\Sprites\preto.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="chines.png">
+    <Image Include="Assets\Sprites\chines.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="preto.png">
+    <Image Include="Assets\Sprites\caipira.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

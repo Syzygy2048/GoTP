@@ -27,8 +27,8 @@ int main()
 	sf::Texture defTexture;
 	sf::Texture secondTexture;
 
-	secondTexture.loadFromFile("preto.png");
-	defTexture.loadFromFile("caipira.png");
+	secondTexture.loadFromFile("Assets\\Sprites\\preto.png");
+	defTexture.loadFromFile("Assets\\Sprites\\caipira.png");
 	
 	newChar->setTexture(defTexture);
 

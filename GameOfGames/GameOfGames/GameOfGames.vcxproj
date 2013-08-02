@@ -84,9 +84,9 @@
     <ClInclude Include="SceneGraph\SpriteNode.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="caipira.png" />
-    <Image Include="chines.png" />
-    <Image Include="preto.png" />
+    <Image Include="Assets\Sprites\caipira.png" />
+    <Image Include="Assets\Sprites\chines.png" />
+    <Image Include="Assets\Sprites\preto.png" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="settings.txt" />
