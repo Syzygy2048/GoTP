@@ -10,7 +10,7 @@ public:
 	//Override and dont forget to call the parent implementation.
 	virtual void tick(float deltaTtime);
 	virtual void onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transform parentTranform);
-	
+
 	void draw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform);
 	void draw(float deltaTime, sf::RenderWindow* target);
 
@@ -18,8 +18,6 @@ public:
 
 	void setLayer(int newLayer);
 	void move(sf::Vector2f newLocation);
-	void setLocation(sf::Vector2f newLocation);
-	void scale(sf::Vector2f newScale);
 	void setScale(sf::Vector2f newScale);
 	void setRotation(float newRotation);
 	void setTransform(sf::Transform* newTransform);
@@ -34,12 +32,11 @@ public:
 
 protected:
 	SceneNode* parent;
-	sf::Vector2f* screenRatio;
 	std::vector<SceneNode*>* children;
+	sf::Vector2f* cachedLocation;
+	sf::Vector2f* cachedScale;
 
 private:
-	sf::Vector2f* cachedLocation;
 	float cachedRotation;
-	sf::Vector2f* cachedScale;
 	sf::Transform* transform;
 };

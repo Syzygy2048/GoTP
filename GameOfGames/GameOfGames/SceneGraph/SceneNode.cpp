@@ -44,26 +44,16 @@ void SceneNode::onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transform
 {
 }
 
-void SceneNode::setScreenRatio(sf::Vector2f* newRatio)
-{
-	screenRatio = newRatio;
-}
-
 void SceneNode::setLayer(int newLayer)
 {
 	//transform.layer = newLayer;
-}
-
-void SceneNode::setLocation(sf::Vector2f newLocation)
-{
-	move(sf::Vector2f(newLocation.x-cachedLocation->x,newLocation.y-cachedLocation->y));
 }
 
 void SceneNode::move(sf::Vector2f newLocation)
 {
 	transform->rotate(-cachedRotation);
 	transform->scale(1.f/cachedScale->x,1.f/cachedScale->y);
-	
+
 	cachedLocation->x+=newLocation.x;
 	cachedLocation->y+=newLocation.y;
 
@@ -71,17 +61,6 @@ void SceneNode::move(sf::Vector2f newLocation)
 
 	transform->scale(*cachedScale);
 	transform->rotate(cachedRotation);
-}
-
-void SceneNode::scale(sf::Vector2f newScale)
-{
-	sf::Vector2f* temp = new sf::Vector2f(newScale.x*cachedScale->x,newScale.y*cachedScale->y);
-
-	delete cachedScale;
-
-	cachedScale = temp;
-
-	transform->scale(newScale);
 }
 
 void SceneNode::setScale(sf::Vector2f newScale)
@@ -116,8 +95,8 @@ sf::Transform SceneNode::getTransform()
 void SceneNode::addNode(SceneNode* node, sf::Vector2f location)
 {
 	node->parent = this;
-	node->setScreenRatio(screenRatio);
-	node->setLocation(location);
+
+	node->move(location);
 	children->push_back(node);
 }
 

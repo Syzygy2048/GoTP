@@ -14,14 +14,12 @@ int main()
 {
 	OptionsManager* manager = new OptionsManager();
 
-	sf::Vector2i displayResolution = manager->getDisplayResolution();
+	sf::Vector2f displayResolution = manager->getDisplayResolution();
 
 	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(displayResolution.x,displayResolution.y), WINDOW_TITLE);
 	sf::Clock clock;
 
 	SceneNode* baseView = new SceneNode();
-
-	baseView->setScreenRatio(manager->getCachedScreenRatio());
 
 	SpriteNode* newChar = new SpriteNode();
 
@@ -38,18 +36,19 @@ int main()
 	miniChar->setTexture(secondTexture);
 
 	newChar->addNode(miniChar,sf::Vector2f(25.f,0.f));
+
 	baseView->addNode(newChar,sf::Vector2f(100.f,0.f));
-
-	miniChar->setScale(sf::Vector2f(2.f,1.f));
-
-	miniChar->setLocation(sf::Vector2f(25.f,0.f));
-
-	miniChar->scale(sf::Vector2f(0.5,1.f));
+	
+	miniChar->setScale(sf::Vector2f(2.f,2.f));
 
 	rootNodes.push_back(baseView);
 
-	
 	float remainingTime = 0;
+
+	for each (SceneNode* rootNode in rootNodes)
+	{
+		rootNode->setScale(*manager->getCachedScreenRatio());
+	}
 
 	while(window->isOpen())
 	{
@@ -92,6 +91,7 @@ int main()
 	{
 		delete node;
 	}
+
 	delete window;
 
 	return 0;

@@ -4,13 +4,13 @@
 #include <iostream>
 #include <sys/stat.h>
 
-OptionsManager::OptionsManager() : path(new std::string ("settings.txt")),defaultDisplayResolution(new sf::Vector2i(720,720)), defaultInternalResolution(new sf::Vector2i(720,720)), defaultFullscreen(0), defaultVSync(0)
+OptionsManager::OptionsManager() : path(new std::string ("settings.txt")),defaultDisplayResolution(new sf::Vector2f(720.f,720.f)), defaultInternalResolution(new sf::Vector2f(720.f,720.f)), defaultFullscreen(0), defaultVSync(0)
 {
 	fullscreen = -1;
 	vSync = -1;
 
-	internalResolution = new sf::Vector2i();
-	displayResolution = new sf::Vector2i();
+	internalResolution = new sf::Vector2f();
+	displayResolution = new sf::Vector2f();
 
 	read();
 
@@ -36,7 +36,7 @@ sf::Vector2f* OptionsManager::getCachedScreenRatio()
 		return cachedScreenRatio;
 	}
 }
-
+//screen ratio should be used on the root nodes, just that, see main.
 sf::Vector2f* OptionsManager::getFinalScreenRatio()
 {
 	if(cachedScreenRatio)
