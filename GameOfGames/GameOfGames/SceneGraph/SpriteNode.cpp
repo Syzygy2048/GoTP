@@ -1,5 +1,5 @@
 #include "SpriteNode.h"
-
+#include "..\\AssetManager.h"
 SpriteNode::SpriteNode()
 {
 	sprite = new sf::Sprite();
@@ -19,5 +19,7 @@ void SpriteNode::onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transfor
 
 SpriteNode::~SpriteNode(void)
 {
+	AssetManager::unsubscribeToTexture(texture);
+
 	delete sprite;
 }

@@ -4,6 +4,7 @@
 #include "Options\OptionsManager.h"
 #include "SceneGraph/SceneNode.h"
 #include "SceneGraph/SpriteNode.h"
+#include "AssetManager.h"
 
 #define TIMESTEP 0.01666666666f
 #define WINDOW_TITLE "Game of Thrones"
@@ -20,15 +21,9 @@ void testingShit()
 	
 	SpriteNode* third = new SpriteNode();
 
-	sf::Texture* defTexture = new sf::Texture();
-	sf::Texture* secondTexture = new sf::Texture();
-
-	secondTexture->loadFromFile("Assets\\Sprites\\preto.png");
-	defTexture->loadFromFile("Assets\\Sprites\\caipira.png");
-	
-	newChar->setTexture(defTexture);
-	miniChar->setTexture(secondTexture);
-	third->setTexture(defTexture);
+	newChar->setTexture(AssetManager::getTexture("caipira.png"));
+	miniChar->setTexture(AssetManager::getTexture("chines.png"));
+	third->setTexture(AssetManager::getTexture("caipira.png"));
 
 	baseView->addNode(newChar,sf::Vector2f(100.f,0.f));
 	baseView->addNode(miniChar,sf::Vector2f(113.f,0.f));
