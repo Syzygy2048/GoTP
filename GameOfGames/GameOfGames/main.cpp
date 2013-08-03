@@ -21,16 +21,20 @@ void testingShit()
 	
 	SpriteNode* third = new SpriteNode();
 
-	newChar->setTexture(AssetManager::getTexture("caipira.png"));
-	miniChar->setTexture(AssetManager::getTexture("chines.png"));
-	third->setTexture(AssetManager::getTexture("caipira.png"));
+	newChar->setTexture("caipira.png");
+	miniChar->setTexture("chines.png");
+	third->setTexture("caipira.png");
 
 	baseView->addNode(newChar,sf::Vector2f(100.f,0.f));
 	baseView->addNode(miniChar,sf::Vector2f(113.f,0.f));
 	baseView->addNode(third,sf::Vector2f(125.f,0.f));
 
+	third->setLocation(sf::Vector2f(125.f,0.f));
+
 	third->setLayer(2);
 	miniChar->setLayer(1);
+
+	//miniChar->setHidden(true);
 
 	rootNodes.push_back(baseView);
 }
@@ -45,14 +49,14 @@ int main()
 	
 	if(manager->getFullscreen())
 	{
-		window = new sf::RenderWindow(sf::VideoMode(displayResolution.x,displayResolution.y), WINDOW_TITLE, sf::Style::Fullscreen);
+		window = new sf::RenderWindow(sf::VideoMode(int(displayResolution.x), int(displayResolution.y)), WINDOW_TITLE, sf::Style::Fullscreen);
 	}
 	else
 	{
-		window = new sf::RenderWindow(sf::VideoMode(displayResolution.x,displayResolution.y), WINDOW_TITLE);
+		window = new sf::RenderWindow(sf::VideoMode(int(displayResolution.x),int(displayResolution.y)), WINDOW_TITLE);
 	}
 	
-	window->setVerticalSyncEnabled(manager->getVSync());
+	window->setVerticalSyncEnabled((manager->getVSync() ?  true : false));
 	
 	//tests yo
 	testingShit();

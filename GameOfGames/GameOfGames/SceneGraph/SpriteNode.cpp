@@ -5,8 +5,22 @@ SpriteNode::SpriteNode()
 	sprite = new sf::Sprite();
 }
 
-void SpriteNode::setTexture(sf::Texture* newTexture)
+void SpriteNode::setTexture(std::string textureName)
 {
+	sf::Texture* newTexture = AssetManager::getTexture(textureName);
+
+	if(!newTexture)
+	{
+		std::cout<<"Received null texture for "<< textureName<<". \n";
+
+		return;
+	}
+
+	if (texture)
+	{
+		AssetManager::unsubscribeToTexture(texture);
+	}
+
 	texture = newTexture;
 
 	sprite->setTexture((*texture));
@@ -19,7 +33,10 @@ void SpriteNode::onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transfor
 
 SpriteNode::~SpriteNode(void)
 {
-	AssetManager::unsubscribeToTexture(texture);
+	if (texture)
+	{
+		AssetManager::unsubscribeToTexture(texture);
+	}
 
 	delete sprite;
 }

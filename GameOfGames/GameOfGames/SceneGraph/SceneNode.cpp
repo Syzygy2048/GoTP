@@ -7,6 +7,12 @@ SceneNode::SceneNode()
 	cachedScale = new sf::Vector2f(1.f,1.f);
 	children = new std::vector<SceneNode*>();
 	transform = new sf::Transform();
+	hidden = false;
+}
+
+void SceneNode::setHidden(bool newHidden)
+{
+	hidden = newHidden;
 }
 
 void SceneNode::tick(float deltaTime)
@@ -21,9 +27,12 @@ void SceneNode::draw(float deltaTime, sf::RenderWindow* target, sf::Transform pa
 {
 	for(SceneNode* node : *children)
 	{
-		sf::Transform totalTransform = parentTranform**transform;
-		node->onDraw(deltaTime,target,totalTransform*node->getTransform());
-		node->draw(deltaTime,target, totalTransform);
+		if(!node->isHidden())
+		{
+			sf::Transform totalTransform = parentTranform**transform;
+			node->onDraw(deltaTime,target,totalTransform*node->getTransform());
+			node->draw(deltaTime,target, totalTransform);
+		}
 	}
 }
 
@@ -40,7 +49,7 @@ void SceneNode::setLayer(int newLayer)
 void SceneNode::adjustLayerFor(SceneNode* node)
 {
 	//we just remove from the list and readd it in the right place
-	for (int i = 0; i < children->size();i++)
+	for (unsigned int i = 0; i < children->size();i++)
 	{
 		if (children->at(i)==node)
 		{
@@ -49,6 +58,52 @@ void SceneNode::adjustLayerFor(SceneNode* node)
 	}
 
 	finalChildInsertion(node);
+}
+
+bool SceneNode::detachNode(SceneNode* toRemove)
+{
+	for(unsigned int i = 0; i < children->size();i++)
+	{
+		SceneNode* node = children->at(i);
+
+		if(node == toRemove)
+		{
+			children->erase(children->begin()+i);
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool SceneNode::eraseNode(SceneNode* toRemove)
+{
+	bool response = detachNode(toRemove);
+
+	if (response)
+	{
+		delete toRemove;
+	}
+
+	return response;		
+}
+
+SceneNode* SceneNode::nodeAt(unsigned int index)
+{
+	if (index < children->size())
+	{
+		return children->at(index);
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+void SceneNode::setLocation(sf::Vector2f newLocation)
+{
+	move(sf::Vector2f(newLocation.x - cachedLocation->x,newLocation.y - cachedLocation->y));
 }
 
 void SceneNode::move(sf::Vector2f newLocation)
@@ -121,7 +176,7 @@ void SceneNode::finalChildInsertion(SceneNode* node)
 		return;
 	}
 
-	for (int i = 0; i < children->size();i++)
+	for (unsigned int i = 0; i < children->size();i++)
 	{
 		SceneNode* child = children->at(i);
 

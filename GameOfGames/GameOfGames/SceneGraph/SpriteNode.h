@@ -4,11 +4,11 @@
 class SpriteNode : public SceneNode
 {
 public:
-	SpriteNode();
 	void setSprite(std::string newSource);
-	void setTexture(sf::Texture* newTexture);
-	void onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transform parentTranform);
+	void setTexture(std::string textureName);
+	void onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform);
 
+	SpriteNode();
 	~SpriteNode(void);
 
 private:
