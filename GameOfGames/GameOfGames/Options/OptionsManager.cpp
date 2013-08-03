@@ -4,10 +4,11 @@
 #include <iostream>
 #include <sys/stat.h>
 
-OptionsManager::OptionsManager() : path(new std::string ("settings.txt")),defaultDisplayResolution(new sf::Vector2f(720.f,720.f)), defaultInternalResolution(new sf::Vector2f(720.f,720.f)), defaultFullscreen(0), defaultVSync(0)
+OptionsManager::OptionsManager() : path(new std::string ("settings.txt")),defaultDisplayResolution(new sf::Vector2f(1280.f, 720.f)), defaultInternalResolution(new sf::Vector2f(720.f,720.f)), defaultFullscreen(1), defaultWideScreen(1),defaultVSync(1)
 {
 	fullscreen = -1;
 	vSync = -1;
+	wideScreen = -1;
 
 	internalResolution = new sf::Vector2f();
 	displayResolution = new sf::Vector2f();
@@ -19,6 +20,7 @@ OptionsManager::OptionsManager() : path(new std::string ("settings.txt")),defaul
 		displayResolution->x == 0 || 
 		displayResolution->y == 0 ||
 		fullscreen == -1 || 
+		wideScreen == -1 ||
 		vSync == -1)
 	{
 		writeMissingDefault();
@@ -44,6 +46,24 @@ sf::Vector2f* OptionsManager::getFinalScreenRatio()
 		delete cachedScreenRatio;
 	}
 
+	float temp = 1.f;
+
+	switch (wideScreen)
+	{
+	case 0:
+		temp = 4.f/3.f;
+		break;
+	case 1:
+		temp = 16.f/9.f;
+		break;
+
+	case 2:
+		temp = 16.f/10.f;
+		break;
+	}
+
+	internalResolution->x *= temp;
+
 	cachedScreenRatio = new sf::Vector2f(displayResolution->x/internalResolution->x, displayResolution->y/internalResolution->y);
 
 	return cachedScreenRatio;
@@ -68,22 +88,22 @@ void OptionsManager::read()
 		if(line.find("x internalResolution") != std::string::npos)
 		{
 			std::getline(fs, line);
-			internalResolution->x = std::stoi(line);
+			internalResolution->x = std::stof(line);
 		}
 		else if(line.find("y internalResolution") != std::string::npos)
 		{
 			std::getline(fs, line);
-			internalResolution->y = std::stoi(line);
+			internalResolution->y = std::stof(line);
 		}
 		else if(line.find("x resolution") != std::string::npos)
 		{
 			std::getline(fs, line);
-			displayResolution->x = std::stoi(line);
+			displayResolution->x = std::stof(line);
 		} 
 		else if(line.find("y resolution") != std::string::npos)
 		{
 			std::getline(fs, line);
-			displayResolution->y = std::stoi(line);
+			displayResolution->y = std::stof(line);
 		}
 		else if(line.find("fullscreen") != std::string::npos)
 		{
@@ -94,6 +114,11 @@ void OptionsManager::read()
 		{
 			std::getline(fs, line);
 			vSync = std::stoi(line);
+		}
+		else if(line.find("wide") != std::string::npos)
+		{
+			std::getline(fs, line);
+			wideScreen = std::stoi(line);
 		}
 	}
 
@@ -142,6 +167,12 @@ void OptionsManager::writeMissingDefault()
 			fs << "vsync = " << defaultVSync << std::endl;
 		}
 
+		if (wideScreen == -1)
+		{
+			wideScreen = defaultWideScreen;
+			fs << "wide = " << defaultWideScreen << std::endl;
+		}
+
 		fs.close();
 	}
 }
@@ -152,6 +183,7 @@ void OptionsManager::setDefault()
 	internalResolution = defaultInternalResolution;
 	fullscreen = defaultFullscreen;
 	vSync = defaultVSync;
+	wideScreen = defaultWideScreen;
 
 	writeChanged();
 }
@@ -176,6 +208,8 @@ void OptionsManager::writeChanged()
 
 		fs << "vsync = " << vSync << std::endl;
 
+		fs << "wide = "<<wideScreen << std::endl;
+
 		fs.close();
 	}
 }
@@ -184,7 +218,7 @@ OptionsManager::~OptionsManager(void)
 {
 	delete internalResolution;
 	delete displayResolution;
-	
+
 	delete cachedScreenRatio;
 	delete path;
 	delete defaultInternalResolution;

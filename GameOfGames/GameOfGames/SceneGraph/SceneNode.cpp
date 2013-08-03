@@ -51,16 +51,22 @@ void SceneNode::setLayer(int newLayer)
 
 void SceneNode::move(sf::Vector2f newLocation)
 {
-	transform->rotate(-cachedRotation);
-	transform->scale(1.f/cachedScale->x,1.f/cachedScale->y);
+	if(parent)
+	{
+		transform->rotate(-cachedRotation);
+		transform->scale(1.f/cachedScale->x,1.f/cachedScale->y);
+	}
 
 	cachedLocation->x+=newLocation.x;
 	cachedLocation->y+=newLocation.y;
 
 	transform->translate(newLocation);
 
-	transform->scale(*cachedScale);
-	transform->rotate(cachedRotation);
+	if(parent)
+	{
+		transform->scale(*cachedScale);
+		transform->rotate(cachedRotation);
+	}
 }
 
 void SceneNode::setScale(sf::Vector2f newScale)

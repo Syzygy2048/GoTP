@@ -34,11 +34,14 @@ private:
 	sf::Vector2f* displayResolution;
 	int fullscreen;
 	int vSync;
+	int wideScreen;
 
 	sf::Vector2f* defaultInternalResolution;
 	sf::Vector2f* defaultDisplayResolution;
 	int defaultFullscreen;
 	int defaultVSync;
+	int defaultWideScreen;
+
 	sf::Vector2f* cachedScreenRatio;
 	std::string* path;
 };

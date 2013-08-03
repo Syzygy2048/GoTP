@@ -16,7 +16,26 @@ int main()
 
 	sf::Vector2f displayResolution = manager->getDisplayResolution();
 
-	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(displayResolution.x,displayResolution.y), WINDOW_TITLE);
+	sf::RenderWindow* window;
+	
+	if(manager->getFullscreen())
+	{
+		window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), WINDOW_TITLE, sf::Style::Fullscreen);
+	}
+	else
+	{
+		window = new sf::RenderWindow(sf::VideoMode(displayResolution.x,displayResolution.y), WINDOW_TITLE);
+	}
+	
+	if(manager->getVSync())
+	{
+		window->setVerticalSyncEnabled(true);
+	}
+	else
+	{
+		window->setVerticalSyncEnabled(false);
+	}
+
 	sf::Clock clock;
 
 	SceneNode* baseView = new SceneNode();

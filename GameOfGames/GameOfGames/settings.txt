@@ -1,6 +1,7 @@
 x internalResolution = 720
 y internalResolution = 720
-x resolution = 720
+x resolution = 1280
 y resolution = 720
 fullscreen = 0
-vsync = 0
+vsync = 1
+wide = 1
