@@ -46,7 +46,25 @@ void SceneNode::onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transform
 
 void SceneNode::setLayer(int newLayer)
 {
-	//transform.layer = newLayer;
+	layer = newLayer;
+
+	if(parent)
+	{
+		parent->adjustLayerFor(this);
+	}
+}
+
+void SceneNode::adjustLayerFor(SceneNode* node)
+{
+	for (int i = 0; i < children->size();i++)
+	{
+		if (children->at(i)==node)
+		{
+			children->erase(children->begin()+i);
+		}
+	}
+
+	finalChildInsertion(node);
 }
 
 void SceneNode::move(sf::Vector2f newLocation)
@@ -93,17 +111,44 @@ void SceneNode::setTransform(sf::Transform* newTransform)
 	transform = newTransform;
 }
 
-sf::Transform SceneNode::getTransform()
-{
-	return *transform;
-}
-
 void SceneNode::addNode(SceneNode* node, sf::Vector2f location)
 {
 	node->parent = this;
 
 	node->move(location);
-	children->push_back(node);
+
+	finalChildInsertion(node);
+}
+
+void SceneNode::finalChildInsertion(SceneNode* node)
+{
+	bool added = false;
+
+	if (children->empty())
+	{
+		children->push_back(node);
+
+		return;
+	}
+
+	for (int i = 0; i < children->size();i++)
+	{
+		SceneNode* child = children->at(i);
+
+		if (node->getLayer() > child->getLayer())
+		{
+			children->insert(children->begin()+i,node);
+
+			added = true;
+
+			break;
+		}
+	}
+
+	if (!added)
+	{
+		children->push_back(node);
+	}
 }
 
 SceneNode::~SceneNode(void)

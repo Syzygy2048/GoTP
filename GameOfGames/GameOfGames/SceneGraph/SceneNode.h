@@ -16,14 +16,15 @@ public:
 
 	void setScreenRatio(sf::Vector2f* newRatio);
 
+	void adjustLayerFor(SceneNode* child);
+	int getLayer() { return layer; };
 	void setLayer(int newLayer);
 	void move(sf::Vector2f newLocation);
 	void setScale(sf::Vector2f newScale);
 	void setRotation(float newRotation);
 	void setTransform(sf::Transform* newTransform);
-
 	//Call this to read the transform.
-	sf::Transform getTransform();
+	sf::Transform getTransform(){ return *transform;  };
 
 	void addNode(SceneNode* node, sf::Vector2f location);
 
@@ -37,6 +38,8 @@ protected:
 	sf::Vector2f* cachedScale;
 
 private:
+	void finalChildInsertion(SceneNode* node);
 	float cachedRotation;
+	int layer;
 	sf::Transform* transform;
 };

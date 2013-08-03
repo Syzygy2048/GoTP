@@ -10,6 +10,36 @@
 
 std::vector<SceneNode*> rootNodes;
 
+void testingShit()
+{
+	SceneNode* baseView = new SceneNode();
+
+	SpriteNode* newChar = new SpriteNode();
+	
+	SpriteNode* miniChar = new SpriteNode();
+	
+	SpriteNode* third = new SpriteNode();
+
+	sf::Texture* defTexture = new sf::Texture();
+	sf::Texture* secondTexture = new sf::Texture();
+
+	secondTexture->loadFromFile("Assets\\Sprites\\preto.png");
+	defTexture->loadFromFile("Assets\\Sprites\\caipira.png");
+	
+	newChar->setTexture(defTexture);
+	miniChar->setTexture(secondTexture);
+	third->setTexture(defTexture);
+
+	baseView->addNode(newChar,sf::Vector2f(100.f,0.f));
+	baseView->addNode(miniChar,sf::Vector2f(113.f,0.f));
+	baseView->addNode(third,sf::Vector2f(125.f,0.f));
+
+	third->setLayer(2);
+	miniChar->setLayer(1);
+
+	rootNodes.push_back(baseView);
+}
+
 int main()
 {
 	OptionsManager* manager = new OptionsManager();
@@ -20,47 +50,19 @@ int main()
 	
 	if(manager->getFullscreen())
 	{
-		window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), WINDOW_TITLE, sf::Style::Fullscreen);
+		window = new sf::RenderWindow(sf::VideoMode(displayResolution.x,displayResolution.y), WINDOW_TITLE, sf::Style::Fullscreen);
 	}
 	else
 	{
 		window = new sf::RenderWindow(sf::VideoMode(displayResolution.x,displayResolution.y), WINDOW_TITLE);
 	}
 	
-	if(manager->getVSync())
-	{
-		window->setVerticalSyncEnabled(true);
-	}
-	else
-	{
-		window->setVerticalSyncEnabled(false);
-	}
-
+	window->setVerticalSyncEnabled(manager->getVSync());
+	
+	//tests yo
+	testingShit();
+	
 	sf::Clock clock;
-
-	SceneNode* baseView = new SceneNode();
-
-	SpriteNode* newChar = new SpriteNode();
-
-	SpriteNode* miniChar = new SpriteNode();
-
-	sf::Texture* defTexture = new sf::Texture();
-	sf::Texture* secondTexture = new sf::Texture();
-
-	secondTexture->loadFromFile("Assets\\Sprites\\preto.png");
-	defTexture->loadFromFile("Assets\\Sprites\\caipira.png");
-	
-	newChar->setTexture(defTexture);
-
-	miniChar->setTexture(secondTexture);
-
-	newChar->addNode(miniChar,sf::Vector2f(25.f,0.f));
-
-	baseView->addNode(newChar,sf::Vector2f(100.f,0.f));
-	
-	miniChar->setScale(sf::Vector2f(2.f,2.f));
-
-	rootNodes.push_back(baseView);
 
 	float remainingTime = 0;
 
