@@ -102,7 +102,7 @@ int main()
 
 		for(SceneNode* node : rootNodes)
 		{
-			node->draw(cachedTime-remainingTime, window);
+			node->draw(cachedTime-remainingTime, window, sf::Transform());
 		}
 
 		window->display();

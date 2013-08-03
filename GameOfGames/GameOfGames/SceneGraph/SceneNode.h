@@ -9,11 +9,10 @@ public:
 
 	//Override and dont forget to call the parent implementation.
 	virtual void tick(float deltaTtime);
-	virtual void onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transform parentTranform);
+	virtual void onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transform parentTranform){};
 
 	void draw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform);
-	void draw(float deltaTime, sf::RenderWindow* target);
-
+	
 	void setScreenRatio(sf::Vector2f* newRatio);
 
 	void adjustLayerFor(SceneNode* child);
