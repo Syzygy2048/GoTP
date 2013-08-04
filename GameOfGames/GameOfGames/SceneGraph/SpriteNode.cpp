@@ -36,6 +36,42 @@ void SpriteNode::onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transfor
 	target->draw(*sprite,totalTransform);
 }
 
+void SpriteNode::setTintColor(int red, int green, int blue, float alpha)
+{
+	sprite->setColor(sf::Color(red,green,blue,sf::Uint8(255*alpha)));
+}
+
+void SpriteNode::setTintColor(int red, int green, int blue)
+{
+	float alpha = 255.f/getTintColor().a;
+
+	setTintColor(red,green,blue,alpha);
+}
+
+void SpriteNode::setTintColor(sf::Color newColor)
+{
+	sprite->setColor(newColor);
+}
+
+void SpriteNode::setAlpha(float alpha)
+{
+	sf::Color c = getTintColor();
+
+	c.a = sf::Uint8(255*alpha);
+
+	sprite->setColor(c);
+}
+
+void SpriteNode::resetTintColor()
+{
+	sprite->setColor(sf::Color(255,255,255,255));
+}
+
+sf::Color SpriteNode::getTintColor()
+{
+	return sprite->getColor();
+}
+
 void SpriteNode::removeTexture()
 {
 	AssetManager::unsubscribeToTexture(texture);

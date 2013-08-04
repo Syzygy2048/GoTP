@@ -18,6 +18,11 @@ void UIView::setSize(sf::Vector2i* newSize)
 	adjustBackGround();
 }
 
+void UIView::onSetTexture()
+{
+	adjustBackGround();
+}
+
 void UIView::adjustBackGround()
 {
 	sf::RenderTexture destinationTexture= sf::RenderTexture();
@@ -28,8 +33,6 @@ void UIView::adjustBackGround()
 
 	if(texture)
 	{
-		
-
 		int tileSize = texture->getSize().x/3;
 
 		if (tileSize*2 > size->x || tileSize*2 > size->y)
@@ -43,7 +46,6 @@ void UIView::adjustBackGround()
 			sf::Sprite tempSprite = sf::Sprite();
 			tempSprite.setTexture(*texture);
 			
-			int heightToDraw = tileSize;
 			int verticalFillSpace = size->y;
 			int verticalDrawingPoint = 0;
 
@@ -51,7 +53,7 @@ void UIView::adjustBackGround()
 			{
 				int referenceVerticalPoint = 0;
 				
-				//are we filling vertical space?
+				//are we not filling the first line?
 				if(verticalDrawingPoint)
 				{
 					//are we filling the bottom?
@@ -66,19 +68,19 @@ void UIView::adjustBackGround()
 				}
 
 				//we draw the left chunk
-				tempSprite.setPosition(0,verticalDrawingPoint);
-				tempSprite.setTextureRect(sf::IntRect(0,referenceVerticalPoint,tileSize,heightToDraw));
+				tempSprite.setPosition(0.f,float(verticalDrawingPoint));
+				tempSprite.setTextureRect(sf::IntRect(0,referenceVerticalPoint,tileSize,tileSize));
 				destinationTexture.draw(tempSprite);
 
 				//the right chunk
-				tempSprite.setPosition(size->x-tileSize,verticalDrawingPoint);
-				tempSprite.setTextureRect(sf::IntRect(tileSize*2,referenceVerticalPoint,tileSize,heightToDraw));
+				tempSprite.setPosition(float(size->x-tileSize),float(verticalDrawingPoint));
+				tempSprite.setTextureRect(sf::IntRect(tileSize*2,referenceVerticalPoint,tileSize,tileSize));
 				destinationTexture.draw(tempSprite);
 
 				int horizontalFillingSpace = size->x - (tileSize*2);
 				int horizontalDrawingPoint = tileSize;
 
-				tempSprite.setTextureRect(sf::IntRect(tileSize,referenceVerticalPoint,tileSize,heightToDraw));
+				tempSprite.setTextureRect(sf::IntRect(tileSize,referenceVerticalPoint,tileSize,tileSize));
 
 				//now we fill the horizontal gap
 				while (horizontalFillingSpace > 0)
@@ -86,10 +88,10 @@ void UIView::adjustBackGround()
 					//are we drawing the last one?
 					if (horizontalFillingSpace<tileSize)
 					{
-						tempSprite.setTextureRect(sf::IntRect(tileSize,referenceVerticalPoint,horizontalFillingSpace,heightToDraw));
+						tempSprite.setTextureRect(sf::IntRect(tileSize,referenceVerticalPoint,horizontalFillingSpace,tileSize));
 					}
 
-					tempSprite.setPosition(horizontalDrawingPoint,verticalDrawingPoint);
+					tempSprite.setPosition(float(horizontalDrawingPoint),float(verticalDrawingPoint));
 					destinationTexture.draw(tempSprite);
 
 					horizontalDrawingPoint +=tileSize;
@@ -120,11 +122,6 @@ void UIView::adjustBackGround()
 	finalTexture = new sf::Texture(destinationTexture.getTexture());
 
 	sprite->setTexture(*finalTexture);
-}
-
-void UIView::onSetTexture()
-{
-	adjustBackGround();
 }
 
 UIView::~UIView(void)

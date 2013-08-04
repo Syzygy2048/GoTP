@@ -32,6 +32,8 @@ sf::Texture* AssetManager::getTexture(std::string textureName)
 
 	if (toAdd->texture->loadFromFile(path))
 	{
+		toAdd->texture->setSmooth(true);
+
 		texturesData->push_back(toAdd);
 
 		return toAdd->texture;

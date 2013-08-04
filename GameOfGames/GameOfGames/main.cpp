@@ -17,7 +17,13 @@ void testingShit()
 	SceneNode* baseView = new SceneNode();
 
 	SpriteNode* newChar = new SpriteNode();
-	UIView* panel = new UIView(new sf::Vector2i(85,60),"Tileset.png");
+	UIView* panel = new UIView(new sf::Vector2i(300,200),"Tileset.png");//this image has a transparent border of 1px
+
+	panel->setAlpha(0.5);
+
+	panel->setTintColor(255,255,255);
+
+	panel->resetTintColor();
 
 	/*SpriteNode* miniChar = new SpriteNode();
 	

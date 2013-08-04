@@ -1,5 +1,5 @@
-x internalResolution = 180
-y internalResolution = 180
+x internalResolution = 720
+y internalResolution = 720
 x resolution = 1280
 y resolution = 720
 fullscreen = 0
