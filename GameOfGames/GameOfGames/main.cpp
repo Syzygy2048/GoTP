@@ -49,7 +49,7 @@ void testingShit()
 int main()
 {
 	OptionsManager* manager = new OptionsManager();
-	InputHandlerSFML* input = &InputHandlerSFML::getInstance();
+	InputHandlerSFML* input = InputHandlerSFML::getInstance();
 
 	sf::Vector2f displayResolution = manager->getDisplayResolution();
 	sf::RenderWindow* window;

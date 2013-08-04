@@ -2,6 +2,9 @@
 
 InputHandlerSFML::InputHandlerSFML(void)
 {
+	clickBitmask = 0;
+	oldBitmask = 0;
+	holdBitmask = 0;
 }
 
 void InputHandlerSFML::poll()
@@ -21,9 +24,9 @@ void InputHandlerSFML::poll()
 	holdBitmask = oldBitmask & clickBitmask;	
 }
 
-InputHandlerSFML& InputHandlerSFML::getInstance()
+InputHandlerSFML* InputHandlerSFML::getInstance()
 {
-	static InputHandlerSFML instance;
+	static InputHandlerSFML* instance = new InputHandlerSFML();
 	return instance;
 }
 

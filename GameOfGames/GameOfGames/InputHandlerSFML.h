@@ -18,7 +18,7 @@ class InputHandlerSFML
 public:
 
 
-	static InputHandlerSFML& getInstance();
+	static InputHandlerSFML* getInstance();
 	
 	//checks the keyboard for all currently pressed keys and loads them into bitmasks, only call once per frame from within the game loop.
 	void poll();
