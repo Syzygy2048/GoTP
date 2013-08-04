@@ -2,7 +2,8 @@
 #include <iostream>
 #include <vector>
 #include "Options\OptionsManager.h"
-#include "SceneGraph/SceneNode.h"
+#include "SceneGraph/SpriteNode.h"
+#include "SceneGraph/UIView.h"
 #include "SceneGraph/SpriteNode.h"
 #include "AssetManager.h"
 
@@ -16,25 +17,20 @@ void testingShit()
 	SceneNode* baseView = new SceneNode();
 
 	SpriteNode* newChar = new SpriteNode();
+	UIView* panel = new UIView(new sf::Vector2i(85,60),"Tileset.png");
+
+	/*SpriteNode* miniChar = new SpriteNode();
 	
-	SpriteNode* miniChar = new SpriteNode();
-	
-	SpriteNode* third = new SpriteNode();
+	SpriteNode* third = new SpriteNode();*/
 
-	newChar->setTexture("caipira.png");
-	miniChar->setTexture("chines.png");
-	third->setTexture("caipira.png");
+	newChar->setTexture("Tileset.png");
+	/*miniChar->setTexture("chines.png");
+	third->setTexture("caipira.png");*/
 
-	baseView->addNode(newChar,sf::Vector2f(100.f,0.f));
-	baseView->addNode(miniChar,sf::Vector2f(113.f,0.f));
-	baseView->addNode(third,sf::Vector2f(125.f,0.f));
-
-	third->setLocation(sf::Vector2f(125.f,0.f));
-
-	third->setLayer(2);
-	miniChar->setLayer(1);
-
-	//miniChar->setHidden(true);
+	baseView->addNode(newChar,sf::Vector2f(0.f,0.f));
+	baseView->addNode(panel,sf::Vector2f(0.f,45.f));
+	/*baseView->addNode(miniChar,sf::Vector2f(125.f,0.f));
+	baseView->addNode(third,sf::Vector2f(150.f,0.f));*/
 
 	rootNodes.push_back(baseView);
 }

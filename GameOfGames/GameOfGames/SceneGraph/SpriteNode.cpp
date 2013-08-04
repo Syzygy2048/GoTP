@@ -23,12 +23,26 @@ void SpriteNode::setTexture(std::string textureName)
 
 	texture = newTexture;
 
+	onSetTexture();
+}
+
+void SpriteNode::onSetTexture()
+{
 	sprite->setTexture((*texture));
 }
 
 void SpriteNode::onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transform totalTransform)
 {
 	target->draw(*sprite,totalTransform);
+}
+
+void SpriteNode::removeTexture()
+{
+	AssetManager::unsubscribeToTexture(texture);
+
+	texture = NULL;
+
+	onRemoveTexture();
 }
 
 SpriteNode::~SpriteNode(void)

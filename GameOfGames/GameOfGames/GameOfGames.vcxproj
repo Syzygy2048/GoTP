@@ -61,11 +61,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)\madlibs\SFML-2.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SFML_STATIC ;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)\madlibs\SFML-2.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics-s.lib;sfml-window-s.lib;sfml-system-s.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -75,6 +79,7 @@
     <ClCompile Include="Options\OptionsManager.cpp" />
     <ClCompile Include="SceneGraph\SceneNode.cpp" />
     <ClCompile Include="SceneGraph\SpriteNode.cpp" />
+    <ClCompile Include="SceneGraph\UIView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h" />
@@ -84,11 +89,13 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="SceneGraph\SceneNode.h" />
     <ClInclude Include="SceneGraph\SpriteNode.h" />
+    <ClInclude Include="SceneGraph\UIView.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Sprites\caipira.png" />
     <Image Include="Assets\Sprites\chines.png" />
     <Image Include="Assets\Sprites\preto.png" />
+    <Image Include="Assets\Sprites\Tileset.png" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="settings.txt" />

@@ -1,5 +1,9 @@
 bin/build
 
+GameOfGames/Release
+GameOfGames/Debug
+
+*.sln
 *.res
 *.aps
 *.rc

@@ -56,7 +56,7 @@ sf::Texture* AssetManager::getTexture(std::string textureName)
 		return;
 	}
 
-	for(int i = 0; i < texturesData->size();i++)
+	for(unsigned int i = 0; i < texturesData->size();i++)
 	{
 		TextureData* data = texturesData->at(i);
 

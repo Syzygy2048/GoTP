@@ -4,14 +4,16 @@
 class SpriteNode : public SceneNode
 {
 public:
-	void setSprite(std::string newSource);
 	void setTexture(std::string textureName);
-	void onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform);
-
+	void removeTexture();
+	
 	SpriteNode();
 	~SpriteNode(void);
 
-private:
+protected:
+	virtual void onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform);
+	virtual void onRemoveTexture(){};
+	virtual void onSetTexture();
 	sf::Sprite* sprite;
 	sf::Texture* texture;
 };
