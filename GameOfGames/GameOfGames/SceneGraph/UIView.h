@@ -8,6 +8,7 @@ public:
 	const sf::Vector2i* getSize(){ return size; };
 	void setSize(sf::Vector2i* newSize);
 
+	UIView(sf::Vector2i* newSize);
 	UIView(sf::Vector2i* newSize, std::string newTexture);
 	~UIView(void);
 protected:

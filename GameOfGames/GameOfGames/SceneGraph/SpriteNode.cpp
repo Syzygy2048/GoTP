@@ -38,12 +38,12 @@ void SpriteNode::onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transfor
 
 void SpriteNode::setTintColor(int red, int green, int blue, float alpha)
 {
-	sprite->setColor(sf::Color(red,green,blue,sf::Uint8(255*alpha)));
+	sprite->setColor(sf::Color(red,green,blue,sf::Uint8(254*alpha)));
 }
 
 void SpriteNode::setTintColor(int red, int green, int blue)
 {
-	float alpha = 255.f/getTintColor().a;
+	float alpha = getTintColor().a/254.f;
 
 	setTintColor(red,green,blue,alpha);
 }

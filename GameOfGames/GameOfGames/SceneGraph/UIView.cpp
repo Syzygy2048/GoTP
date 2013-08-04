@@ -6,6 +6,11 @@ UIView::UIView(sf::Vector2i* newSize, std::string newTexture)
 	setTexture(newTexture);
 }
 
+UIView::UIView(sf::Vector2i* newSize)
+{
+	setSize(newSize);
+}
+
 void UIView::onRemoveTexture()
 {
 	adjustBackGround();
@@ -29,7 +34,7 @@ void UIView::adjustBackGround()
 
 	destinationTexture.create(size->x,size->y);
 
-	destinationTexture.clear(sf::Color::Green);
+	destinationTexture.clear(sprite->getColor());
 
 	if(texture)
 	{
