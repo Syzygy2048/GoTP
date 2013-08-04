@@ -6,6 +6,7 @@
 #include "SceneGraph/UIView.h"
 #include "SceneGraph/SpriteNode.h"
 #include "AssetManager.h"
+#include "InputHandlerSFML.h"
 
 #define TIMESTEP 0.01666666666f
 #define WINDOW_TITLE "Game of Thrones"
@@ -22,9 +23,10 @@ void testingShit()
 	//panel->removeTexture();
 	//panel->setTintColor(255,0,0);
 	//panel->setAlpha(0.5);
-	
-
 	//panel->resetTintColor();
+
+	//newChar->setScale(sf::Vector2f(2.f,2.f));
+	//newChar->setRotation(90.f);
 
 	/*SpriteNode* miniChar = new SpriteNode();
 	
@@ -47,9 +49,7 @@ int main()
 	OptionsManager* manager = new OptionsManager();
 
 	sf::Vector2f displayResolution = manager->getDisplayResolution();
-
 	sf::RenderWindow* window;
-	
 	if(manager->getFullscreen())
 	{
 		window = new sf::RenderWindow(sf::VideoMode(int(displayResolution.x), int(displayResolution.y)), WINDOW_TITLE, sf::Style::Fullscreen);
@@ -58,17 +58,15 @@ int main()
 	{
 		window = new sf::RenderWindow(sf::VideoMode(int(displayResolution.x),int(displayResolution.y)), WINDOW_TITLE);
 	}
-	
 	window->setVerticalSyncEnabled((manager->getVSync() ?  true : false));
 	
 	//tests yo
 	testingShit();
 	
 	sf::Clock clock;
-
 	float remainingTime = 0;
 
-	for each (SceneNode* rootNode in rootNodes)
+	for(SceneNode* rootNode : rootNodes)
 	{
 		rootNode->setScale(*manager->getCachedScreenRatio());
 	}
@@ -97,16 +95,13 @@ int main()
 				node->tick(TIMESTEP);				
 			}
 		}
-
 		remainingTime = timeToConsume;
 
 		window->clear();
-
 		for(SceneNode* node : rootNodes)
 		{
 			node->draw(cachedTime-remainingTime, window, sf::Transform());
 		}
-
 		window->display();
 	}
 
@@ -114,7 +109,6 @@ int main()
 	{
 		delete node;
 	}
-
 	delete window;
 
 	return 0;
