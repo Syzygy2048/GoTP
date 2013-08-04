@@ -24,16 +24,16 @@
     <ClCompile Include="SceneGraph\SpriteNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Options\OptionsManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AssetManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SceneGraph\UIView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Input\InputHandlerSFML.cpp">
+    <ClCompile Include="OptionsManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InputHandlerSFML.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,19 +44,16 @@
     <ClInclude Include="SceneGraph\SpriteNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Options\OptionsManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AssetManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SceneGraph\UIView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Input\InputHandlerSFML.h">
+    <ClInclude Include="OptionsManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Input\IHandleInput.h">
+    <ClInclude Include="InputHandlerSFML.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

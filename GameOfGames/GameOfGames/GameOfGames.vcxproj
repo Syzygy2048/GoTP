@@ -74,15 +74,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
+    <ClCompile Include="InputHandlerSFML.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Options\OptionsManager.cpp" />
+    <ClCompile Include="OptionsManager.cpp" />
     <ClCompile Include="SceneGraph\SceneNode.cpp" />
     <ClCompile Include="SceneGraph\SpriteNode.cpp" />
     <ClCompile Include="SceneGraph\UIView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h" />
-    <ClInclude Include="Options\OptionsManager.h" />
+    <ClInclude Include="InputHandlerSFML.h" />
+    <ClInclude Include="OptionsManager.h" />
     <ClInclude Include="SceneGraph\SceneNode.h" />
     <ClInclude Include="SceneGraph\SpriteNode.h" />
     <ClInclude Include="SceneGraph\UIView.h" />

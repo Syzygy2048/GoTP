@@ -2,7 +2,6 @@
 
 #include <SFML\Window.hpp>
 #include "SceneGraph\SceneNode.h"
-#include "IHandleInput.h"
 #include <cstdint>
 
 #define keyW (uint64_t) pow(2,0)
@@ -19,7 +18,7 @@ class InputHandlerSFML
 public:
 
 
-	static InputHandlerSFML* getInstance();
+	static InputHandlerSFML& getInstance();
 	
 	//checks the keyboard for all currently pressed keys and loads them into bitmasks, only call once per frame from within the game loop.
 	void poll();
@@ -28,6 +27,8 @@ public:
 	uint64_t getKeysPressed(){ return clickBitmask; }
 	//returns a bitmask of all defined keys that are held down for more than a frame already
 	uint64_t getKeysHeld(){ return holdBitmask; }
+	
+	sf::Vector2i* getMousePosition() {return &mousePos; }
 
 
 	//void subscribeToEvent(void (*callbackFunction)(IHandleInput*), uint64_t subMask);
@@ -35,12 +36,12 @@ public:
 	~InputHandlerSFML(void);
 
 private:
+	InputHandlerSFML* instance;
 	InputHandlerSFML(void);										//private because singleton
 	InputHandlerSFML(const InputHandlerSFML&);					//prevents copy constructor
 	InputHandlerSFML& operator = (const InputHandlerSFML&);		//prevents copy
 
 	sf::Vector2i mousePos;
-
 
 	uint64_t clickBitmask;
 	uint64_t holdBitmask;

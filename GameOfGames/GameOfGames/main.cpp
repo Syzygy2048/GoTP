@@ -1,12 +1,14 @@
-#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
-#include "Options/OptionsManager.h"
+
+#include <SFML/Graphics.hpp>
+
 #include "SceneGraph/SpriteNode.h"
 #include "SceneGraph/UIView.h"
 #include "SceneGraph/SpriteNode.h"
 #include "AssetManager.h"
-#include "Input/InputHandlerSFML.h"
+#include "OptionsManager.h"
+#include "InputHandlerSFML.h"
 
 #define TIMESTEP 0.01666666666f
 #define WINDOW_TITLE "Game of Thrones"
@@ -47,6 +49,7 @@ void testingShit()
 int main()
 {
 	OptionsManager* manager = new OptionsManager();
+	InputHandlerSFML* input = &InputHandlerSFML::getInstance();
 
 	sf::Vector2f displayResolution = manager->getDisplayResolution();
 	sf::RenderWindow* window;
@@ -85,6 +88,8 @@ int main()
 		sf::Time elapsed = clock.restart();
 		float timeToConsume = remainingTime + elapsed.asSeconds();
 		float cachedTime = timeToConsume;
+
+		input->poll();
 
 		while(timeToConsume >= TIMESTEP)
 		{
