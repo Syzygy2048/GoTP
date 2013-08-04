@@ -88,6 +88,7 @@
     <ClInclude Include="SceneGraph\SceneNode.h" />
     <ClInclude Include="SceneGraph\SpriteNode.h" />
     <ClInclude Include="SceneGraph\UIView.h" />
+    <ClInclude Include="UIViewClickListener.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Sprites\caipira.png" />

@@ -11,6 +11,19 @@ UIView::UIView(sf::Vector2i* newSize)
 	setSize(newSize);
 }
 
+void UIView::activated()
+{
+	if(listener)
+	{
+		listener->viewClicked(this);
+	}
+}
+
+void UIView::setClickListener(UIViewClickListener* newListener)
+{
+	listener = newListener;
+}
+
 void UIView::onRemoveTexture()
 {
 	adjustBackGround();

@@ -2,7 +2,6 @@
 #include <vector>
 
 #include <SFML/Graphics.hpp>
-
 #include "SceneGraph/SpriteNode.h"
 #include "SceneGraph/UIView.h"
 #include "SceneGraph/SpriteNode.h"
@@ -20,6 +19,7 @@ void testingShit()
 	SceneNode* baseView = new SceneNode();
 
 	SpriteNode* newChar = new SpriteNode();
+
 	UIView* panel = new UIView(new sf::Vector2i(300,200),"Tileset.png");//this image has a transparent border of 1px
 
 	//panel->removeTexture();

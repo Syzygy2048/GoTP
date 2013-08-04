@@ -56,6 +56,9 @@
     <ClInclude Include="InputHandlerSFML.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UIViewClickListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Sprites\preto.png">
