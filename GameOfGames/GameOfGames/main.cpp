@@ -1,12 +1,12 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
-#include "Options\OptionsManager.h"
+#include "Options/OptionsManager.h"
 #include "SceneGraph/SpriteNode.h"
 #include "SceneGraph/UIView.h"
 #include "SceneGraph/SpriteNode.h"
 #include "AssetManager.h"
-#include "InputHandlerSFML.h"
+#include "Input/InputHandlerSFML.h"
 
 #define TIMESTEP 0.01666666666f
 #define WINDOW_TITLE "Game of Thrones"

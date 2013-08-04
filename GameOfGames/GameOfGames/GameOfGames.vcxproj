@@ -74,7 +74,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
-    <ClCompile Include="Input\InputHandlerSFML.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Options\OptionsManager.cpp" />
     <ClCompile Include="SceneGraph\SceneNode.cpp" />
@@ -83,10 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h" />
-    <ClInclude Include="Input\IHandleInput.h" />
-    <ClInclude Include="Input\InputHandlerSFML.h" />
     <ClInclude Include="Options\OptionsManager.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="SceneGraph\SceneNode.h" />
     <ClInclude Include="SceneGraph\SpriteNode.h" />
     <ClInclude Include="SceneGraph\UIView.h" />

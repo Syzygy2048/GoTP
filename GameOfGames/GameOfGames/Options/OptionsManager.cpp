@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <sys/stat.h>
+#include <SFML\System.hpp>
 
 OptionsManager::OptionsManager() : path(new std::string ("settings.txt")),defaultDisplayResolution(new sf::Vector2f(1920.f, 1080.f)), defaultInternalResolution(new sf::Vector2f(720.f,720.f)), defaultFullscreen(1), defaultWideScreen(1),defaultVSync(1)
 {
