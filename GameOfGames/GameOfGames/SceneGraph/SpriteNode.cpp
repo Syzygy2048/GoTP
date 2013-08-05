@@ -7,7 +7,7 @@ SpriteNode::SpriteNode()
 
 void SpriteNode::setTexture(std::string textureName)
 {
-	sf::Texture* newTexture = AssetManager::getTexture(textureName);
+	sf::Texture* newTexture = AssetManager::getTexture(textureName,NULL);
 
 	if(!newTexture)
 	{
@@ -18,7 +18,7 @@ void SpriteNode::setTexture(std::string textureName)
 
 	if (texture)
 	{
-		AssetManager::unsubscribeToTexture(texture);
+		AssetManager::getTexture(NULL,texture);
 	}
 
 	texture = newTexture;
@@ -74,9 +74,13 @@ sf::Color SpriteNode::getTintColor()
 
 void SpriteNode::removeTexture()
 {
-	AssetManager::unsubscribeToTexture(texture);
+	AssetManager::getTexture("",texture);
 
-	texture = NULL;
+	texture = new sf::Texture();
+
+	sprite->setTexture(*texture);
+
+	delete texture;
 
 	onRemoveTexture();
 }
@@ -85,7 +89,7 @@ SpriteNode::~SpriteNode(void)
 {
 	if (texture)
 	{
-		AssetManager::unsubscribeToTexture(texture);
+		removeTexture();
 	}
 
 	delete sprite;

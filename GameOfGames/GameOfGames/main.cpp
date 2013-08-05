@@ -7,6 +7,7 @@
 #include "SceneGraph/SpriteNode.h"
 #include "AssetManager.h"
 #include "OptionsManager.h"
+#include "UIViewClickListener.h"
 #include "InputHandlerSFML.h"
 
 #define TIMESTEP 0.01666666666f
@@ -14,13 +15,14 @@
 
 std::vector<SceneNode*> rootNodes;
 
+
 void testingShit()
 {
 	SceneNode* baseView = new SceneNode();
 
 	SpriteNode* newChar = new SpriteNode();
 
-	UIView* panel = new UIView(new sf::Vector2i(300,200),"Tileset.png");//this image has a transparent border of 1px
+	UIView* panel = new UIView(new sf::Vector2i(300,200),"Tileset.png");//this image has a transparent border of 
 
 	//panel->removeTexture();
 	//panel->setTintColor(255,0,0);
@@ -31,12 +33,14 @@ void testingShit()
 	//newChar->setRotation(90.f);
 
 	/*SpriteNode* miniChar = new SpriteNode();
-	
+
 	SpriteNode* third = new SpriteNode();*/
 
 	newChar->setTexture("Tileset.png");
 	/*miniChar->setTexture("chines.png");
 	third->setTexture("caipira.png");*/
+
+	newChar->removeTexture();
 
 	baseView->addNode(newChar,sf::Vector2f(0.f,0.f));
 	baseView->addNode(panel,sf::Vector2f(0.f,45.f));
@@ -62,10 +66,10 @@ int main()
 		window = new sf::RenderWindow(sf::VideoMode(int(displayResolution.x),int(displayResolution.y)), WINDOW_TITLE);
 	}
 	window->setVerticalSyncEnabled((manager->getVSync() ?  true : false));
-	
+
 	//tests yo
 	testingShit();
-	
+
 	sf::Clock clock;
 	float remainingTime = 0;
 
@@ -91,6 +95,8 @@ int main()
 
 		input->poll();
 
+		UIViewClickListener::addDrawnClickable(NULL,true);
+
 		while(timeToConsume >= TIMESTEP)
 		{
 			timeToConsume -= TIMESTEP;
@@ -100,13 +106,18 @@ int main()
 				node->tick(TIMESTEP);				
 			}
 		}
+
+		//check here
+
 		remainingTime = timeToConsume;
 
 		window->clear();
+
 		for(SceneNode* node : rootNodes)
 		{
 			node->draw(cachedTime-remainingTime, window, sf::Transform());
 		}
+
 		window->display();
 	}
 

@@ -1,14 +1,17 @@
 #include "UIView.h"
+#include "..\UIViewClickListener.h"
 
 UIView::UIView(sf::Vector2i* newSize, std::string newTexture)
 {
 	setSize(newSize);
+	focusable = true;
 	setTexture(newTexture);
 }
 
 UIView::UIView(sf::Vector2i* newSize)
 {
 	setSize(newSize);
+	focusable = true;
 }
 
 void UIView::activated()
@@ -34,6 +37,16 @@ void UIView::setSize(sf::Vector2i* newSize)
 	size = newSize;
 
 	adjustBackGround();
+}
+
+void UIView::onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform)
+{
+	SpriteNode::onDraw(deltaTime,target, parentTranform);
+
+	if(focusable)
+	{
+		UIViewClickListener::addDrawnClickable(this,false);
+	}	
 }
 
 void UIView::onSetTexture()

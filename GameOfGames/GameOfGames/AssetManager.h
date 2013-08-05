@@ -5,8 +5,7 @@
 class AssetManager
 {
 public:
-	static sf::Texture* getTexture(std::string textureName);
-	static void unsubscribeToTexture(sf::Texture* texture);
+	static sf::Texture* getTexture(std::string textureName,sf::Texture* unsubscribing);
 
 private:
 	struct TextureData
