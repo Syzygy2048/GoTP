@@ -26,7 +26,13 @@ void InputHandlerSFML::poll()
 
 InputHandlerSFML* InputHandlerSFML::getInstance()
 {
-	static InputHandlerSFML* instance = new InputHandlerSFML();
+	static InputHandlerSFML* instance;
+	
+	if(!instance)
+	{
+		instance = new InputHandlerSFML();
+	}
+	
 	return instance;
 }
 

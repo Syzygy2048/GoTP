@@ -16,8 +16,6 @@
 class InputHandlerSFML
 {
 public:
-
-
 	static InputHandlerSFML* getInstance();
 	
 	//checks the keyboard for all currently pressed keys and loads them into bitmasks, only call once per frame from within the game loop.
@@ -29,7 +27,6 @@ public:
 	uint64_t getKeysHeld(){ return holdBitmask; }
 	
 	sf::Vector2i* getMousePosition() {return &mousePos; }
-
 
 	//void subscribeToEvent(void (*callbackFunction)(IHandleInput*), uint64_t subMask);
 

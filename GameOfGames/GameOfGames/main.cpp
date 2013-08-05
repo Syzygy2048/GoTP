@@ -40,7 +40,7 @@ void testingShit()
 	/*miniChar->setTexture("chines.png");
 	third->setTexture("caipira.png");*/
 
-	newChar->removeTexture();
+	//newChar->removeTexture();
 
 	baseView->addNode(newChar,sf::Vector2f(0.f,0.f));
 	baseView->addNode(panel,sf::Vector2f(0.f,45.f));
@@ -95,7 +95,7 @@ int main()
 
 		input->poll();
 
-		UIViewClickListener::addDrawnClickable(NULL,true);
+		AssetManager::getIntance()->clearClickables();
 
 		while(timeToConsume >= TIMESTEP)
 		{
@@ -107,7 +107,20 @@ int main()
 			}
 		}
 
-		//check here
+		if(mouseButtonLeft == (mouseButtonLeft & input->getKeysPressed()))
+		{
+			std::cout<<"click\n";
+		}
+
+		if(mouseButtonLeft == (mouseButtonLeft & input->getKeysHeld()))
+		{
+			std::cout<<"held\n";
+		}
+
+		if((mouseButtonLeft == (mouseButtonLeft & input->getKeysHeld())) && (mouseButtonLeft == (mouseButtonLeft & input->getKeysPressed())))
+		{
+			std::cout<<"click and held\n";
+		}
 
 		remainingTime = timeToConsume;
 

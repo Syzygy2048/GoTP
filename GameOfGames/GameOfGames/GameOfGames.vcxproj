@@ -80,7 +80,6 @@
     <ClCompile Include="SceneGraph\SceneNode.cpp" />
     <ClCompile Include="SceneGraph\SpriteNode.cpp" />
     <ClCompile Include="SceneGraph\UIView.cpp" />
-    <ClCompile Include="UIViewClickListener.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h" />

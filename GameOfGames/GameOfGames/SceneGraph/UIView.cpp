@@ -1,5 +1,6 @@
 #include "UIView.h"
 #include "..\UIViewClickListener.h"
+#include "..\AssetManager.h"
 
 UIView::UIView(sf::Vector2i* newSize, std::string newTexture)
 {
@@ -45,7 +46,7 @@ void UIView::onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform par
 
 	if(focusable)
 	{
-		UIViewClickListener::addDrawnClickable(this,false);
+		AssetManager::getIntance()->addDrawnClickable(this);
 	}	
 }
 
