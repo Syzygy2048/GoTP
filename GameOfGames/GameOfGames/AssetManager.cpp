@@ -42,9 +42,9 @@ void AssetManager::checkOnClickable()
 
 			lastHovered->setHoveredState(true);
 		}
-		else if(!drawnClickable->isHoverable())
+		else if(drawnClickable->getHoveredState() && !drawnClickable->isHoverable())
 		{
-			lastHovered->setHoveredState(false);
+			drawnClickable->setHoveredState(false);
 
 			lastHovered = NULL;
 		}
