@@ -35,18 +35,21 @@ void SceneNode::tick(float deltaTime)
 	}
 }
 
-void SceneNode::draw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform, bool clickTest)
+void SceneNode::draw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform)
 {
-	for(SceneNode* node : *children)
+	if(!isHidden())
 	{
-		if(!node->isHidden())
-		{
-			sf::Transform totalTransform = parentTranform**transform;
+		sf::Transform totalTransform = parentTranform**transform;
 
-			node->onDraw(deltaTime,target,totalTransform*node->getTransform(),clickTest);
-			node->draw(deltaTime,target, totalTransform,clickTest);
+		onDraw(deltaTime,target,totalTransform);
+
+		for(SceneNode* node : *children)
+		{
+			node->draw(deltaTime,target, totalTransform);
 		}
 	}
+
+
 }
 
 void SceneNode::setLayer(int newLayer)

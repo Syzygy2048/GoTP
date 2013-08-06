@@ -29,6 +29,7 @@ private:
 		int usersAmount;
 	};
 
+	UIView* lastHovered;
 	UIView* drawnClickable;
 	std::vector<TextureData*>* texturesData;
 };

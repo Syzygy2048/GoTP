@@ -29,9 +29,30 @@ void AssetManager::unsubscribeToTexture(sf::Texture* texture)
 
 void AssetManager::checkOnClickable()
 {
-	if (drawnClickable)
+	if (drawnClickable && drawnClickable->getFocusable())
 	{
-		drawnClickable->activated();
+		if(!drawnClickable->getHoveredState() && drawnClickable->isHoverable())
+		{
+			if (lastHovered)
+			{
+				lastHovered->setHoveredState(false);
+			}
+
+			lastHovered = drawnClickable;
+
+			lastHovered->setHoveredState(true);
+		}
+
+		if(InputHandlerSFML::getInstance()->didClicked())
+		{
+			drawnClickable->activated();
+		}
+	}
+	else if(lastHovered)
+	{
+		lastHovered->setHoveredState(false);
+
+		lastHovered = NULL;
 	}
 }
 

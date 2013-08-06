@@ -22,6 +22,8 @@ void InputHandlerSFML::poll(sf::RenderWindow* window)
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)) clickBitmask ^= keyD;
 
 	holdBitmask = oldBitmask & clickBitmask;	
+
+	clicked = !(mouseButtonLeft == (mouseButtonLeft & getKeysHeld())) && ((mouseButtonLeft == (mouseButtonLeft & getKeysPressed())));
 }
 
 InputHandlerSFML* InputHandlerSFML::getInstance()

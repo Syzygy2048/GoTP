@@ -80,6 +80,7 @@
     <ClCompile Include="SceneGraph\SceneNode.cpp" />
     <ClCompile Include="SceneGraph\SpriteNode.cpp" />
     <ClCompile Include="SceneGraph\UIView.cpp" />
+    <ClCompile Include="TestClickListener.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h" />
@@ -88,7 +89,8 @@
     <ClInclude Include="SceneGraph\SceneNode.h" />
     <ClInclude Include="SceneGraph\SpriteNode.h" />
     <ClInclude Include="SceneGraph\UIView.h" />
-    <ClInclude Include="UIViewClickListener.h" />
+    <ClInclude Include="TestClickListener.h" />
+    <ClInclude Include="UIViewListener.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Sprites\caipira.png" />

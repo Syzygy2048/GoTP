@@ -7,11 +7,11 @@
 class SceneNode
 {
 public:
-	void draw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform, bool clickTest);
+	void draw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform);
 
 	//Override and dont forget to call the parent implementation.
 	virtual void tick(float deltaTtime);
-	virtual void onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform, bool clickTest){}
+	virtual void onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform){}
 	
 	//settings
 	void setHidden(bool newHidden);

@@ -19,7 +19,7 @@ public:
 	~SpriteNode(void);
 
 protected:
-	virtual void onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform, bool clickTest);
+	virtual void onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform);
 	virtual void onRemoveTexture(){};
 	virtual void onSetTexture();
 	sf::Sprite* sprite;

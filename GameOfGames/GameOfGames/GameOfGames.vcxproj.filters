@@ -36,6 +36,9 @@
     <ClCompile Include="InputHandlerSFML.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TestClickListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneGraph\SceneNode.h">
@@ -56,7 +59,10 @@
     <ClInclude Include="InputHandlerSFML.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UIViewClickListener.h">
+    <ClInclude Include="TestClickListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIViewListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

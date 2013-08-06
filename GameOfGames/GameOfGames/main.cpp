@@ -7,7 +7,8 @@
 #include "SceneGraph/SpriteNode.h"
 #include "AssetManager.h"
 #include "OptionsManager.h"
-#include "UIViewClickListener.h"
+#include "TestClickListener.h"
+#include "UIViewListener.h"
 #include "InputHandlerSFML.h"
 
 #define TIMESTEP 0.01666666666f
@@ -22,8 +23,16 @@ void testingShit()
 	SpriteNode* newChar = new SpriteNode();
 	newChar->setTexture("Tileset.png");
 
+	TestClickListener* viewListener = new TestClickListener();
+
 	UIView* panel = new UIView(new sf::Vector2i(300,200),"Tileset.png");//this image has a transparent border of 
 	UIView* panel2 = new UIView(new sf::Vector2i(150,100),"Tileset.png");//this image has a transparent border of 
+
+	panel->setHoverable(true);
+	panel2->setHoverable(true);
+
+	panel->setUIViewListener(viewListener);
+	panel2->setUIViewListener(viewListener);
 
 	//panel->removeTexture();
 	//panel->setTintColor(255,0,0);
@@ -116,17 +125,14 @@ int main()
 
 		window->clear();
 
-		bool clickTest = !(mouseButtonLeft == (mouseButtonLeft & input->getKeysHeld())) && ((mouseButtonLeft == (mouseButtonLeft & input->getKeysPressed())));
-
 		for(SceneNode* node : rootNodes)
 		{
-			node->draw(cachedTime-remainingTime, window, sf::Transform(),clickTest);
+			node->draw(cachedTime-remainingTime, window, sf::Transform());
 		}
 
-		if(clickTest)
-		{
-			AssetManager::getInstance()->checkOnClickable();
-		}
+		
+		AssetManager::getInstance()->checkOnClickable();
+		
 
 		window->display();
 	}

@@ -27,12 +27,13 @@ public:
 	uint64_t getKeysHeld(){ return holdBitmask; }
 	
 	sf::Vector2i* getMousePosition() {return &mousePos; }
-
+	bool didClicked(){ return clicked; }
 	//void subscribeToEvent(void (*callbackFunction)(IHandleInput*), uint64_t subMask);
 
 	~InputHandlerSFML(void);
 
 private:
+	bool clicked;
 	InputHandlerSFML* instance;
 	InputHandlerSFML(void);										//private because singleton
 	InputHandlerSFML(const InputHandlerSFML&);					//prevents copy constructor

@@ -1,5 +1,6 @@
 #include "UIView.h"
-#include "..\UIViewClickListener.h"
+#include "..\UIViewListener.h"
+#include "..\InputHandlerSFML.h"
 #include "..\AssetManager.h"
 
 UIView::UIView(sf::Vector2i* newSize, std::string newTexture)
@@ -23,7 +24,7 @@ void UIView::activated()
 	}
 }
 
-void UIView::setClickListener(UIViewClickListener* newListener)
+void UIView::setUIViewListener(UIViewListener* newListener)
 {
 	listener = newListener;
 }
@@ -40,25 +41,32 @@ void UIView::setSize(sf::Vector2i* newSize)
 	adjustBackGround();
 }
 
-void UIView::onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform, bool clickTest)
+void UIView::setHoveredState(bool hoveredState)
 {
-	SpriteNode::onDraw(deltaTime,target, parentTranform, clickTest);
+	beingHovered = hoveredState;
 
-	if(focusable && clickTest)
+	if (listener)
 	{
-		sf::FloatRect temp = sf::FloatRect(0.f,0.f,float(size->x),float(size->y));
+		listener->viewHovered(this, beingHovered);
+	}
+}
 
-		sf::Transform inverse = parentTranform.getInverse();
+void UIView::onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform)
+{
+	SpriteNode::onDraw(deltaTime,target, parentTranform);
 
-		sf::Vector2i mousePos = *InputHandlerSFML::getInstance()->getMousePosition();
+	sf::FloatRect temp = sf::FloatRect(0.f,0.f,float(size->x),float(size->y));
 
-		sf::Vector2f transformedPoint = inverse.transformPoint(mousePos.x,mousePos.y);
+	sf::Transform inverse = parentTranform.getInverse();
 
-		if(temp.contains(transformedPoint))
-		{
-			AssetManager::getInstance()->setDrawnClickable(this);
-		}
-	}	
+	sf::Vector2i mousePos = *InputHandlerSFML::getInstance()->getMousePosition();
+
+	sf::Vector2f transformedPoint = inverse.transformPoint(float(mousePos.x),float(mousePos.y));
+
+	if(temp.contains(transformedPoint))
+	{
+		AssetManager::getInstance()->setDrawnClickable(this);
+	}
 }
 
 void UIView::onSetTexture()
