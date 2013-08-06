@@ -8,12 +8,16 @@ UIView::UIView(sf::Vector2i* newSize, std::string newTexture)
 	setSize(newSize);
 	focusable = true;
 	setTexture(newTexture);
+	hoverable = false;
+	beingHovered= false;
 }
 
 UIView::UIView(sf::Vector2i* newSize)
 {
 	setSize(newSize);
 	focusable = true;
+	hoverable = false;
+	beingHovered= false;
 }
 
 void UIView::activated()

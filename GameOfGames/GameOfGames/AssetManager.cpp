@@ -42,6 +42,12 @@ void AssetManager::checkOnClickable()
 
 			lastHovered->setHoveredState(true);
 		}
+		else if(!drawnClickable->isHoverable())
+		{
+			lastHovered->setHoveredState(false);
+
+			lastHovered = NULL;
+		}
 
 		if(InputHandlerSFML::getInstance()->didClicked())
 		{
