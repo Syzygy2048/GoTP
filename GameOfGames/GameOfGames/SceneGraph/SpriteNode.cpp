@@ -31,7 +31,7 @@ void SpriteNode::onSetTexture()
 	sprite->setTexture((*texture));
 }
 
-void SpriteNode::onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transform totalTransform)
+void SpriteNode::onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transform totalTransform, bool clickTest)
 {
 	target->draw(*sprite,totalTransform);
 }

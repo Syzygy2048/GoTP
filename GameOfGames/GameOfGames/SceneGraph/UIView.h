@@ -13,7 +13,6 @@ public:
 	//set the object that is suposed to respond to a click on this view
 	void setClickListener(UIViewClickListener* newListener);
 	void activated();
-	sf::FloatRect getCachedRealArea(){ return cachedRealArea; };
 	bool getFocusable(){ return focusable;}
 	void setFocusable(bool newFocusable){ focusable = newFocusable; }//focusable == clickable, so far
 
@@ -23,12 +22,11 @@ public:
 
 protected:
 	//so I can cache the real area based on its size and the parent transform
-	virtual void onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform);
+	virtual void onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform, bool clickTest);
 	virtual void onRemoveTexture();
 	virtual void onSetTexture();
 
 private:
-	sf::FloatRect cachedRealArea;
 	bool focusable;
 	UIViewClickListener* listener;
 	sf::Texture* finalTexture;

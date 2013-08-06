@@ -11,9 +11,9 @@ public:
 	 sf::Texture* getTexture(std::string textureName);
 	 void unsubscribeToTexture(sf::Texture* unsubscribing);
 
-	 void clearClickables();
-	 void addDrawnClickable(UIView* toAdd);
-	 void checkOnClickables();
+	 void clearClickable();
+	 void setDrawnClickable(UIView* clicked);
+	 void checkOnClickable();
 
 	 static AssetManager* getInstance();
 
@@ -29,6 +29,6 @@ private:
 		int usersAmount;
 	};
 
-	std::vector<UIView*>* drawnClickables;
+	UIView* drawnClickable;
 	std::vector<TextureData*>* texturesData;
 };

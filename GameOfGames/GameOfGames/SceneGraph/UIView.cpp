@@ -7,14 +7,12 @@ UIView::UIView(sf::Vector2i* newSize, std::string newTexture)
 	setSize(newSize);
 	focusable = true;
 	setTexture(newTexture);
-	canRotate = false;
 }
 
 UIView::UIView(sf::Vector2i* newSize)
 {
 	setSize(newSize);
 	focusable = true;
-	canRotate = false;
 }
 
 void UIView::activated()
@@ -42,17 +40,24 @@ void UIView::setSize(sf::Vector2i* newSize)
 	adjustBackGround();
 }
 
-void UIView::onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform)
+void UIView::onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform, bool clickTest)
 {
-	SpriteNode::onDraw(deltaTime,target, parentTranform);
+	SpriteNode::onDraw(deltaTime,target, parentTranform, clickTest);
 
-	if(focusable)
+	if(focusable && clickTest)
 	{
-		sf::FloatRect temp = sf::FloatRect(0.f,0.f,float( size->x),float(size->y));
+		sf::FloatRect temp = sf::FloatRect(0.f,0.f,float(size->x),float(size->y));
 
-		cachedRealArea = parentTranform.transformRect(temp);
+		sf::Transform inverse = parentTranform.getInverse();
 
-		AssetManager::getInstance()->addDrawnClickable(this);
+		sf::Vector2i mousePos = *InputHandlerSFML::getInstance()->getMousePosition();
+
+		sf::Vector2f transformedPoint = inverse.transformPoint(mousePos.x,mousePos.y);
+
+		if(temp.contains(transformedPoint))
+		{
+			AssetManager::getInstance()->setDrawnClickable(this);
+		}
 	}	
 }
 

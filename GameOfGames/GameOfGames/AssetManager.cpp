@@ -27,21 +27,11 @@ void AssetManager::unsubscribeToTexture(sf::Texture* texture)
 	}
 }
 
-void AssetManager::checkOnClickables()
+void AssetManager::checkOnClickable()
 {
-	sf::Vector2i* mousePos = InputHandlerSFML::getInstance()->getMousePosition();
-
-	for (int i = signed int( drawnClickables->size())-1; i >= 0; i--)
+	if (drawnClickable)
 	{
-		UIView* drawn = drawnClickables->at(i);
-
-		if (drawn->getCachedRealArea().contains(float( mousePos->x),float (mousePos->y)))
-		{
-			drawn->activated();
-
-			//break so only the top one is called
-			break;
-		}
+		drawnClickable->activated();
 	}
 }
 
@@ -86,26 +76,19 @@ sf::Texture* AssetManager::getTexture(std::string textureName)
 	}
 }
 
-void AssetManager::clearClickables()
+void AssetManager::clearClickable()
 {
-	if (drawnClickables)
-	{
-		while (!drawnClickables->empty())
-		{
-			drawnClickables->pop_back();
-		}
-	}
+	drawnClickable = NULL;
 }
 
-void AssetManager::addDrawnClickable(UIView* toAdd)
+void AssetManager::setDrawnClickable(UIView* clicked)
 {
-	drawnClickables->push_back(toAdd);
+	drawnClickable = clicked;
 }
 
 AssetManager::AssetManager()
 {
 	texturesData = new std::vector<TextureData*>();
-	drawnClickables = new std::vector<UIView*>();
 }
 
 AssetManager* AssetManager::getInstance()

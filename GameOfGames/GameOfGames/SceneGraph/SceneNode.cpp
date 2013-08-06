@@ -2,7 +2,6 @@
 
 SceneNode::SceneNode()
 {
-	canRotate = true;
 	parent = NULL;
 	cachedLocation = new sf::Vector2f(0.f,0.f);
 	cachedScale = new sf::Vector2f(1.f,1.f);
@@ -36,7 +35,7 @@ void SceneNode::tick(float deltaTime)
 	}
 }
 
-void SceneNode::draw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform)
+void SceneNode::draw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform, bool clickTest)
 {
 	for(SceneNode* node : *children)
 	{
@@ -44,13 +43,8 @@ void SceneNode::draw(float deltaTime, sf::RenderWindow* target, sf::Transform pa
 		{
 			sf::Transform totalTransform = parentTranform**transform;
 
-			if(!node->canRotate)
-			{
-				totalTransform.rotate(-cachedRotation);
-			}
-
-			node->onDraw(deltaTime,target,totalTransform*node->getTransform());
-			node->draw(deltaTime,target, totalTransform);
+			node->onDraw(deltaTime,target,totalTransform*node->getTransform(),clickTest);
+			node->draw(deltaTime,target, totalTransform,clickTest);
 		}
 	}
 }
@@ -164,11 +158,6 @@ void SceneNode::setScale(sf::Vector2f newScale)
 void SceneNode::setRotation(float newRotation)
 {
 	//see setScale
-	if(!canRotate)
-	{
-		return;
-	}
-
 	transform->rotate(-cachedRotation);
 
 	cachedRotation = newRotation;

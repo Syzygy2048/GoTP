@@ -15,12 +15,12 @@
 
 std::vector<SceneNode*> rootNodes;
 
-
 void testingShit()
 {
 	SceneNode* baseView = new SceneNode();
 
 	SpriteNode* newChar = new SpriteNode();
+	newChar->setTexture("Tileset.png");
 
 	UIView* panel = new UIView(new sf::Vector2i(300,200),"Tileset.png");//this image has a transparent border of 
 	UIView* panel2 = new UIView(new sf::Vector2i(150,100),"Tileset.png");//this image has a transparent border of 
@@ -31,21 +31,23 @@ void testingShit()
 	//panel->resetTintColor();
 
 	//newChar->setScale(sf::Vector2f(2.f,2.f));
-	//newChar->setRotation(90.f);
+	//newChar->setRotation(45.f);
 
 	/*SpriteNode* miniChar = new SpriteNode();
 
 	SpriteNode* third = new SpriteNode();*/
 
-	newChar->setTexture("Tileset.png");
+	
 	/*miniChar->setTexture("chines.png");
 	third->setTexture("caipira.png");*/
 
 	//newChar->removeTexture();
 
-	baseView->addNode(newChar,sf::Vector2f(0.f,0.f));
+	//panel2->setRotation(45.f);
+
+	baseView->addNode(newChar,sf::Vector2f(10.f,10.f));
 	newChar->addNode(panel,sf::Vector2f(20.f,45.f));
-	baseView->addNode(panel2,sf::Vector2f(75.f,150.f));
+	baseView->addNode(panel2,sf::Vector2f(200.f,150.f));
 
 	/*baseView->addNode(miniChar,sf::Vector2f(125.f,0.f));
 	baseView->addNode(third,sf::Vector2f(150.f,0.f));*/
@@ -98,7 +100,7 @@ int main()
 
 		input->poll(window);
 
-		AssetManager::getInstance()->clearClickables();
+		AssetManager::getInstance()->clearClickable();
 
 		while(timeToConsume >= TIMESTEP)
 		{
@@ -114,15 +116,16 @@ int main()
 
 		window->clear();
 
+		bool clickTest = !(mouseButtonLeft == (mouseButtonLeft & input->getKeysHeld())) && ((mouseButtonLeft == (mouseButtonLeft & input->getKeysPressed())));
+
 		for(SceneNode* node : rootNodes)
 		{
-			node->draw(cachedTime-remainingTime, window, sf::Transform());
+			node->draw(cachedTime-remainingTime, window, sf::Transform(),clickTest);
 		}
 
-		if(!(mouseButtonLeft == (mouseButtonLeft & input->getKeysHeld())) && 
-			(mouseButtonLeft == (mouseButtonLeft & input->getKeysPressed())))
+		if(clickTest)
 		{
-			AssetManager::getInstance()->checkOnClickables();
+			AssetManager::getInstance()->checkOnClickable();
 		}
 
 		window->display();
