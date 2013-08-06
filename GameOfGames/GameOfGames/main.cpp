@@ -23,6 +23,7 @@ void testingShit()
 	SpriteNode* newChar = new SpriteNode();
 
 	UIView* panel = new UIView(new sf::Vector2i(300,200),"Tileset.png");//this image has a transparent border of 
+	UIView* panel2 = new UIView(new sf::Vector2i(150,100),"Tileset.png");//this image has a transparent border of 
 
 	//panel->removeTexture();
 	//panel->setTintColor(255,0,0);
@@ -43,7 +44,9 @@ void testingShit()
 	//newChar->removeTexture();
 
 	baseView->addNode(newChar,sf::Vector2f(0.f,0.f));
-	baseView->addNode(panel,sf::Vector2f(0.f,45.f));
+	newChar->addNode(panel,sf::Vector2f(20.f,45.f));
+	baseView->addNode(panel2,sf::Vector2f(75.f,150.f));
+
 	/*baseView->addNode(miniChar,sf::Vector2f(125.f,0.f));
 	baseView->addNode(third,sf::Vector2f(150.f,0.f));*/
 
@@ -93,9 +96,9 @@ int main()
 		float timeToConsume = remainingTime + elapsed.asSeconds();
 		float cachedTime = timeToConsume;
 
-		input->poll();
+		input->poll(window);
 
-		AssetManager::getIntance()->clearClickables();
+		AssetManager::getInstance()->clearClickables();
 
 		while(timeToConsume >= TIMESTEP)
 		{
@@ -107,21 +110,6 @@ int main()
 			}
 		}
 
-		if(mouseButtonLeft == (mouseButtonLeft & input->getKeysPressed()))
-		{
-			std::cout<<"click\n";
-		}
-
-		if(mouseButtonLeft == (mouseButtonLeft & input->getKeysHeld()))
-		{
-			std::cout<<"held\n";
-		}
-
-		if((mouseButtonLeft == (mouseButtonLeft & input->getKeysHeld())) && (mouseButtonLeft == (mouseButtonLeft & input->getKeysPressed())))
-		{
-			std::cout<<"click and held\n";
-		}
-
 		remainingTime = timeToConsume;
 
 		window->clear();
@@ -129,6 +117,12 @@ int main()
 		for(SceneNode* node : rootNodes)
 		{
 			node->draw(cachedTime-remainingTime, window, sf::Transform());
+		}
+
+		if(!(mouseButtonLeft == (mouseButtonLeft & input->getKeysHeld())) && 
+			(mouseButtonLeft == (mouseButtonLeft & input->getKeysPressed())))
+		{
+			AssetManager::getInstance()->checkOnClickables();
 		}
 
 		window->display();

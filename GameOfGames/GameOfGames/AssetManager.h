@@ -7,13 +7,15 @@ class UIView;
 class AssetManager
 {
 public:
+	//avoid calling these, sprite classes already know how to handle subscriptions/unsubscriptions
 	 sf::Texture* getTexture(std::string textureName);
 	 void unsubscribeToTexture(sf::Texture* unsubscribing);
 
 	 void clearClickables();
 	 void addDrawnClickable(UIView* toAdd);
+	 void checkOnClickables();
 
-	 static AssetManager* getIntance();
+	 static AssetManager* getInstance();
 
 private:
 	AssetManager(void);										

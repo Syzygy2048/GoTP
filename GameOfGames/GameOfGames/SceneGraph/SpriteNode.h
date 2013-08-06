@@ -5,6 +5,7 @@
 class SpriteNode : public SceneNode
 {
 public:
+	//just pass the texture name, no need to pass the folder that contains it too
 	void setTexture(std::string textureName);
 	void removeTexture();
 	void setTintColor(int red, int green, int blue, float alpha);

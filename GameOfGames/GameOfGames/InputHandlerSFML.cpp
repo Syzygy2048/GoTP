@@ -7,11 +7,11 @@ InputHandlerSFML::InputHandlerSFML(void)
 	holdBitmask = 0;
 }
 
-void InputHandlerSFML::poll()
+void InputHandlerSFML::poll(sf::RenderWindow* window)
 {
 	oldBitmask = clickBitmask;
 	clickBitmask = 0;
-	mousePos = sf::Mouse::getPosition();
+	mousePos = sf::Mouse::getPosition(*window);
 	if(sf::Mouse::isButtonPressed(sf::Mouse::Left))	clickBitmask ^= mouseButtonLeft; 
 	if(sf::Mouse::isButtonPressed(sf::Mouse::Right)) clickBitmask ^= mouseButtonRight; 
 

@@ -1,5 +1,7 @@
 #include "AssetManager.h"
 #include <iostream>
+#include "InputHandlerSFML.h"
+#include "SceneGraph\UIView.h"
 
 void AssetManager::unsubscribeToTexture(sf::Texture* texture)
 {
@@ -21,6 +23,24 @@ void AssetManager::unsubscribeToTexture(sf::Texture* texture)
 
 				delete data;
 			}
+		}
+	}
+}
+
+void AssetManager::checkOnClickables()
+{
+	sf::Vector2i* mousePos = InputHandlerSFML::getInstance()->getMousePosition();
+
+	for (int i = signed int( drawnClickables->size())-1; i >= 0; i--)
+	{
+		UIView* drawn = drawnClickables->at(i);
+
+		if (drawn->getCachedRealArea().contains(float( mousePos->x),float (mousePos->y)))
+		{
+			drawn->activated();
+
+			//break so only the top one is called
+			break;
 		}
 	}
 }
@@ -88,7 +108,7 @@ AssetManager::AssetManager()
 	drawnClickables = new std::vector<UIView*>();
 }
 
-AssetManager* AssetManager::getIntance()
+AssetManager* AssetManager::getInstance()
 {
 	static AssetManager* instance;
 

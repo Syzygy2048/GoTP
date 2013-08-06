@@ -2,6 +2,7 @@
 
 SceneNode::SceneNode()
 {
+	canRotate = true;
 	parent = NULL;
 	cachedLocation = new sf::Vector2f(0.f,0.f);
 	cachedScale = new sf::Vector2f(1.f,1.f);
@@ -13,6 +14,18 @@ SceneNode::SceneNode()
 void SceneNode::setHidden(bool newHidden)
 {
 	hidden = newHidden;
+}
+
+void SceneNode::destroy()
+{
+	if (parent)
+	{
+		parent->eraseNode(this);
+	}
+	else
+	{
+		delete this;
+	}
 }
 
 void SceneNode::tick(float deltaTime)
@@ -30,6 +43,12 @@ void SceneNode::draw(float deltaTime, sf::RenderWindow* target, sf::Transform pa
 		if(!node->isHidden())
 		{
 			sf::Transform totalTransform = parentTranform**transform;
+
+			if(!node->canRotate)
+			{
+				totalTransform.rotate(-cachedRotation);
+			}
+
 			node->onDraw(deltaTime,target,totalTransform*node->getTransform());
 			node->draw(deltaTime,target, totalTransform);
 		}
@@ -68,6 +87,8 @@ bool SceneNode::detachNode(SceneNode* toRemove)
 
 		if(node == toRemove)
 		{
+			toRemove->parent = NULL;
+
 			children->erase(children->begin()+i);
 
 			return true;
@@ -143,6 +164,11 @@ void SceneNode::setScale(sf::Vector2f newScale)
 void SceneNode::setRotation(float newRotation)
 {
 	//see setScale
+	if(!canRotate)
+	{
+		return;
+	}
+
 	transform->rotate(-cachedRotation);
 
 	cachedRotation = newRotation;
@@ -155,13 +181,20 @@ void SceneNode::setTransform(sf::Transform* newTransform)
 	transform = newTransform;
 }
 
-void SceneNode::addNode(SceneNode* node, sf::Vector2f location)
+bool SceneNode::addNode(SceneNode* node, sf::Vector2f location)
 {
+	if(node->parent)
+	{
+		return false;
+	}
+
 	node->parent = this;
 
 	node->move(location);
 
 	finalChildInsertion(node);
+
+	return true;
 }
 
 void SceneNode::finalChildInsertion(SceneNode* node)

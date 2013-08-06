@@ -7,12 +7,14 @@ UIView::UIView(sf::Vector2i* newSize, std::string newTexture)
 	setSize(newSize);
 	focusable = true;
 	setTexture(newTexture);
+	canRotate = false;
 }
 
 UIView::UIView(sf::Vector2i* newSize)
 {
 	setSize(newSize);
 	focusable = true;
+	canRotate = false;
 }
 
 void UIView::activated()
@@ -46,7 +48,11 @@ void UIView::onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform par
 
 	if(focusable)
 	{
-		AssetManager::getIntance()->addDrawnClickable(this);
+		sf::FloatRect temp = sf::FloatRect(0.f,0.f,float( size->x),float(size->y));
+
+		cachedRealArea = parentTranform.transformRect(temp);
+
+		AssetManager::getInstance()->addDrawnClickable(this);
 	}	
 }
 
@@ -77,14 +83,14 @@ void UIView::adjustBackGround()
 
 			sf::Sprite tempSprite = sf::Sprite();
 			tempSprite.setTexture(*texture);
-			
+
 			int verticalFillSpace = size->y;
 			int verticalDrawingPoint = 0;
 
 			while (verticalFillSpace > 0)
 			{
 				int referenceVerticalPoint = 0;
-				
+
 				//are we not filling the first line?
 				if(verticalDrawingPoint)
 				{
@@ -153,11 +159,20 @@ void UIView::adjustBackGround()
 
 	finalTexture = new sf::Texture(destinationTexture.getTexture());
 
+	finalTexture->setSmooth(true);
+
 	sprite->setTexture(*finalTexture);
 }
 
 UIView::~UIView(void)
 {
-	delete finalTexture;
-	delete size;
+	if (finalTexture)
+	{
+		delete finalTexture;
+	}
+
+	if (size)
+	{
+		delete size;
+	}
 }

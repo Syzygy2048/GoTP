@@ -19,7 +19,7 @@ public:
 	static InputHandlerSFML* getInstance();
 	
 	//checks the keyboard for all currently pressed keys and loads them into bitmasks, only call once per frame from within the game loop.
-	void poll();
+	void poll(sf::RenderWindow* window);
 
 	//returns a bitmask of all defined keys currently pressed down
 	uint64_t getKeysPressed(){ return clickBitmask; }
