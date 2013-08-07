@@ -14,5 +14,17 @@ void TestClickListener::viewHovered(UIView* sender, bool hoveredState)
 
 void TestClickListener::viewClicked(UIView* sender)
 {
-	std::cout<<"view at "<<sender->getCachedLocation()->x<<", "<<sender->getCachedLocation()->y<<" got clicked.\n"; 
+	sf::Font font;
+
+	font.loadFromFile("arial.ttf");
+
+	sf::Text* text = new sf::Text("hello", font);
+
+	text->setCharacterSize(30);
+
+	text->setStyle(sf::Text::Italic);
+
+	text->setColor(sf::Color::Red);
+
+	sender->setText(text);
 }

@@ -54,9 +54,9 @@ void testingShit()
 
 	//panel2->setRotation(45.f);
 
-	baseView->addNode(newChar,sf::Vector2f(10.f,10.f));
-	newChar->addNode(panel,sf::Vector2f(20.f,45.f));
-	baseView->addNode(panel2,sf::Vector2f(200.f,150.f));
+	//baseView->addNode(newChar,sf::Vector2f(0.f,0.f));
+	baseView->addNode(panel,sf::Vector2f(150.f,100.f));
+	baseView->addNode(panel2,sf::Vector2f(75.f,250.f));
 
 	/*baseView->addNode(miniChar,sf::Vector2f(125.f,0.f));
 	baseView->addNode(third,sf::Vector2f(150.f,0.f));*/

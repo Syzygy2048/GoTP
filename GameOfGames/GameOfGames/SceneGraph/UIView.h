@@ -19,18 +19,22 @@ public:
 	void setHoveredState(bool hoveredState);
 	void setHoverable(bool newHoverable){ hoverable = newHoverable; }
 	bool isHoverable(){ return hoverable;}
+	bool isDrawingAsPanel(){ return drawAsPanel; }
+	void setDrawAsPanel(bool newDrawAsPanel);
+	void setText(sf::Text* text);
+	sf::Text* getText(){ return text; }
 	
-	UIView(sf::Vector2i* newSize);
 	UIView(sf::Vector2i* newSize, std::string newTexture);
 	~UIView(void);
 
 protected:
-	//so I can cache the real area based on its size and the parent transform
 	virtual void onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform);
 	virtual void onRemoveTexture();
 	virtual void onSetTexture();
 
 private:
+	sf::Text* text;
+	bool drawAsPanel;
 	bool beingHovered;
 	bool hoverable;
 	bool focusable;

@@ -29,6 +29,8 @@ void SpriteNode::setTexture(std::string textureName)
 void SpriteNode::onSetTexture()
 {
 	sprite->setTexture((*texture));
+
+	sprite->setPosition(-float(texture->getSize().x)/2,-float((texture->getSize().y)/2));
 }
 
 void SpriteNode::onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transform totalTransform)

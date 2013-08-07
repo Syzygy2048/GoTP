@@ -5,19 +5,20 @@
 
 UIView::UIView(sf::Vector2i* newSize, std::string newTexture)
 {
-	setSize(newSize);
+	drawAsPanel = true;
 	focusable = true;
-	setTexture(newTexture);
 	hoverable = false;
 	beingHovered= false;
+
+	setSize(newSize);
+	setTexture(newTexture);
 }
 
-UIView::UIView(sf::Vector2i* newSize)
+void UIView::setDrawAsPanel(bool newDrawAsPanel)
 {
-	setSize(newSize);
-	focusable = true;
-	hoverable = false;
-	beingHovered= false;
+	drawAsPanel = newDrawAsPanel;
+
+	adjustBackGround();
 }
 
 void UIView::activated()
@@ -59,7 +60,7 @@ void UIView::onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform par
 {
 	SpriteNode::onDraw(deltaTime,target, parentTranform);
 
-	sf::FloatRect temp = sf::FloatRect(0.f,0.f,float(size->x),float(size->y));
+	sf::FloatRect rect = sf::FloatRect(float(-size->x)/2,float(-size->y)/2,float(size->x),float(size->y));
 
 	sf::Transform inverse = parentTranform.getInverse();
 
@@ -67,7 +68,7 @@ void UIView::onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform par
 
 	sf::Vector2f transformedPoint = inverse.transformPoint(float(mousePos.x),float(mousePos.y));
 
-	if(temp.contains(transformedPoint))
+	if(rect.contains(transformedPoint))
 	{
 		AssetManager::getInstance()->setDrawnClickable(this);
 	}
@@ -80,11 +81,22 @@ void UIView::onSetTexture()
 
 void UIView::adjustBackGround()
 {
-	sf::RenderTexture destinationTexture= sf::RenderTexture();
+	if (!drawAsPanel)
+	{
+		sprite->setScale(float(size->x)/texture->getSize().x,float(size->y)/texture->getSize().y);
+
+		sprite->setTexture(*texture);
+
+		return;
+	}
+	else
+	{
+		sprite->setScale(1,1);
+	}
+
+	sf::RenderTexture destinationTexture = sf::RenderTexture();
 
 	destinationTexture.create(size->x,size->y);
-
-	destinationTexture.clear(sprite->getColor());
 
 	if(texture)
 	{
@@ -96,9 +108,10 @@ void UIView::adjustBackGround()
 		}
 		else
 		{
-			destinationTexture.clear();
+			destinationTexture.clear(sf::Color::Transparent);
 
 			sf::Sprite tempSprite = sf::Sprite();
+
 			tempSprite.setTexture(*texture);
 
 			int verticalFillSpace = size->y;
@@ -166,6 +179,15 @@ void UIView::adjustBackGround()
 			}
 		}
 	}
+	else
+	{
+		destinationTexture.clear(sprite->getColor());
+	}
+
+	if(text)
+	{
+		destinationTexture.draw(*text);
+	}
 
 	destinationTexture.display();
 
@@ -179,6 +201,21 @@ void UIView::adjustBackGround()
 	finalTexture->setSmooth(true);
 
 	sprite->setTexture(*finalTexture);
+
+	sprite->setPosition(-float(finalTexture->getSize().x)/2,-float((finalTexture->getSize().y)/2));
+
+}
+
+void UIView::setText(sf::Text* newText)
+{
+	if (text)
+	{
+		delete text;
+	}
+
+	text = newText;
+
+	adjustBackGround();
 }
 
 UIView::~UIView(void)
@@ -186,6 +223,11 @@ UIView::~UIView(void)
 	if (finalTexture)
 	{
 		delete finalTexture;
+	}
+
+	if (text)
+	{
+		delete text;
 	}
 
 	if (size)
