@@ -9,7 +9,7 @@ UIView::UIView(sf::Vector2i* newSize, std::string newTexture)
 	focusable = true;
 	hoverable = false;
 	beingHovered= false;
-
+	offset = new sf::Vector2i(0,0);
 	setSize(newSize);
 	setTexture(newTexture);
 }
@@ -60,7 +60,7 @@ void UIView::onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform par
 {
 	SpriteNode::onDraw(deltaTime,target, parentTranform);
 
-	sf::FloatRect rect = sf::FloatRect(float(-size->x)/2,float(-size->y)/2,float(size->x),float(size->y));
+	sf::FloatRect rect = sf::FloatRect(float(-size->x)/2+offset->x,float(-size->y)/2,float(size->x),float(size->y)+offset->y);
 
 	sf::Transform inverse = parentTranform.getInverse();
 
@@ -193,6 +193,9 @@ void UIView::adjustBackGround()
 
 	if(finalTexture)
 	{
+
+		sprite->move(float(finalTexture->getSize().x)/2,float((finalTexture->getSize().y)/2));
+
 		delete finalTexture;
 	}
 
@@ -202,7 +205,7 @@ void UIView::adjustBackGround()
 
 	sprite->setTexture(*finalTexture);
 
-	sprite->setPosition(-float(finalTexture->getSize().x)/2,-float((finalTexture->getSize().y)/2));
+	sprite->move(-float(finalTexture->getSize().x)/2,-float((finalTexture->getSize().y)/2));
 
 }
 

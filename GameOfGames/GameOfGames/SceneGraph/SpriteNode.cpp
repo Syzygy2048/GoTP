@@ -5,6 +5,20 @@ SpriteNode::SpriteNode()
 	sprite = new sf::Sprite();
 }
 
+void SpriteNode::setOffSet(sf::Vector2i* newOffset)
+{
+	if (offset)
+	{
+		sprite->move(-float(offset->x),-float(offset->y));
+
+		delete offset;
+	}
+
+	offset = newOffset;
+
+	sprite->move(float(offset->x),float(offset->y));
+}
+
 void SpriteNode::setTexture(std::string textureName)
 {
 	sf::Texture* newTexture = AssetManager::getInstance()->getTexture(textureName);
@@ -28,9 +42,14 @@ void SpriteNode::setTexture(std::string textureName)
 
 void SpriteNode::onSetTexture()
 {
+	if (texture)
+	{
+		sprite->move(float(texture->getSize().x)/2,float((texture->getSize().y)/2));
+	}
+
 	sprite->setTexture((*texture));
 
-	sprite->setPosition(-float(texture->getSize().x)/2,-float((texture->getSize().y)/2));
+	sprite->move(-float(texture->getSize().x)/2,-float((texture->getSize().y)/2));
 }
 
 void SpriteNode::onDraw(float deltaTime, sf::RenderWindow* target,  sf::Transform totalTransform)

@@ -28,8 +28,12 @@ void testingShit()
 	UIView* panel = new UIView(new sf::Vector2i(300,200),"Tileset.png");//this image has a transparent border of 
 	UIView* panel2 = new UIView(new sf::Vector2i(150,100),"Tileset.png");//this image has a transparent border of 
 
+	panel->setOffSet(new sf::Vector2i(150,0));
+
 	panel->setHoverable(true);
 	panel2->setHoverable(true);
+
+	panel->setRotation(45.f);
 
 	panel->setUIViewListener(viewListener);
 	panel2->setUIViewListener(viewListener);
