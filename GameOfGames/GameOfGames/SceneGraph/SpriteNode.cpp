@@ -32,6 +32,8 @@ void SpriteNode::setTexture(std::string textureName)
 
 	if (texture)
 	{
+		sprite->move(float(texture->getSize().x)/2,float((texture->getSize().y)/2));
+
 		AssetManager::getInstance()->unsubscribeToTexture(texture);
 	}
 
@@ -42,11 +44,6 @@ void SpriteNode::setTexture(std::string textureName)
 
 void SpriteNode::onSetTexture()
 {
-	if (texture)
-	{
-		sprite->move(float(texture->getSize().x)/2,float((texture->getSize().y)/2));
-	}
-
 	sprite->setTexture((*texture));
 
 	sprite->move(-float(texture->getSize().x)/2,-float((texture->getSize().y)/2));
