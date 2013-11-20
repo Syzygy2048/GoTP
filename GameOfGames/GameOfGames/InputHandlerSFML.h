@@ -1,8 +1,7 @@
 #pragma once
 
 #include <SFML\Window.hpp>
-#include "SceneGraph\SceneNode.h"
-#include "SceneGraph\UIView.h"
+#include <SFML\Graphics.hpp>
 #include <cstdint>
 
 #define keyW (uint64_t) pow(2,0)

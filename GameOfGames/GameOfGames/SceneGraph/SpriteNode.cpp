@@ -1,5 +1,7 @@
+
 #include "SpriteNode.h"
-#include "..\\AssetManager.h"
+#include "..\AssetManager.h"
+
 SpriteNode::SpriteNode()
 {
 	sprite = new sf::Sprite();

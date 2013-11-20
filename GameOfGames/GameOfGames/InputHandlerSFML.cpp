@@ -1,4 +1,6 @@
 #include "InputHandlerSFML.h"
+#include "SceneGraph\SceneNode.h"
+#include "SceneGraph\UIView.h"
 
 InputHandlerSFML::InputHandlerSFML(void)
 {

@@ -2,9 +2,10 @@
 #include <vector>
 
 #include <SFML/Graphics.hpp>
-#include "SceneGraph/SpriteNode.h"
-#include "SceneGraph/UIView.h"
-#include "SceneGraph/SpriteNode.h"
+#include "SceneGraph\SpriteNode.h"
+#include "SceneGraph\UIView.h"
+#include "SceneGraph\SceneNode.h"
+#include "SceneGraph\SpriteNode.h"
 #include "AssetManager.h"
 #include "OptionsManager.h"
 #include "TestClickListener.h"

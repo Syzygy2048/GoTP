@@ -1,4 +1,5 @@
 #include "UIView.h"
+#include "..\InputHandlerSFML.h"
 #include "..\UIViewListener.h"
 #include "..\InputHandlerSFML.h"
 #include "..\AssetManager.h"

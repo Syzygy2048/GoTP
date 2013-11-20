@@ -1,7 +1,6 @@
 #pragma once
-#include <SFML\Graphics.hpp>
 #include "SpriteNode.h"
-#include "..\InputHandlerSFML.h"
+#include <SFML\Graphics.hpp>
 
 class UIViewListener;
 
