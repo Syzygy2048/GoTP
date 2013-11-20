@@ -2,6 +2,7 @@
 
 #include <SFML\Window.hpp>
 #include "SceneGraph\SceneNode.h"
+#include "SceneGraph\UIView.h"
 #include <cstdint>
 
 #define keyW (uint64_t) pow(2,0)
@@ -12,12 +13,17 @@
 #define mouseButtonLeft (uint64_t) pow(2,5)
 #define mouseButtonRight (uint64_t) pow(2,6)
 
+class UIView;
 
 class InputHandlerSFML
 {
 public:
 	static InputHandlerSFML* getInstance();
 	
+	 void clearClickable();
+	 void setDrawnClickable(UIView* clicked);
+	 void checkOnClickable();
+
 	//checks the keyboard for all currently pressed keys and loads them into bitmasks, only call once per frame from within the game loop.
 	void poll(sf::RenderWindow* window);
 
@@ -44,5 +50,9 @@ private:
 	uint64_t clickBitmask;
 	uint64_t holdBitmask;
 	uint64_t oldBitmask;
+
+	UIView* lastHovered;
+	UIView* drawnClickable;
+	
 };
 

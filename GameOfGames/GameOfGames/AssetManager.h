@@ -2,18 +2,12 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-class UIView;
-
 class AssetManager
 {
 public:
 	//avoid calling these, sprite classes already know how to handle subscriptions/unsubscriptions
 	 sf::Texture* getTexture(std::string textureName);
 	 void unsubscribeToTexture(sf::Texture* unsubscribing);
-
-	 void clearClickable();
-	 void setDrawnClickable(UIView* clicked);
-	 void checkOnClickable();
 
 	 static AssetManager* getInstance();
 
@@ -29,7 +23,5 @@ private:
 		int usersAmount;
 	};
 
-	UIView* lastHovered;
-	UIView* drawnClickable;
 	std::vector<TextureData*>* texturesData;
 };

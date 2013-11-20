@@ -7,6 +7,57 @@ InputHandlerSFML::InputHandlerSFML(void)
 	holdBitmask = 0;
 }
 
+void InputHandlerSFML::clearClickable()
+{
+	drawnClickable = NULL;
+}
+
+void InputHandlerSFML::setDrawnClickable(UIView* clicked)
+{
+	drawnClickable = clicked;
+}
+
+void InputHandlerSFML::checkOnClickable()
+{
+	if (drawnClickable && drawnClickable->getFocusable())
+	{
+		if(!drawnClickable->getHoveredState() && drawnClickable->isHoverable())
+		{
+			if (lastHovered)
+			{
+				lastHovered->setHoveredState(false);
+			}
+
+			lastHovered = drawnClickable;
+
+			lastHovered->setHoveredState(true);
+		}
+		else if(drawnClickable->getHoveredState() && !drawnClickable->isHoverable())
+		{
+			drawnClickable->setHoveredState(false);
+
+			lastHovered = NULL;
+		}
+		else if(lastHovered && lastHovered!= drawnClickable)
+		{
+			lastHovered->setHoveredState(false);
+
+			lastHovered = NULL;
+		}
+
+		if(InputHandlerSFML::getInstance()->didClicked())
+		{
+			drawnClickable->activated();
+		}
+	}
+	else if(lastHovered)
+	{
+		lastHovered->setHoveredState(false);
+
+		lastHovered = NULL;
+	}
+}
+
 void InputHandlerSFML::poll(sf::RenderWindow* window)
 {
 	oldBitmask = clickBitmask;

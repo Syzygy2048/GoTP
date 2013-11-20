@@ -113,7 +113,7 @@ int main()
 
 		input->poll(window);
 
-		AssetManager::getInstance()->clearClickable();
+		InputHandlerSFML::getInstance()->clearClickable();
 
 		while(timeToConsume >= TIMESTEP)
 		{
@@ -135,9 +135,8 @@ int main()
 		}
 
 		
-		AssetManager::getInstance()->checkOnClickable();
+		InputHandlerSFML::getInstance()->checkOnClickable();
 		
-
 		window->display();
 	}
 

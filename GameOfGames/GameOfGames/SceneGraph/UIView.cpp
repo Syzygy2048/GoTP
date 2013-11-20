@@ -70,7 +70,7 @@ void UIView::onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform par
 
 	if(rect.contains(transformedPoint))
 	{
-		AssetManager::getInstance()->setDrawnClickable(this);
+		InputHandlerSFML::getInstance()->setDrawnClickable(this);
 	}
 }
 

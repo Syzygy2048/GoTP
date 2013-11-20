@@ -27,47 +27,6 @@ void AssetManager::unsubscribeToTexture(sf::Texture* texture)
 	}
 }
 
-void AssetManager::checkOnClickable()
-{
-	if (drawnClickable && drawnClickable->getFocusable())
-	{
-		if(!drawnClickable->getHoveredState() && drawnClickable->isHoverable())
-		{
-			if (lastHovered)
-			{
-				lastHovered->setHoveredState(false);
-			}
-
-			lastHovered = drawnClickable;
-
-			lastHovered->setHoveredState(true);
-		}
-		else if(drawnClickable->getHoveredState() && !drawnClickable->isHoverable())
-		{
-			drawnClickable->setHoveredState(false);
-
-			lastHovered = NULL;
-		}
-		else if(lastHovered && lastHovered!= drawnClickable)
-		{
-			lastHovered->setHoveredState(false);
-
-			lastHovered = NULL;
-		}
-
-		if(InputHandlerSFML::getInstance()->didClicked())
-		{
-			drawnClickable->activated();
-		}
-	}
-	else if(lastHovered)
-	{
-		lastHovered->setHoveredState(false);
-
-		lastHovered = NULL;
-	}
-}
-
 sf::Texture* AssetManager::getTexture(std::string textureName)
 {
 	for each (TextureData* data in *texturesData)
@@ -107,16 +66,6 @@ sf::Texture* AssetManager::getTexture(std::string textureName)
 
 		return NULL;
 	}
-}
-
-void AssetManager::clearClickable()
-{
-	drawnClickable = NULL;
-}
-
-void AssetManager::setDrawnClickable(UIView* clicked)
-{
-	drawnClickable = clicked;
 }
 
 AssetManager::AssetManager()
