@@ -7,10 +7,15 @@ class UIViewListener;
 class UIView:public SpriteNode
 {
 public:
-	const sf::Vector2i* getSize(){ return size; };
-	void setSize(sf::Vector2i* newSize);
+	//constructors and destructor
+	UIView(sf::Vector2i* newSize, std::string newTexture);
+	UIView(sf::Vector2i* newSize);
+	~UIView(void);
+
 	//set the object that is suposed to respond to a click on this view
 	void setUIViewListener(UIViewListener* newListener);
+
+	//methods about its behaviour status
 	void activated(int key);
 	bool getFocusable(){ return focusable;}
 	void setFocusable(bool newFocusable){ focusable = newFocusable; }//focusable == any action that can be performed
@@ -18,27 +23,30 @@ public:
 	void setHoveredState(bool hoveredState);
 	void setHoverable(bool newHoverable){ hoverable = newHoverable; }
 	bool isHoverable(){ return hoverable;}
+
+	//methods about how it draws
+	void setDrawAsPanel(bool newDrawAsPanel);
 	bool isDrawingAsPanel(){ return drawAsPanel; }
 	void setAlwaysUseClearBg(bool newAlwaysUseClearBg){alwaysUseClearBg = newAlwaysUseClearBg; };
-	void setDrawAsPanel(bool newDrawAsPanel);
+
+	//methods about its text
 	void setText(sf::Text* text);
-	void setFont(sf::Font* font);
-	sf::Font* getFont(){return font;};
-	sf::Text* getText(){ return text; }
-	
-	UIView(sf::Vector2i* newSize, std::string newTexture);
-	UIView(sf::Vector2i* newSize);
-	~UIView(void);
+	void updateText(sf::String newString);
+	const sf::Text* getText(){ return text; }
+
+	//methods about its size
+	const sf::Vector2i* getSize(){ return size; };
+	void setSize(sf::Vector2i* newSize);
 
 protected:
+	//methods called by other parent and children
 	virtual void onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform);
-	virtual void onRemoveTexture();
-	virtual void onSetTexture();
+	virtual void onRemoveTexture(){adjustBackGround();};
+	virtual void onSetTexture(){adjustBackGround();};
 
 private:
 	void configInitialSettings(sf::Vector2i* newSize);
 
-	sf::Font* font;
 	sf::Text* text;
 	bool drawAsPanel;
 	bool beingHovered;

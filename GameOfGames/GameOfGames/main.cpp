@@ -18,10 +18,11 @@
 
 std::vector<SceneNode*> rootNodes;
 UIView* fpsCounter;
+SceneNode* baseView;
 
 void testingShit()
 {
-	SceneNode* baseView = new SceneNode();
+
 
 	//SpriteNode* newChar = new SpriteNode();
 	//newChar->setTexture("Tileset.png");
@@ -30,11 +31,6 @@ void testingShit()
 
 	UIView* panel = new UIView(new sf::Vector2i(300,200),"Tileset.png");//this image has a transparent border of 
 	UIView* panel2 = new UIView(new sf::Vector2i(150,100),"Tileset.png");//this image has a transparent border of 
-
-	fpsCounter = new UIView(new sf::Vector2i(50,50));
-
-	fpsCounter ->setOffSet(new sf::Vector2i(25,25));
-
 
 	panel->setHoverable(true);
 	panel2->setHoverable(true);
@@ -66,7 +62,6 @@ void testingShit()
 
 	baseView->addNode(panel,sf::Vector2f(150.f,100.f));
 	baseView->addNode(panel2,sf::Vector2f(75.f,250.f));
-	baseView->addNode(fpsCounter,sf::Vector2f(0.f,0.f));
 
 	/*baseView->addNode(miniChar,sf::Vector2f(125.f,0.f));
 	baseView->addNode(third,sf::Vector2f(150.f,0.f));*/
@@ -91,8 +86,30 @@ int main()
 	}
 	window->setVerticalSyncEnabled((manager->getVSync() ?  true : false));
 
+	baseView = new SceneNode();
+
+	fpsCounter = new UIView(new sf::Vector2i(100,50));
+
+	sf::Font font = sf::Font();
+
+	font.loadFromFile("arial.ttf");
+
+	sf::Text* text = new sf::Text("", font);
+
+	text->setCharacterSize(30);
+
+	text->setColor(sf::Color::Red);
+
+	fpsCounter->setText(text);
+
+	fpsCounter ->setOffSet(new sf::Vector2i(55,25));
+
+	baseView->addNode(fpsCounter,sf::Vector2f(0.f,0.f));
+
 	//tests yo
 	testingShit();
+
+	fpsCounter->setLayer(0);
 
 	sf::Clock clock;
 	float remainingTime = 0;
@@ -116,31 +133,15 @@ int main()
 
 			int tempFrames = framesDrawn;
 
-			sf::Font font = sf::Font();
-
-			font.loadFromFile("arial.ttf");
-
 			if(manager->getShowFps())
 			{
 				char numstr[10];
 
 				sprintf_s(numstr, "%i", framesDrawn);
 
-				sf::String newText = sf::String(numstr);
-
-				sf::Text* text = new sf::Text(newText, font);
-
-				text->setCharacterSize(20);
-
-				text->setColor(sf::Color::Red);
-
-				fpsCounter->setText(text);
+				fpsCounter->updateText(sf::String(numstr));
 
 				framesDrawn = 0;
-			}
-			else if(fpsCounter->getText())
-			{
-				delete fpsCounter->getText();
 			}
 		}
 

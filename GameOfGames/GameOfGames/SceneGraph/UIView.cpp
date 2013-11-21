@@ -7,19 +7,8 @@
 UIView::UIView(sf::Vector2i* newSize, std::string newTexture)
 {
 	configInitialSettings(newSize);
-	
-	setTexture(newTexture);
-}
 
-void UIView::configInitialSettings(sf::Vector2i* newSize)
-{
-	drawAsPanel = true;
-	focusable = true;
-	hoverable = false;
-	beingHovered= false;
-	alwaysUseClearBg = true;
-	offset = new sf::Vector2i(0,0);
-	setSize(newSize);
+	setTexture(newTexture);
 }
 
 UIView::UIView(sf::Vector2i* newSize)
@@ -27,11 +16,27 @@ UIView::UIView(sf::Vector2i* newSize)
 	configInitialSettings(newSize);
 }
 
-void UIView::setDrawAsPanel(bool newDrawAsPanel)
+UIView::~UIView(void)
 {
-	drawAsPanel = newDrawAsPanel;
+	if (finalTexture)
+	{
+		delete finalTexture;
+	}
 
-	adjustBackGround();
+	if (text)
+	{
+		delete text;
+	}
+
+	if (size)
+	{
+		delete size;
+	}
+}
+
+void UIView::setUIViewListener(UIViewListener* newListener)
+{
+	listener = newListener;
 }
 
 void UIView::activated(int key)
@@ -42,23 +47,6 @@ void UIView::activated(int key)
 	}
 }
 
-void UIView::setUIViewListener(UIViewListener* newListener)
-{
-	listener = newListener;
-}
-
-void UIView::onRemoveTexture()
-{
-	adjustBackGround();
-}
-
-void UIView::setSize(sf::Vector2i* newSize)
-{
-	size = newSize;
-
-	adjustBackGround();
-}
-
 void UIView::setHoveredState(bool hoveredState)
 {
 	beingHovered = hoveredState;
@@ -67,6 +55,42 @@ void UIView::setHoveredState(bool hoveredState)
 	{
 		listener->viewHovered(this, beingHovered);
 	}
+}
+
+void UIView::setDrawAsPanel(bool newDrawAsPanel)
+{
+	drawAsPanel = newDrawAsPanel;
+
+	adjustBackGround();
+}
+
+void UIView::setText(sf::Text* newText)
+{
+	if (text)
+	{
+		delete text;
+	}
+
+	text = newText;
+
+	adjustBackGround();
+}
+
+void UIView::updateText(sf::String newString)
+{
+	if(text)
+	{
+		text->setString(newString);
+
+		adjustBackGround();
+	}
+}
+
+void UIView::setSize(sf::Vector2i* newSize)
+{
+	size = newSize;
+
+	adjustBackGround();
 }
 
 void UIView::onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform)
@@ -85,11 +109,6 @@ void UIView::onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform par
 	{
 		InputHandlerSFML::getInstance()->setDrawnClickable(this);
 	}
-}
-
-void UIView::onSetTexture()
-{
-	adjustBackGround();
 }
 
 void UIView::adjustBackGround()
@@ -202,7 +221,7 @@ void UIView::adjustBackGround()
 		{
 			destinationTexture.clear(sprite->getColor());
 		}
-		
+
 	}
 
 	if(text)
@@ -228,42 +247,17 @@ void UIView::adjustBackGround()
 	sprite->move(-float(finalTexture->getSize().x)/2,-float((finalTexture->getSize().y)/2));
 }
 
-void UIView::setFont(sf::Font* font)
+void UIView::configInitialSettings(sf::Vector2i* newSize)
 {
-	if (font)
-	{
-		delete font;
-	}
-
-	font = font;
+	drawAsPanel = true;
+	focusable = true;
+	hoverable = false;
+	beingHovered= false;
+	alwaysUseClearBg = true;
+	offset = new sf::Vector2i(0,0);
+	setSize(newSize);
 }
 
-void UIView::setText(sf::Text* newText)
-{
-	if (text)
-	{
-		delete text;
-	}
 
-	text = newText;
 
-	adjustBackGround();
-}
 
-UIView::~UIView(void)
-{
-	if (finalTexture)
-	{
-		delete finalTexture;
-	}
-
-	if (text)
-	{
-		delete text;
-	}
-
-	if (size)
-	{
-		delete size;
-	}
-}
