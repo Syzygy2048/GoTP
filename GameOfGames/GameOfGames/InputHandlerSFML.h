@@ -2,7 +2,6 @@
 
 #include <SFML\Window.hpp>
 #include <SFML\Graphics.hpp>
-#include <cstdint>
 
 #define keyW (uint64_t) pow(2,0)
 #define keyA (uint64_t) pow(2,1)
@@ -18,27 +17,24 @@ class InputHandlerSFML
 {
 public:
 	static InputHandlerSFML* getInstance();
-	
-	 void clearClickable();
-	 void setDrawnClickable(UIView* clicked);
-	 void checkOnClickable();
 
-	//checks the keyboard for all currently pressed keys and loads them into bitmasks, only call once per frame from within the game loop.
-	void poll(sf::RenderWindow* window);
+	void clearOcurredEvents();
+	void informMouseClicked(int button);
+	void informMouseMoved(sf::Vector2i location);
+	void clearClickable();
+	void setDrawnClickable(UIView* clicked);
+	void checkOnClickable();
 
-	//returns a bitmask of all defined keys currently pressed down
-	uint64_t getKeysPressed(){ return clickBitmask; }
-	//returns a bitmask of all defined keys that are held down for more than a frame already
-	uint64_t getKeysHeld(){ return holdBitmask; }
-	
 	sf::Vector2i* getMousePosition() {return &mousePos; }
-	bool didClicked(){ return clicked; }
-	//void subscribeToEvent(void (*callbackFunction)(IHandleInput*), uint64_t subMask);
+
+	bool didClicked(){ return mouseClicked; }
 
 	~InputHandlerSFML(void);
 
 private:
-	bool clicked;
+	bool mouseClicked;
+	int mouseClickedKey;
+	bool mouseMoved;
 	InputHandlerSFML* instance;
 	InputHandlerSFML(void);										//private because singleton
 	InputHandlerSFML(const InputHandlerSFML&);					//prevents copy constructor
@@ -46,12 +42,8 @@ private:
 
 	sf::Vector2i mousePos;
 
-	uint64_t clickBitmask;
-	uint64_t holdBitmask;
-	uint64_t oldBitmask;
-
 	UIView* lastHovered;
 	UIView* drawnClickable;
-	
+
 };
 

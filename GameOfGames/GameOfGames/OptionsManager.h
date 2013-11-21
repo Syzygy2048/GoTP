@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <SFML/Graphics.hpp>
+#include <SFML\Graphics.hpp>
 //Handles 
 class OptionsManager
 {
@@ -13,6 +13,7 @@ public:
 	sf::Vector2f* getCachedScreenRatio();
 	int getFullscreen(){ return fullscreen; }
 	int getVSync(){ return vSync; }
+	int getShowFps(){return showFps;}
 
 	OptionsManager(void);
 	~OptionsManager(void);
@@ -33,6 +34,7 @@ private:
 	sf::Vector2f* internalResolution;
 	sf::Vector2f* displayResolution;
 	int fullscreen;
+	int showFps;
 	int vSync;
 	int wideScreen;
 
@@ -41,6 +43,7 @@ private:
 	int defaultFullscreen;
 	int defaultVSync;
 	int defaultWideScreen;
+	int defaultShowFps;
 
 	sf::Vector2f* cachedScreenRatio;
 	std::string* path;

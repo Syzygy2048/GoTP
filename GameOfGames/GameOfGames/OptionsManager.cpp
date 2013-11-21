@@ -5,11 +5,12 @@
 #include <sys/stat.h>
 
 
-OptionsManager::OptionsManager() : path(new std::string ("settings.txt")),defaultDisplayResolution(new sf::Vector2f(1920.f, 1080.f)), defaultInternalResolution(new sf::Vector2f(720.f,720.f)), defaultFullscreen(1), defaultWideScreen(1),defaultVSync(1)
+OptionsManager::OptionsManager() : path(new std::string ("settings.txt")),defaultDisplayResolution(new sf::Vector2f(1920.f, 1080.f)), defaultInternalResolution(new sf::Vector2f(720.f,720.f)), defaultFullscreen(1), defaultWideScreen(1),defaultVSync(1), defaultShowFps(1)
 {
 	fullscreen = -1;
 	vSync = -1;
 	wideScreen = -1;
+	showFps = -1;
 
 	internalResolution = new sf::Vector2f();
 	displayResolution = new sf::Vector2f();
@@ -22,7 +23,8 @@ OptionsManager::OptionsManager() : path(new std::string ("settings.txt")),defaul
 		displayResolution->y == 0 ||
 		fullscreen == -1 || 
 		wideScreen == -1 ||
-		vSync == -1)
+		vSync == -1 ||
+		showFps == -1)
 	{
 		writeMissingDefault();
 	}
@@ -121,6 +123,11 @@ void OptionsManager::read()
 			std::getline(fs, line);
 			wideScreen = std::stoi(line);
 		}
+		else if(line.find("show fps") != std::string::npos)
+		{
+			std::getline(fs, line);
+			showFps = std::stof(line);
+		}
 	}
 
 	fs.close();
@@ -174,6 +181,12 @@ void OptionsManager::writeMissingDefault()
 			fs << "wide = " << defaultWideScreen << std::endl;
 		}
 
+		if (showFps == -1)
+		{
+			showFps = defaultShowFps;
+			fs << "show fps = " << defaultShowFps << std::endl;
+		}
+
 		fs.close();
 	}
 }
@@ -210,6 +223,8 @@ void OptionsManager::writeChanged()
 		fs << "vsync = " << vSync << std::endl;
 
 		fs << "wide = "<<wideScreen << std::endl;
+
+		fs << "show fps = "<<showFps << std::endl;
 
 		fs.close();
 	}

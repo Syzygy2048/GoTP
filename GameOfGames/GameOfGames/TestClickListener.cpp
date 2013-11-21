@@ -1,4 +1,6 @@
 #include "TestClickListener.h"
+#include "SceneGraph\UIView.h"
+#include "SFML\Graphics.hpp"
 
 void TestClickListener::viewHovered(UIView* sender, bool hoveredState)
 {
@@ -12,8 +14,13 @@ void TestClickListener::viewHovered(UIView* sender, bool hoveredState)
 	}
 }
 
-void TestClickListener::viewClicked(UIView* sender)
+void TestClickListener::viewClicked(UIView* sender, int key)
 {
+	if(key)
+	{
+		return;
+	}
+
 	sf::Font font;
 
 	font.loadFromFile("arial.ttf");

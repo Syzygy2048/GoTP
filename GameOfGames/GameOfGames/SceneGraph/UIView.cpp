@@ -6,13 +6,25 @@
 
 UIView::UIView(sf::Vector2i* newSize, std::string newTexture)
 {
+	configInitialSettings(newSize);
+	
+	setTexture(newTexture);
+}
+
+void UIView::configInitialSettings(sf::Vector2i* newSize)
+{
 	drawAsPanel = true;
 	focusable = true;
 	hoverable = false;
 	beingHovered= false;
+	alwaysUseClearBg = true;
 	offset = new sf::Vector2i(0,0);
 	setSize(newSize);
-	setTexture(newTexture);
+}
+
+UIView::UIView(sf::Vector2i* newSize)
+{
+	configInitialSettings(newSize);
 }
 
 void UIView::setDrawAsPanel(bool newDrawAsPanel)
@@ -22,11 +34,11 @@ void UIView::setDrawAsPanel(bool newDrawAsPanel)
 	adjustBackGround();
 }
 
-void UIView::activated()
+void UIView::activated(int key)
 {
 	if(listener)
 	{
-		listener->viewClicked(this);
+		listener->viewClicked(this,key);
 	}
 }
 
@@ -182,7 +194,15 @@ void UIView::adjustBackGround()
 	}
 	else
 	{
-		destinationTexture.clear(sprite->getColor());
+		if (alwaysUseClearBg)
+		{
+			destinationTexture.clear(sf::Color::Transparent);
+		}
+		else
+		{
+			destinationTexture.clear(sprite->getColor());
+		}
+		
 	}
 
 	if(text)
@@ -194,7 +214,6 @@ void UIView::adjustBackGround()
 
 	if(finalTexture)
 	{
-
 		sprite->move(float(finalTexture->getSize().x)/2,float((finalTexture->getSize().y)/2));
 
 		delete finalTexture;
@@ -207,7 +226,16 @@ void UIView::adjustBackGround()
 	sprite->setTexture(*finalTexture);
 
 	sprite->move(-float(finalTexture->getSize().x)/2,-float((finalTexture->getSize().y)/2));
+}
 
+void UIView::setFont(sf::Font* font)
+{
+	if (font)
+	{
+		delete font;
+	}
+
+	font = font;
 }
 
 void UIView::setText(sf::Text* newText)

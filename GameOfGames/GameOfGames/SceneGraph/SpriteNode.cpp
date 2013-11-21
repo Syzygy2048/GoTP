@@ -5,6 +5,7 @@
 SpriteNode::SpriteNode()
 {
 	sprite = new sf::Sprite();
+	//sprite->setColor(sf::Color::Transparent);
 }
 
 void SpriteNode::setOffSet(sf::Vector2i* newOffset)
