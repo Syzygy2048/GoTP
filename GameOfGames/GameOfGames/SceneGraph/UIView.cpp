@@ -84,6 +84,10 @@ void UIView::updateText(sf::String newString)
 
 		adjustBackGround();
 	}
+	else
+	{
+		std::cout<<"Can´t update text "<<newString.toAnsiString() <<" because the text is null.\nYou dumbass.\n";
+	}
 }
 
 void UIView::setSize(sf::Vector2i* newSize)
@@ -96,6 +100,11 @@ void UIView::setSize(sf::Vector2i* newSize)
 void UIView::onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform parentTranform)
 {
 	SpriteNode::onDraw(deltaTime,target, parentTranform);
+
+	if(ignoreMouse)
+	{
+		return;
+	}
 
 	sf::FloatRect rect = sf::FloatRect(float(-size->x)/2+offset->x,float(-size->y)/2,float(size->x),float(size->y)+offset->y);
 
@@ -111,24 +120,64 @@ void UIView::onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform par
 	}
 }
 
+//Black magic that will set the proper image. Forgot how it works exactly.
 void UIView::adjustBackGround()
 {
 	if (!drawAsPanel)
 	{
-		sprite->setScale(float(size->x)/texture->getSize().x,float(size->y)/texture->getSize().y);
+		//it may be bugged as fuck.
+		sf::RenderTexture* destinationTexture = new sf::RenderTexture();
 
-		sprite->setTexture(*texture);
+		destinationTexture->create(size->x,size->y);
+
+		destinationTexture->setSmooth(true);
+
+		destinationTexture->clear(sf::Color::Transparent);
+
+		if(texture)
+		{
+			sf::Sprite tempSprite = sf::Sprite();
+
+			tempSprite.setScale(float(size->x)/texture->getSize().x,float(size->y)/texture->getSize().y);
+
+			tempSprite.setTexture(*texture);
+
+			destinationTexture->draw(tempSprite);
+		}
+		if(text)
+		{
+			destinationTexture->draw(*text);
+		}
+
+		if(finalTexture)
+		{
+			sprite->move(float(finalTexture->getSize().x)/2,float((finalTexture->getSize().y)/2));
+
+			delete finalTexture;
+		}
+
+		destinationTexture->display();
+
+		finalTexture = new sf::Texture(destinationTexture->getTexture());
+
+		delete destinationTexture;
+
+		finalTexture->setSmooth(true);
+
+		sprite->setTexture(*finalTexture);
+
+		sprite->move(-float(finalTexture->getSize().x)/2,-float((finalTexture->getSize().y)/2));
 
 		return;
 	}
-	else
-	{
-		sprite->setScale(1,1);
-	}
 
-	sf::RenderTexture destinationTexture = sf::RenderTexture();
+	sprite->setScale(1,1);
 
-	destinationTexture.create(size->x,size->y);
+	sf::RenderTexture* destinationTexture =new sf::RenderTexture();
+
+	destinationTexture->create(size->x,size->y);
+
+	destinationTexture->setSmooth(true);
 
 	if(texture)
 	{
@@ -140,7 +189,7 @@ void UIView::adjustBackGround()
 		}
 		else
 		{
-			destinationTexture.clear(sf::Color::Transparent);
+			destinationTexture->clear(sf::Color::Transparent);
 
 			sf::Sprite tempSprite = sf::Sprite();
 
@@ -170,12 +219,12 @@ void UIView::adjustBackGround()
 				//we draw the left chunk
 				tempSprite.setPosition(0.f,float(verticalDrawingPoint));
 				tempSprite.setTextureRect(sf::IntRect(0,referenceVerticalPoint,tileSize,tileSize));
-				destinationTexture.draw(tempSprite);
+				destinationTexture->draw(tempSprite);
 
 				//the right chunk
 				tempSprite.setPosition(float(size->x-tileSize),float(verticalDrawingPoint));
 				tempSprite.setTextureRect(sf::IntRect(tileSize*2,referenceVerticalPoint,tileSize,tileSize));
-				destinationTexture.draw(tempSprite);
+				destinationTexture->draw(tempSprite);
 
 				int horizontalFillingSpace = size->x - (tileSize*2);
 				int horizontalDrawingPoint = tileSize;
@@ -192,7 +241,7 @@ void UIView::adjustBackGround()
 					}
 
 					tempSprite.setPosition(float(horizontalDrawingPoint),float(verticalDrawingPoint));
-					destinationTexture.draw(tempSprite);
+					destinationTexture->draw(tempSprite);
 
 					horizontalDrawingPoint +=tileSize;
 					horizontalFillingSpace -= tileSize;
@@ -215,21 +264,21 @@ void UIView::adjustBackGround()
 	{
 		if (alwaysUseClearBg)
 		{
-			destinationTexture.clear(sf::Color::Transparent);
+			destinationTexture->clear(sf::Color::Transparent);
 		}
 		else
 		{
-			destinationTexture.clear(sprite->getColor());
+			destinationTexture->clear(sprite->getColor());
 		}
 
 	}
 
 	if(text)
 	{
-		destinationTexture.draw(*text);
+		destinationTexture->draw(*text);
 	}
 
-	destinationTexture.display();
+	destinationTexture->display();
 
 	if(finalTexture)
 	{
@@ -238,7 +287,9 @@ void UIView::adjustBackGround()
 		delete finalTexture;
 	}
 
-	finalTexture = new sf::Texture(destinationTexture.getTexture());
+	finalTexture = new sf::Texture(destinationTexture->getTexture());
+
+	delete destinationTexture;
 
 	finalTexture->setSmooth(true);
 
@@ -249,7 +300,7 @@ void UIView::adjustBackGround()
 
 void UIView::configInitialSettings(sf::Vector2i* newSize)
 {
-	drawAsPanel = true;
+	drawAsPanel = false;
 	focusable = true;
 	hoverable = false;
 	beingHovered= false;

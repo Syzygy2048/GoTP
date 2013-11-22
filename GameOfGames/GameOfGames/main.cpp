@@ -36,6 +36,7 @@ void testingShit()
 	panel2->setHoverable(true);
 
 	panel->setUIViewListener(viewListener);
+	panel2->setDrawAsPanel(true);
 	panel2->setUIViewListener(viewListener);
 
 	//panel->removeTexture();
@@ -60,7 +61,9 @@ void testingShit()
 
 	//baseView->addNode(newChar,sf::Vector2f(0.f,0.f));
 
-	baseView->addNode(panel,sf::Vector2f(150.f,100.f));
+	panel->setOffSet(new sf::Vector2i(150,100));
+
+	baseView->addNode(panel,sf::Vector2f(0.f,0.f));
 	baseView->addNode(panel2,sf::Vector2f(75.f,250.f));
 
 	/*baseView->addNode(miniChar,sf::Vector2f(125.f,0.f));
@@ -89,7 +92,7 @@ int main()
 	baseView = new SceneNode();
 
 	fpsCounter = new UIView(new sf::Vector2i(100,50));
-
+	//fpsCounter->setDrawAsPanel(true);
 	sf::Font font = sf::Font();
 
 	font.loadFromFile("arial.ttf");
@@ -110,6 +113,8 @@ int main()
 	testingShit();
 
 	fpsCounter->setLayer(0);
+
+	fpsCounter->setIgnoreMouse(true);
 
 	sf::Clock clock;
 	float remainingTime = 0;

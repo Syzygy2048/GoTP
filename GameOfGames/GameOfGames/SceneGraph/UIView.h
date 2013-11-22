@@ -23,6 +23,8 @@ public:
 	void setHoveredState(bool hoveredState);
 	void setHoverable(bool newHoverable){ hoverable = newHoverable; }
 	bool isHoverable(){ return hoverable;}
+	void setIgnoreMouse(bool newIgnoreMouse){ignoreMouse = newIgnoreMouse;}
+	bool ignoresMouse(){ return ignoreMouse;}
 
 	//methods about how it draws
 	void setDrawAsPanel(bool newDrawAsPanel);
@@ -51,6 +53,7 @@ private:
 	bool drawAsPanel;
 	bool beingHovered;
 	bool hoverable;
+	bool ignoreMouse;
 	bool focusable;
 	bool alwaysUseClearBg;
 	UIViewListener* listener;
