@@ -3,6 +3,7 @@
 #include <vector>
 
 #include <SFML/Graphics.hpp>
+#include "FocusGroup.h"
 #include "SceneGraph\SpriteNode.h"
 #include "SceneGraph\UIView.h"
 #include "SceneGraph\SceneNode.h"
@@ -21,11 +22,10 @@ UIView* fpsCounter;
 SceneNode* baseView;
 sf::RenderWindow* window;
 OptionsManager* manager;
+FocusGroup* group;
 
 void testingShit()
 {
-
-
 	//SpriteNode* newChar = new SpriteNode();
 	//newChar->setTexture("Tileset.png");
 
@@ -40,6 +40,16 @@ void testingShit()
 	panel->setUIViewListener(viewListener);
 	panel2->setDrawAsPanel(true);
 	panel2->setUIViewListener(viewListener);
+
+	group = new FocusGroup();
+
+	//group->setLooped(false);
+	group->setOrientation(GroupOrientation::VERTICAL);
+
+	group->insertFocusable(panel);
+	group->insertFocusable(panel2);
+
+	InputHandlerSFML::getInstance()->setActiveFocusGroup(group);
 
 	//panel->removeTexture();
 	//panel->setTintColor(255,0,0);
@@ -71,7 +81,7 @@ void testingShit()
 	/*baseView->addNode(miniChar,sf::Vector2f(125.f,0.f));
 	baseView->addNode(third,sf::Vector2f(150.f,0.f));*/
 
-	rootNodes.push_back(baseView);
+
 }
 
 void initWindow()
@@ -107,9 +117,12 @@ int main()
 	initWindow();
 
 	baseView = new SceneNode();
-
 	fpsCounter = new UIView(new sf::Vector2i(100,50));
-	//fpsCounter->setDrawAsPanel(true);
+
+	//Base elements. HUD, scenario, etc.
+	rootNodes.push_back(baseView);
+	rootNodes.push_back(fpsCounter);
+
 	sf::Font font = sf::Font();
 
 	font.loadFromFile("arial.ttf");
@@ -124,12 +137,8 @@ int main()
 
 	fpsCounter ->setOffSet(new sf::Vector2i(55,25));
 
-	baseView->addNode(fpsCounter,sf::Vector2f(0.f,0.f));
-
 	//tests yo
 	testingShit();
-
-	fpsCounter->setLayer(0);
 
 	fpsCounter->setIgnoreMouse(true);
 
@@ -145,7 +154,8 @@ int main()
 	InputHandlerSFML::getInstance()->informMouseMoved(sf::Mouse::getPosition(*window));
 
 	int framesDrawn = 0;
-
+	float minimumTimeBetweenDpadInputs = 0.02f;
+	float timeSinceLastDpadInput = minimumTimeBetweenDpadInputs;
 	float fpsClock = 0.f;
 
 	while(window->isOpen() || manager->getOptionsChanged())
@@ -186,6 +196,9 @@ int main()
 
 		InputHandlerSFML::getInstance()->clearOcurredEvents();
 
+		float previousHdPad =0;
+		float previousVdPad =0;
+
 		while(window->pollEvent(event))
 		{
 			switch(event.type)
@@ -193,6 +206,26 @@ int main()
 			case sf::Event::MouseButtonPressed :
 				{
 					InputHandlerSFML::getInstance()->informMouseClicked(event.key.code);
+					break;
+				}
+			case sf::Event::KeyPressed:
+				{
+					if(sf::Keyboard::A == event.key.code)
+					{
+						input->informDpadChanged(LEFT);
+					}
+					else if (sf::Keyboard::W == event.key.code)
+					{
+						input->informDpadChanged(UP);
+					}
+					else if (sf::Keyboard::D == event.key.code)
+					{
+						input->informDpadChanged(RIGHT);
+					}
+					else if (sf::Keyboard::S == event.key.code)
+					{
+						input->informDpadChanged(DOWN);
+					}
 					break;
 				}
 			case sf::Event::MouseMoved:
@@ -211,11 +244,66 @@ int main()
 					InputHandlerSFML::getInstance()->informMouseMoved(sf::Vector2i(-1,-1));
 					break;
 				}
+			case sf::Event::JoystickButtonPressed:
+				{
+					//std::cout<<event.joystickButton.button<<"\n";
+
+					break;
+				}
+			case sf::Event::JoystickMoved:
+				{
+					//information regarding 360 controller
+					//sf::Joystick::getAxisPosition(0, sf::Joystick::Z) triggers, left one is the positive.
+					//horizontal and vertical.
+					//X  Y left analog
+					//U  R right analog
+					//PovY PovX d-pad
+
+					if(timeSinceLastDpadInput >= minimumTimeBetweenDpadInputs)
+					{
+						timeSinceLastDpadInput = 0.f;
+
+						if(previousHdPad > -100 && sf::Joystick::getAxisPosition(0, sf::Joystick::PovY) == -100 )
+						{
+							input->informDpadChanged(RIGHT);
+						}
+
+						else if(previousHdPad < 100 && sf::Joystick::getAxisPosition(0, sf::Joystick::PovY) == 100 )
+						{
+							input->informDpadChanged(LEFT);
+						}
+
+						if(previousVdPad > -100 && sf::Joystick::getAxisPosition(0, sf::Joystick::PovX) == -100 )
+						{
+							input->informDpadChanged(DOWN);
+						}
+						else if(previousVdPad < 100 && sf::Joystick::getAxisPosition(0, sf::Joystick::PovX) == 100 )
+						{
+							input->informDpadChanged(UP);
+						}
+					}
+
+
+
+
+
+					previousHdPad = sf::Joystick::getAxisPosition(0, sf::Joystick::PovY);
+					previousVdPad = sf::Joystick::getAxisPosition(0, sf::Joystick::PovX);
+
+
+					break;
+				}
 			}
 		}
 
 		sf::Time elapsed = clock.restart();
 		fpsClock += elapsed.asSeconds();
+
+		if(timeSinceLastDpadInput <= minimumTimeBetweenDpadInputs)
+		{
+			timeSinceLastDpadInput += elapsed.asSeconds();
+		}
+
 		float timeToConsume = remainingTime + elapsed.asSeconds();
 		float cachedTime = timeToConsume;
 
@@ -249,7 +337,6 @@ int main()
 		if(manager->getOptionsChanged())
 		{
 			window->close();
-
 		}
 	}
 

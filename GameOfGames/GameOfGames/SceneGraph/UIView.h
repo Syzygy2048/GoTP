@@ -2,6 +2,7 @@
 #include "SpriteNode.h"
 #include <SFML\Graphics.hpp>
 
+class FocusGroup;
 class UIViewListener;
 
 class UIView:public SpriteNode
@@ -13,6 +14,7 @@ public:
 	UIView(sf::Vector2i* newSize);
 	~UIView(void);
 
+	void setFocusGroup(FocusGroup* newGroup){group = newGroup;}
 
 	void setUIViewListener(UIViewListener* newListener);
 
@@ -20,6 +22,8 @@ public:
 	void activated(int key);
 	bool getFocusable(){ return focusable;}
 
+	//Being on focus means a focus group focused this view.
+	void setFocusedState(bool newFocusState);
 
 	//Being focusable means it can be hovered or clicked, but it doesnt means it wont block the mouse when hovering something under this view.
 	void setFocusable(bool newFocusable){ focusable = newFocusable; }
@@ -68,6 +72,7 @@ private:
 
 	sf::Text* text;
 	
+	bool focusedState;
 	bool drawAsPanel;
 	bool beingHovered;
 	bool hoverable;
@@ -78,4 +83,5 @@ private:
 	sf::Texture* finalTexture;
 	virtual void adjustBackGround();
 	sf::Vector2i* size;
+	FocusGroup* group;
 };

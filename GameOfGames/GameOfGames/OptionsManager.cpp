@@ -17,11 +17,26 @@ OptionsManager* OptionsManager::getInstance()
 	return instance;
 }
 
+WideScreenMode OptionsManager::getWidescreenMode()
+{
+	switch (wideScreen)
+	{
+	case 0:
+			return WideScreenMode::NOWIDE;
+	case 1:
+		return WideScreenMode::SIXTEENBYNINE;
+	case 2:
+		return WideScreenMode::SIXTEENBYTEN;
+	default:
+		return WideScreenMode::NOTSET;
+	}
+}
+
 void OptionsManager::setShowFps(bool newShowFps)
 {
 	showFps = newShowFps;
 
-	writeChanged();
+	writeChangedSettings();
 }
 
 OptionsManager::OptionsManager() : path(new std::string ("settings.txt")),defaultDisplayResolution(new sf::Vector2f(1920.f, 1080.f)), defaultInternalResolution(new sf::Vector2f(720.f,720.f)), defaultFullscreen(1), defaultWideScreen(1),defaultVSync(1), defaultShowFps(1)
@@ -70,7 +85,7 @@ void OptionsManager::setDisplayResolution(sf::Vector2f* newDisplayResolution)
 
 	displayResolution = newDisplayResolution;
 
-	writeChanged();
+	writeChangedSettings();
 
 	optionsChanged = true;
 }
@@ -84,14 +99,14 @@ void OptionsManager::setVsyncEnabled(int enabled)
 		windowPointer->setVerticalSyncEnabled(enabled ? true : false);
 	}
 
-	writeChanged();
+	writeChangedSettings();
 }
 
 void OptionsManager::setWideScreenMode(WideScreenMode newWideScreenMode)
 {
 	wideScreen = newWideScreenMode;
 
-	writeChanged();
+	writeChangedSettings();
 
 	optionsChanged = true;
 }
@@ -133,7 +148,7 @@ void OptionsManager::setFullScreen(int newFullScreen)
 
 	optionsChanged = true;
 
-	writeChanged();
+	writeChangedSettings();
 }
 
 void OptionsManager::read()
@@ -262,10 +277,10 @@ void OptionsManager::setDefault()
 	vSync = defaultVSync;
 	wideScreen = defaultWideScreen;
 
-	writeChanged();
+	writeChangedSettings();
 }
 
-void OptionsManager::writeChanged()
+void OptionsManager::writeChangedSettings()
 {
 	std::ofstream fs;
 

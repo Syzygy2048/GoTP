@@ -3,7 +3,7 @@
 #include <string>
 #include <SFML\Graphics.hpp>
 
-enum WideScreenMode { NOWIDE = 0, SIXTEENBYNINE = 1, SYSTEENBYTEN = 2};
+enum WideScreenMode {NOTSET=-1, NOWIDE = 0, SIXTEENBYNINE = 1, SIXTEENBYTEN = 2};
 
 class OptionsManager
 {
@@ -15,6 +15,7 @@ public:
 	sf::Vector2f getDisplayResolution(){ return *displayResolution; }
 
 	void setWideScreenMode(WideScreenMode newWideScreenMode);
+	WideScreenMode getWidescreenMode();
 
 	sf::Vector2f* getFinalScreenRatio();
 	sf::Vector2f* getCachedScreenRatio();
@@ -30,6 +31,7 @@ public:
 
 	bool getOptionsChanged(){return optionsChanged;}
 	void informWindowReloaded(){optionsChanged = false;}
+	
 
 	static OptionsManager* getInstance();
 	~OptionsManager(void);
@@ -51,7 +53,7 @@ private:
 	void setDefault();
 
 	/* Writes all changed values into the settings file and memory. */
-	void writeChanged();
+	void writeChangedSettings();
 
 	/* Reads all values from a setting file into memory. Called from the constructor. */
 	void read();

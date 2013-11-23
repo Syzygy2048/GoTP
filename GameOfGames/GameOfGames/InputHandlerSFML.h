@@ -3,7 +3,10 @@
 #include <SFML\Window.hpp>
 #include <SFML\Graphics.hpp>
 
+enum DpadDirection{LEFT, RIGHT, UP, DOWN};
+
 class UIView;
+class FocusGroup;
 
 class InputHandlerSFML
 {
@@ -16,6 +19,9 @@ public:
 	void clearClickable();
 	void setDrawnClickable(UIView* clicked);
 	void checkOnClickable();
+	void setActiveFocusGroup(FocusGroup* group);
+
+	void informDpadChanged(DpadDirection direction);
 
 	sf::Vector2i* getMousePosition() {return &mousePos; }
 
@@ -24,6 +30,8 @@ public:
 	~InputHandlerSFML(void);
 
 private:
+	FocusGroup* activeFocusGroup;
+
 	bool mouseClicked;
 	int mouseClickedKey;
 	bool mouseMoved;

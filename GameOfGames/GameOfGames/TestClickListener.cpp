@@ -15,14 +15,24 @@ void TestClickListener::viewHovered(UIView* sender, bool hoveredState)
 	}
 }
 
+void TestClickListener::viewFocused(UIView* sender, bool focusedState)
+{
+	if (focusedState)
+	{
+		sender->setTintColor(255,50,128);
+	}
+	else
+	{
+		sender->resetTintColor();
+	}
+}
+
 void TestClickListener::viewClicked(UIView* sender, int key)
 {
 	if(key)
 	{
 		return;
 	}
-
-	OptionsManager::getInstance()->setWideScreenMode(WideScreenMode::NOWIDE);
 
 	sf::Font font;
 

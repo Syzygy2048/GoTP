@@ -1,6 +1,7 @@
 #include "InputHandlerSFML.h"
 #include "SceneGraph\SceneNode.h"
 #include "SceneGraph\UIView.h"
+#include "FocusGroup.h"
 
 InputHandlerSFML::InputHandlerSFML(void)
 {
@@ -13,12 +14,33 @@ void InputHandlerSFML::informMouseClicked(int key)
 	mouseClickedKey = key;
 }
 
+void  InputHandlerSFML::informDpadChanged(DpadDirection direction)
+{
+	if(activeFocusGroup)
+	{
+		if((direction == UP || direction == DOWN)&& activeFocusGroup->getOrientation() == HORIZONTAL || 
+			(direction == LEFT || direction == RIGHT)&& activeFocusGroup->getOrientation() == VERTICAL )
+		{
+			return;
+		}
+
+		if(activeFocusGroup->getOrientation()==VERTICAL)
+		{
+			activeFocusGroup->changeFocusable(direction == DOWN);
+		}
+		else
+		{
+			activeFocusGroup->changeFocusable(direction == LEFT);
+		}
+	}
+}
+
 void InputHandlerSFML::informMouseMoved(sf::Vector2i location)
 {
 	mouseMoved = true;
 
 	mousePos = location;
-	
+
 }
 
 void InputHandlerSFML::clearOcurredEvents()
@@ -36,6 +58,20 @@ void InputHandlerSFML::clearClickable()
 void InputHandlerSFML::setDrawnClickable(UIView* clicked)
 {
 	drawnClickable = clicked;
+}
+
+void InputHandlerSFML::setActiveFocusGroup(FocusGroup* group)
+{
+	if (activeFocusGroup)
+	{
+		activeFocusGroup->setActive(false);
+	}
+
+	activeFocusGroup = group;
+
+	activeFocusGroup->setActive(true);
+
+
 }
 
 void InputHandlerSFML::checkOnClickable()
@@ -82,12 +118,12 @@ void InputHandlerSFML::checkOnClickable()
 InputHandlerSFML* InputHandlerSFML::getInstance()
 {
 	static InputHandlerSFML* instance;
-	
+
 	if(!instance)
 	{
 		instance = new InputHandlerSFML();
 	}
-	
+
 	return instance;
 }
 

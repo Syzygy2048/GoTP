@@ -3,6 +3,7 @@
 #include "..\UIViewListener.h"
 #include "..\InputHandlerSFML.h"
 #include "..\AssetManager.h"
+#include "..\FocusGroup.h"
 
 UIView::UIView(sf::Vector2i* newSize, std::string newTexture)
 {
@@ -32,6 +33,11 @@ UIView::~UIView(void)
 	{
 		delete size;
 	}
+
+	if(group)
+	{
+		group->removeFocusable(this);
+	}
 }
 
 void UIView::setUIViewListener(UIViewListener* newListener)
@@ -54,6 +60,16 @@ void UIView::setHoveredState(bool hoveredState)
 	if (listener)
 	{
 		listener->viewHovered(this, beingHovered);
+	}
+}
+
+void UIView::setFocusedState(bool newFocusState)
+{
+	focusedState = newFocusState;
+
+	if(listener)
+	{
+		listener->viewFocused(this, focusedState);
 	}
 }
 
@@ -301,6 +317,8 @@ void UIView::adjustBackGround()
 void UIView::configInitialSettings(sf::Vector2i* newSize)
 {
 	drawAsPanel = false;
+	focusedState = false;
+	ignoreMouse = false;
 	focusable = true;
 	hoverable = false;
 	beingHovered= false;
