@@ -19,6 +19,8 @@
 std::vector<SceneNode*> rootNodes;
 UIView* fpsCounter;
 SceneNode* baseView;
+sf::RenderWindow* window;
+OptionsManager* manager;
 
 void testingShit()
 {
@@ -72,13 +74,15 @@ void testingShit()
 	rootNodes.push_back(baseView);
 }
 
-int main()
+void initWindow()
 {
-	OptionsManager* manager = new OptionsManager();
-	InputHandlerSFML* input = InputHandlerSFML::getInstance();
+	if (window)
+	{
+		delete window;
+	}
 
 	sf::Vector2f displayResolution = manager->getDisplayResolution();
-	sf::RenderWindow* window;
+
 	if(manager->getFullscreen())
 	{
 		window = new sf::RenderWindow(sf::VideoMode(int(displayResolution.x), int(displayResolution.y)), WINDOW_TITLE, sf::Style::Fullscreen);
@@ -87,7 +91,20 @@ int main()
 	{
 		window = new sf::RenderWindow(sf::VideoMode(int(displayResolution.x),int(displayResolution.y)), WINDOW_TITLE);
 	}
-	window->setVerticalSyncEnabled((manager->getVSync() ?  true : false));
+
+	window->setVerticalSyncEnabled((manager->getVSync() ? true : false));
+
+	manager->setWindowInstance(window);
+	manager->informWindowReloaded();
+}
+
+int main()
+{
+	manager = OptionsManager::getInstance();
+
+	InputHandlerSFML* input = InputHandlerSFML::getInstance();
+
+	initWindow();
 
 	baseView = new SceneNode();
 
@@ -117,6 +134,7 @@ int main()
 	fpsCounter->setIgnoreMouse(true);
 
 	sf::Clock clock;
+
 	float remainingTime = 0;
 
 	for(SceneNode* rootNode : rootNodes)
@@ -130,8 +148,18 @@ int main()
 
 	float fpsClock = 0.f;
 
-	while(window->isOpen())
+	while(window->isOpen() || manager->getOptionsChanged())
 	{
+		if(!window->isOpen() && manager->getOptionsChanged())
+		{
+			initWindow();
+
+			for(SceneNode* rootNode : rootNodes)
+			{
+				rootNode->setScale(*manager->getFinalScreenRatio());
+			}
+		}
+
 		if (fpsClock >=1)
 		{
 			fpsClock -= 1;
@@ -147,6 +175,10 @@ int main()
 				fpsCounter->updateText(sf::String(numstr));
 
 				framesDrawn = 0;
+			}
+			else
+			{
+				fpsCounter->updateText("");
 			}
 		}
 
@@ -172,6 +204,11 @@ int main()
 				{
 					window->close();
 
+					break;
+				}
+			case sf::Event::MouseLeft:
+				{
+					InputHandlerSFML::getInstance()->informMouseMoved(sf::Vector2i(-1,-1));
 					break;
 				}
 			}
@@ -208,6 +245,12 @@ int main()
 		InputHandlerSFML::getInstance()->checkOnClickable();
 
 		window->display();
+
+		if(manager->getOptionsChanged())
+		{
+			window->close();
+
+		}
 	}
 
 	for(SceneNode* node : rootNodes)

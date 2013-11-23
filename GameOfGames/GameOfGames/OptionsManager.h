@@ -2,23 +2,48 @@
 
 #include <string>
 #include <SFML\Graphics.hpp>
-//Handles 
+
+enum WideScreenMode { NOWIDE = 0, SIXTEENBYNINE = 1, SYSTEENBYTEN = 2};
+
 class OptionsManager
 {
 public:
 
-	sf::Vector2f getInternalResolution(){ return *internalResolution; };
-	sf::Vector2f getDisplayResolution(){ return *displayResolution; };
+	sf::Vector2f getInternalResolution(){ return *internalResolution; }
+
+	void setDisplayResolution(sf::Vector2f* newDisplayResolution);
+	sf::Vector2f getDisplayResolution(){ return *displayResolution; }
+
+	void setWideScreenMode(WideScreenMode newWideScreenMode);
+
 	sf::Vector2f* getFinalScreenRatio();
 	sf::Vector2f* getCachedScreenRatio();
-	int getFullscreen(){ return fullscreen; }
-	int getVSync(){ return vSync; }
-	int getShowFps(){return showFps;}
 
-	OptionsManager(void);
+	int getFullscreen(){ return fullscreen; }
+	void setFullScreen(int newFullScreen);
+
+	int getVSync(){ return vSync; }
+	void setVsyncEnabled(int enabled);
+
+	int getShowFps(){return showFps;}
+	void setShowFps(bool newShowFps);
+
+	bool getOptionsChanged(){return optionsChanged;}
+	void informWindowReloaded(){optionsChanged = false;}
+
+	static OptionsManager* getInstance();
 	~OptionsManager(void);
 
+	void setWindowInstance(sf::Window* newWindow){ windowPointer = newWindow;}
+
 private:
+	sf::Window* windowPointer;
+	OptionsManager* instance;
+	OptionsManager(void);									//private because singleton
+	OptionsManager(const OptionsManager&);					//prevents copy constructor
+	OptionsManager& operator = (const OptionsManager&);		//some reason I dont know why
+
+
 	/* Writes missing default values into the settings file (created if missing) and memory. Called from constructor. */
 	void writeMissingDefault();
 
@@ -30,6 +55,8 @@ private:
 
 	/* Reads all values from a setting file into memory. Called from the constructor. */
 	void read();
+
+	bool optionsChanged;
 
 	sf::Vector2f* internalResolution;
 	sf::Vector2f* displayResolution;

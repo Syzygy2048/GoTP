@@ -3,14 +3,6 @@
 #include <SFML\Window.hpp>
 #include <SFML\Graphics.hpp>
 
-#define keyW (uint64_t) pow(2,0)
-#define keyA (uint64_t) pow(2,1)
-#define keyS (uint64_t) pow(2,2)
-#define keyD (uint64_t) pow(2,3)
-#define keySPACE (uint64_t) pow(2,4)
-#define mouseButtonLeft (uint64_t) pow(2,5)
-#define mouseButtonRight (uint64_t) pow(2,6)
-
 class UIView;
 
 class InputHandlerSFML

@@ -5,6 +5,25 @@
 #include <sys/stat.h>
 
 
+OptionsManager* OptionsManager::getInstance()
+{
+	static OptionsManager* instance;
+
+	if(!instance)
+	{
+		instance = new OptionsManager();
+	}
+
+	return instance;
+}
+
+void OptionsManager::setShowFps(bool newShowFps)
+{
+	showFps = newShowFps;
+
+	writeChanged();
+}
+
 OptionsManager::OptionsManager() : path(new std::string ("settings.txt")),defaultDisplayResolution(new sf::Vector2f(1920.f, 1080.f)), defaultInternalResolution(new sf::Vector2f(720.f,720.f)), defaultFullscreen(1), defaultWideScreen(1),defaultVSync(1), defaultShowFps(1)
 {
 	fullscreen = -1;
@@ -41,6 +60,42 @@ sf::Vector2f* OptionsManager::getCachedScreenRatio()
 		return cachedScreenRatio;
 	}
 }
+
+void OptionsManager::setDisplayResolution(sf::Vector2f* newDisplayResolution)
+{
+	if(displayResolution)
+	{
+		delete displayResolution;
+	}
+
+	displayResolution = newDisplayResolution;
+
+	writeChanged();
+
+	optionsChanged = true;
+}
+
+void OptionsManager::setVsyncEnabled(int enabled)
+{
+	vSync = enabled;
+
+	if(windowPointer)
+	{
+		windowPointer->setVerticalSyncEnabled(enabled ? true : false);
+	}
+
+	writeChanged();
+}
+
+void OptionsManager::setWideScreenMode(WideScreenMode newWideScreenMode)
+{
+	wideScreen = newWideScreenMode;
+
+	writeChanged();
+
+	optionsChanged = true;
+}
+
 //screen ratio should be used on the root nodes, just that, see main.
 sf::Vector2f* OptionsManager::getFinalScreenRatio()
 {
@@ -65,16 +120,24 @@ sf::Vector2f* OptionsManager::getFinalScreenRatio()
 		break;
 	}
 
-	internalResolution->x *= temp;
+	float adjustedXInternalResolution = internalResolution->x * temp;
 
-	cachedScreenRatio = new sf::Vector2f(displayResolution->x/internalResolution->x, displayResolution->y/internalResolution->y);
+	cachedScreenRatio = new sf::Vector2f(displayResolution->x/adjustedXInternalResolution, displayResolution->y/internalResolution->y);
 
 	return cachedScreenRatio;
 }
 
+void OptionsManager::setFullScreen(int newFullScreen)
+{
+	fullscreen = newFullScreen;
+
+	optionsChanged = true;
+
+	writeChanged();
+}
+
 void OptionsManager::read()
 {
-
 	std::ifstream fs;
 	fs.open(path->c_str(), std::ios::in);
 	if(!fs.is_open())
@@ -126,7 +189,7 @@ void OptionsManager::read()
 		else if(line.find("show fps") != std::string::npos)
 		{
 			std::getline(fs, line);
-			showFps = std::stof(line);
+			showFps = std::stoi(line);
 		}
 	}
 
@@ -210,6 +273,7 @@ void OptionsManager::writeChanged()
 
 	if(fs.is_open())
 	{
+
 		fs << "x internalResolution = " << internalResolution->x << std::endl;
 
 		fs << "y internalResolution = " << internalResolution->y << std::endl;
@@ -224,7 +288,7 @@ void OptionsManager::writeChanged()
 
 		fs << "wide = "<<wideScreen << std::endl;
 
-		fs << "show fps = "<<showFps << std::endl;
+		fs << "show fps = "<< showFps << std::endl;
 
 		fs.close();
 	}

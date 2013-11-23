@@ -1,6 +1,7 @@
 #include "TestClickListener.h"
 #include "SceneGraph\UIView.h"
 #include "SFML\Graphics.hpp"
+#include "OptionsManager.h"
 
 void TestClickListener::viewHovered(UIView* sender, bool hoveredState)
 {
@@ -20,6 +21,8 @@ void TestClickListener::viewClicked(UIView* sender, int key)
 	{
 		return;
 	}
+
+	OptionsManager::getInstance()->setWideScreenMode(WideScreenMode::NOWIDE);
 
 	sf::Font font;
 
