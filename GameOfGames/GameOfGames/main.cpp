@@ -156,7 +156,7 @@ int main()
 
 	sf::Font font = sf::Font();
 
-	font.loadFromFile("arial.ttf");
+	font.loadFromFile("Assets/Fonts/arial.ttf");
 
 	sf::Text* text = new sf::Text("", font);
 

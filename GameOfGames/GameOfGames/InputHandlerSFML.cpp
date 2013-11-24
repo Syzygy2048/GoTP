@@ -41,7 +41,7 @@ void InputHandlerSFML::setActiveFocusGroup(unsigned int index)
 	}
 	else
 	{
-		std::cout<<"Couldnt set an active focus group by index because there isnt a focus group set.";
+		std::cout<<"Couldnt set an active focus group by index because there isnt a focus group set or because the index is out of bounds of the set.\n";
 	}
 }
 
