@@ -17,11 +17,13 @@ public:
 	void removeFocusable(UIView* toRemove);
 
 	void changeFocusable(bool positiveAxis);
+	void forceFocusable(int index);
 	
 	GroupOrientation getOrientation(){return orientation;}
 	void setOrientation(GroupOrientation newOrientation){orientation = newOrientation;}
 	
 	void setActive(bool newisActive);
+	bool getActive(){return isActive;}
 
 	bool getIsLooped(){return isLooped;}
 	void setLooped(bool newIsLooped){isLooped = newIsLooped;}

@@ -80,14 +80,35 @@ void FocusGroup::removeFocusable(UIView* toRemove)
 	}
 }
 
+void FocusGroup::forceFocusable(int index)
+{
+	if(currentFocused)
+	{
+		currentFocused->setFocusedState(false);
+	}
+
+	if(index < focusables->size())
+	{
+		focusedIndex = index;
+	}
+	else
+	{
+		focusedIndex = focusables->size()-1;
+	}
+
+	currentFocused = focusables->at(focusedIndex);
+
+	currentFocused->setFocusedState(true);
+}
+
 void FocusGroup::setActive(bool newisActive)
 {
+	isActive = newisActive;
+
 	if(currentFocused)
 	{
 		currentFocused->setFocusedState(newisActive);
 	}
-
-	isActive = newisActive;
 }
 
 FocusGroup::~FocusGroup(void)

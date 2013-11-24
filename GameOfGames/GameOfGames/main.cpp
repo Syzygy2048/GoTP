@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 
+#include "Box2D\Box2D.h"
 #include <SFML/Graphics.hpp>
 #include "FocusGroup.h"
 #include "SceneGraph\SpriteNode.h"
@@ -14,15 +15,19 @@
 #include "UIViewListener.h"
 #include "InputHandlerSFML.h"
 
+
 #define TIMESTEP 0.01666666666f
 #define WINDOW_TITLE "Game of Thrones"
 
 std::vector<SceneNode*> rootNodes;
+std::vector<FocusGroup*>* focusGroups;
+
 UIView* fpsCounter;
 SceneNode* baseView;
 sf::RenderWindow* window;
 OptionsManager* manager;
 FocusGroup* group;
+FocusGroup* group2;
 
 void testingShit()
 {
@@ -31,25 +36,45 @@ void testingShit()
 
 	TestClickListener* viewListener = new TestClickListener();
 
-	UIView* panel = new UIView(new sf::Vector2i(300,200),"Tileset.png");//this image has a transparent border of 
+	UIView* panel = new UIView(new sf::Vector2i(150,100),"Tileset.png");//this image has a transparent border of 
 	UIView* panel2 = new UIView(new sf::Vector2i(150,100),"Tileset.png");//this image has a transparent border of 
+	UIView* panel3 = new UIView(new sf::Vector2i(150,100),"Tileset.png");//this image has a transparent border of 
+	UIView* panel4 = new UIView(new sf::Vector2i(150,100),"Tileset.png");//this image has a transparent border of 
 
-	panel->setHoverable(true);
-	panel2->setHoverable(true);
+	//panel->setHoverable(true);
+	//panel2->setHoverable(true);
 
 	panel->setUIViewListener(viewListener);
+	panel->setDrawAsPanel(true);
 	panel2->setDrawAsPanel(true);
 	panel2->setUIViewListener(viewListener);
 
+	panel3->setUIViewListener(viewListener);
+	panel3->setDrawAsPanel(true);
+	panel4->setDrawAsPanel(true);
+	panel4->setUIViewListener(viewListener);
+
 	group = new FocusGroup();
+	group2 = new FocusGroup();
+
+	focusGroups = new std::vector<FocusGroup*>();
+
+	focusGroups->push_back(group);
+	focusGroups->push_back(group2);
+
 
 	//group->setLooped(false);
 	group->setOrientation(GroupOrientation::VERTICAL);
+	group2->setOrientation(GroupOrientation::VERTICAL);
 
 	group->insertFocusable(panel);
 	group->insertFocusable(panel2);
 
-	InputHandlerSFML::getInstance()->setActiveFocusGroup(group);
+	group2->insertFocusable(panel3);
+	group2->insertFocusable(panel4);
+
+	InputHandlerSFML::getInstance()->setFocusGroupSet(focusGroups);
+	group2->forceFocusable(0);
 
 	//panel->removeTexture();
 	//panel->setTintColor(255,0,0);
@@ -73,10 +98,16 @@ void testingShit()
 
 	//baseView->addNode(newChar,sf::Vector2f(0.f,0.f));
 
-	panel->setOffSet(new sf::Vector2i(150,100));
+	panel->setOffSet(new sf::Vector2i(75,50));
+	panel2->setOffSet(new sf::Vector2i(75,50));
+	panel3->setOffSet(new sf::Vector2i(75,50));
+	panel4->setOffSet(new sf::Vector2i(75,50));
 
 	baseView->addNode(panel,sf::Vector2f(0.f,0.f));
-	baseView->addNode(panel2,sf::Vector2f(75.f,250.f));
+	baseView->addNode(panel2,sf::Vector2f(0.f,100.f));
+
+	baseView->addNode(panel3,sf::Vector2f(150.f,0.f));
+	baseView->addNode(panel4,sf::Vector2f(150.f,100.f));
 
 	/*baseView->addNode(miniChar,sf::Vector2f(125.f,0.f));
 	baseView->addNode(third,sf::Vector2f(150.f,0.f));*/
@@ -265,12 +296,12 @@ int main()
 
 						if(previousHdPad > -100 && sf::Joystick::getAxisPosition(0, sf::Joystick::PovY) == -100 )
 						{
-							input->informDpadChanged(RIGHT);
+							input->informDpadChanged(LEFT);
 						}
 
 						else if(previousHdPad < 100 && sf::Joystick::getAxisPosition(0, sf::Joystick::PovY) == 100 )
 						{
-							input->informDpadChanged(LEFT);
+							input->informDpadChanged(RIGHT);
 						}
 
 						if(previousVdPad > -100 && sf::Joystick::getAxisPosition(0, sf::Joystick::PovX) == -100 )
@@ -283,13 +314,8 @@ int main()
 						}
 					}
 
-
-
-
-
 					previousHdPad = sf::Joystick::getAxisPosition(0, sf::Joystick::PovY);
 					previousVdPad = sf::Joystick::getAxisPosition(0, sf::Joystick::PovX);
-
 
 					break;
 				}

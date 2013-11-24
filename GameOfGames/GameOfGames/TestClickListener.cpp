@@ -2,6 +2,7 @@
 #include "SceneGraph\UIView.h"
 #include "SFML\Graphics.hpp"
 #include "OptionsManager.h"
+#include "FocusGroup.h"
 
 void TestClickListener::viewHovered(UIView* sender, bool hoveredState)
 {
@@ -19,11 +20,25 @@ void TestClickListener::viewFocused(UIView* sender, bool focusedState)
 {
 	if (focusedState)
 	{
-		sender->setTintColor(255,50,128);
+		if(sender->getFocusGroup()->getActive())
+		{
+			sender->setTintColor(255,50,128);
+		}
+		else
+		{
+			sender->setTintColor(255,128,128);
+		}
 	}
 	else
 	{
-		sender->resetTintColor();
+		if(sender->getFocusGroup()->getActive())
+		{
+			sender->resetTintColor();
+		}
+		else
+		{
+			sender->setTintColor(255,128,128);
+		}
 	}
 }
 

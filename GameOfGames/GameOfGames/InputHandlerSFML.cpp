@@ -8,10 +8,41 @@ InputHandlerSFML::InputHandlerSFML(void)
 
 }
 
+void InputHandlerSFML::setFocusGroupSet(std::vector<FocusGroup*>* set)
+{
+	focusGroupSet = set;
+
+	if(focusGroupSet)
+	{
+		setActiveFocusGroup(focusGroupSet->at(0));
+	}
+	else
+	{
+		if(activeFocusGroup)
+		{
+			activeFocusGroup->setActive(false);
+
+			activeFocusGroup = NULL;
+		}
+	}
+}
+
 void InputHandlerSFML::informMouseClicked(int key)
 {
 	mouseClicked = true;
 	mouseClickedKey = key;
+}
+
+void InputHandlerSFML::setActiveFocusGroup(unsigned int index)
+{
+	if(focusGroupSet && index < focusGroupSet->size())
+	{
+		setActiveFocusGroup(focusGroupSet->at(activeFocusGroupIndex));
+	}
+	else
+	{
+		std::cout<<"Couldnt set an active focus group by index because there isnt a focus group set.";
+	}
 }
 
 void  InputHandlerSFML::informDpadChanged(DpadDirection direction)
@@ -21,6 +52,20 @@ void  InputHandlerSFML::informDpadChanged(DpadDirection direction)
 		if((direction == UP || direction == DOWN)&& activeFocusGroup->getOrientation() == HORIZONTAL || 
 			(direction == LEFT || direction == RIGHT)&& activeFocusGroup->getOrientation() == VERTICAL )
 		{
+			if(focusGroupSet)
+			{
+				if(direction == UP || direction == LEFT)
+				{
+					if(activeFocusGroupIndex > 0)
+					{
+						setActiveFocusGroup(activeFocusGroupIndex--);
+					}
+				}
+				else if(activeFocusGroupIndex < focusGroupSet->size()-1)
+				{
+					setActiveFocusGroup(activeFocusGroupIndex++);
+				}
+			}
 			return;
 		}
 
@@ -69,9 +114,22 @@ void InputHandlerSFML::setActiveFocusGroup(FocusGroup* group)
 
 	activeFocusGroup = group;
 
-	activeFocusGroup->setActive(true);
+	if(activeFocusGroup)
+	{
+		activeFocusGroup->setActive(true);
 
-
+		if(focusGroupSet)
+		{
+			for (unsigned int i = 0; i <focusGroupSet->size();i++)
+			{
+				if(focusGroupSet->at(i)== activeFocusGroup)
+				{
+					activeFocusGroupIndex = i;
+					break;
+				}
+			}
+		}
+	}
 }
 
 void InputHandlerSFML::checkOnClickable()

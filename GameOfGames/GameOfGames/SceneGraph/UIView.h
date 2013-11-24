@@ -15,6 +15,7 @@ public:
 	~UIView(void);
 
 	void setFocusGroup(FocusGroup* newGroup){group = newGroup;}
+	FocusGroup* getFocusGroup(){return group;}
 
 	void setUIViewListener(UIViewListener* newListener);
 

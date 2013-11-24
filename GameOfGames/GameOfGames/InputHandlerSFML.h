@@ -19,7 +19,11 @@ public:
 	void clearClickable();
 	void setDrawnClickable(UIView* clicked);
 	void checkOnClickable();
+
 	void setActiveFocusGroup(FocusGroup* group);
+	void setActiveFocusGroup(unsigned int index);
+
+	void setFocusGroupSet(std::vector<FocusGroup*>* set);
 
 	void informDpadChanged(DpadDirection direction);
 
@@ -30,8 +34,9 @@ public:
 	~InputHandlerSFML(void);
 
 private:
+	unsigned int activeFocusGroupIndex;
 	FocusGroup* activeFocusGroup;
-
+	std::vector<FocusGroup*>* focusGroupSet;
 	bool mouseClicked;
 	int mouseClickedKey;
 	bool mouseMoved;
