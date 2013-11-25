@@ -17,6 +17,41 @@ OptionsManager* OptionsManager::getInstance()
 	return instance;
 }
 
+OptionsManager::~OptionsManager(void)
+{
+	delete internalResolution;
+	delete displayResolution;
+
+	delete cachedScreenRatio;
+	delete path;
+	delete defaultInternalResolution;
+	delete defaultDisplayResolution;
+
+}
+
+void OptionsManager::setDisplayResolution(sf::Vector2f* newDisplayResolution)
+{
+	if(displayResolution)
+	{
+		delete displayResolution;
+	}
+
+	displayResolution = newDisplayResolution;
+
+	writeChangedSettings();
+
+	optionsChanged = true;
+}
+
+void OptionsManager::setWideScreenMode(WideScreenMode newWideScreenMode)
+{
+	wideScreen = newWideScreenMode;
+
+	writeChangedSettings();
+
+	optionsChanged = true;
+}
+
 WideScreenMode OptionsManager::getWidescreenMode()
 {
 	switch (wideScreen)
@@ -30,6 +65,69 @@ WideScreenMode OptionsManager::getWidescreenMode()
 	default:
 		return WideScreenMode::NOTSET;
 	}
+}
+
+sf::Vector2f* OptionsManager::getFinalScreenRatio()
+{
+	if(cachedScreenRatio)
+	{
+		delete cachedScreenRatio;
+	}
+
+	float temp = 1.f;
+
+	switch (wideScreen)
+	{
+	case 0:
+		temp = 4.f/3.f;
+		break;
+	case 1:
+		temp = 16.f/9.f;
+		break;
+
+	case 2:
+		temp = 16.f/10.f;
+		break;
+	}
+
+	float adjustedXInternalResolution = internalResolution->x * temp;
+
+	cachedScreenRatio = new sf::Vector2f(displayResolution->x/adjustedXInternalResolution, displayResolution->y/internalResolution->y);
+
+	return cachedScreenRatio;
+}
+
+sf::Vector2f* OptionsManager::getCachedScreenRatio()
+{
+	if(!cachedScreenRatio)
+	{
+		return getFinalScreenRatio();
+	}
+	else
+	{
+		return cachedScreenRatio;
+	}
+}
+
+void OptionsManager::setFullScreen(int newFullScreen)
+{
+	fullscreen = newFullScreen;
+
+	optionsChanged = true;
+
+	writeChangedSettings();
+}
+
+void OptionsManager::setVsyncEnabled(int enabled)
+{
+	vSync = enabled;
+
+	if(windowPointer)
+	{
+		windowPointer->setVerticalSyncEnabled(enabled ? true : false);
+	}
+
+	writeChangedSettings();
 }
 
 void OptionsManager::setShowFps(bool newShowFps)
@@ -62,153 +160,6 @@ OptionsManager::OptionsManager() : path(new std::string ("settings.txt")),defaul
 	{
 		writeMissingDefault();
 	}
-}
-
-sf::Vector2f* OptionsManager::getCachedScreenRatio()
-{
-	if(!cachedScreenRatio)
-	{
-		return getFinalScreenRatio();
-	}
-	else
-	{
-		return cachedScreenRatio;
-	}
-}
-
-void OptionsManager::setDisplayResolution(sf::Vector2f* newDisplayResolution)
-{
-	if(displayResolution)
-	{
-		delete displayResolution;
-	}
-
-	displayResolution = newDisplayResolution;
-
-	writeChangedSettings();
-
-	optionsChanged = true;
-}
-
-void OptionsManager::setVsyncEnabled(int enabled)
-{
-	vSync = enabled;
-
-	if(windowPointer)
-	{
-		windowPointer->setVerticalSyncEnabled(enabled ? true : false);
-	}
-
-	writeChangedSettings();
-}
-
-void OptionsManager::setWideScreenMode(WideScreenMode newWideScreenMode)
-{
-	wideScreen = newWideScreenMode;
-
-	writeChangedSettings();
-
-	optionsChanged = true;
-}
-
-//screen ratio should be used on the root nodes, just that, see main.
-sf::Vector2f* OptionsManager::getFinalScreenRatio()
-{
-	if(cachedScreenRatio)
-	{
-		delete cachedScreenRatio;
-	}
-
-	float temp = 1.f;
-
-	switch (wideScreen)
-	{
-	case 0:
-		temp = 4.f/3.f;
-		break;
-	case 1:
-		temp = 16.f/9.f;
-		break;
-
-	case 2:
-		temp = 16.f/10.f;
-		break;
-	}
-
-	float adjustedXInternalResolution = internalResolution->x * temp;
-
-	cachedScreenRatio = new sf::Vector2f(displayResolution->x/adjustedXInternalResolution, displayResolution->y/internalResolution->y);
-
-	return cachedScreenRatio;
-}
-
-void OptionsManager::setFullScreen(int newFullScreen)
-{
-	fullscreen = newFullScreen;
-
-	optionsChanged = true;
-
-	writeChangedSettings();
-}
-
-void OptionsManager::read()
-{
-	std::ifstream fs;
-	fs.open(path->c_str(), std::ios::in);
-	if(!fs.is_open())
-	{
-		std::cerr << "couldn't open filestream" << std::endl;
-		return;
-	}
-
-	std::string line;
-
-	//read line, check which setting it is and interpret it's value
-	while (std::getline(fs, line, '='))
-	{
-		if(line.find("x internalResolution") != std::string::npos)
-		{
-			std::getline(fs, line);
-			internalResolution->x = std::stof(line);
-		}
-		else if(line.find("y internalResolution") != std::string::npos)
-		{
-			std::getline(fs, line);
-			internalResolution->y = std::stof(line);
-		}
-		else if(line.find("x resolution") != std::string::npos)
-		{
-			std::getline(fs, line);
-			displayResolution->x = std::stof(line);
-		} 
-		else if(line.find("y resolution") != std::string::npos)
-		{
-			std::getline(fs, line);
-			displayResolution->y = std::stof(line);
-		}
-		else if(line.find("fullscreen") != std::string::npos)
-		{
-			std::getline(fs, line);
-			fullscreen = std::stoi(line);
-		}
-		else if(line.find("vsync") != std::string::npos)
-		{
-			std::getline(fs, line);
-			vSync = std::stoi(line);
-		}
-		else if(line.find("wide") != std::string::npos)
-		{
-			std::getline(fs, line);
-			wideScreen = std::stoi(line);
-		}
-		else if(line.find("show fps") != std::string::npos)
-		{
-			std::getline(fs, line);
-			showFps = std::stoi(line);
-		}
-	}
-
-	fs.close();
 }
 
 void OptionsManager::writeMissingDefault()
@@ -309,14 +260,63 @@ void OptionsManager::writeChangedSettings()
 	}
 }
 
-OptionsManager::~OptionsManager(void)
+void OptionsManager::read()
 {
-	delete internalResolution;
-	delete displayResolution;
+	std::ifstream fs;
+	fs.open(path->c_str(), std::ios::in);
+	if(!fs.is_open())
+	{
+		std::cerr << "couldn't open filestream" << std::endl;
+		return;
+	}
 
-	delete cachedScreenRatio;
-	delete path;
-	delete defaultInternalResolution;
-	delete defaultDisplayResolution;
+	std::string line;
 
+	//read line, check which setting it is and interpret it's value
+	while (std::getline(fs, line, '='))
+	{
+		if(line.find("x internalResolution") != std::string::npos)
+		{
+			std::getline(fs, line);
+			internalResolution->x = std::stof(line);
+		}
+		else if(line.find("y internalResolution") != std::string::npos)
+		{
+			std::getline(fs, line);
+			internalResolution->y = std::stof(line);
+		}
+		else if(line.find("x resolution") != std::string::npos)
+		{
+			std::getline(fs, line);
+			displayResolution->x = std::stof(line);
+		} 
+		else if(line.find("y resolution") != std::string::npos)
+		{
+			std::getline(fs, line);
+			displayResolution->y = std::stof(line);
+		}
+		else if(line.find("fullscreen") != std::string::npos)
+		{
+			std::getline(fs, line);
+			fullscreen = std::stoi(line);
+		}
+		else if(line.find("vsync") != std::string::npos)
+		{
+			std::getline(fs, line);
+			vSync = std::stoi(line);
+		}
+		else if(line.find("wide") != std::string::npos)
+		{
+			std::getline(fs, line);
+			wideScreen = std::stoi(line);
+		}
+		else if(line.find("show fps") != std::string::npos)
+		{
+			std::getline(fs, line);
+			showFps = std::stoi(line);
+		}
+	}
+
+	fs.close();
 }
+

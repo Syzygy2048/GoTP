@@ -2,12 +2,13 @@
 
 #include <string>
 #include <SFML\Graphics.hpp>
-
-enum WideScreenMode {NOTSET=-1, NOWIDE = 0, SIXTEENBYNINE = 1, SIXTEENBYTEN = 2};
+#include "Enums.h"
 
 class OptionsManager
 {
 public:
+	static OptionsManager* getInstance();
+	~OptionsManager(void);
 
 	sf::Vector2f getInternalResolution(){ return *internalResolution; }
 
@@ -17,6 +18,7 @@ public:
 	void setWideScreenMode(WideScreenMode newWideScreenMode);
 	WideScreenMode getWidescreenMode();
 
+	//Final screen ratio should be used on the root nodes, just that.
 	sf::Vector2f* getFinalScreenRatio();
 	sf::Vector2f* getCachedScreenRatio();
 
@@ -32,49 +34,35 @@ public:
 	bool getOptionsChanged(){return optionsChanged;}
 	void informWindowReloaded(){optionsChanged = false;}
 	
-
-	static OptionsManager* getInstance();
-	~OptionsManager(void);
-
 	void setWindowInstance(sf::Window* newWindow){ windowPointer = newWindow;}
 
 private:
-	sf::Window* windowPointer;
-	OptionsManager* instance;
-	OptionsManager(void);									//private because singleton
-	OptionsManager(const OptionsManager&);					//prevents copy constructor
-	OptionsManager& operator = (const OptionsManager&);		//some reason I dont know why
-
-
-	/* Writes missing default values into the settings file (created if missing) and memory. Called from constructor. */
+	OptionsManager(void);									
+	OptionsManager(const OptionsManager&);				
+	OptionsManager& operator = (const OptionsManager&);	
+		
 	void writeMissingDefault();
-
-	/* Set's all the values to their default values. Changes need to be applied via writeChanged() to take effect. */
 	void setDefault();
-
-	/* Writes all changed values into the settings file and memory. */
 	void writeChangedSettings();
-
-	/* Reads all values from a setting file into memory. Called from the constructor. */
 	void read();
 
-	bool optionsChanged;
-
+	OptionsManager* instance;
+	sf::Vector2f* cachedScreenRatio;
+	std::string* path;
+	sf::Window* windowPointer;
 	sf::Vector2f* internalResolution;
 	sf::Vector2f* displayResolution;
+	sf::Vector2f* defaultInternalResolution;
+	sf::Vector2f* defaultDisplayResolution;
+
+	bool optionsChanged;
 	int fullscreen;
 	int showFps;
 	int vSync;
 	int wideScreen;
-
-	sf::Vector2f* defaultInternalResolution;
-	sf::Vector2f* defaultDisplayResolution;
 	int defaultFullscreen;
 	int defaultVSync;
 	int defaultWideScreen;
 	int defaultShowFps;
-
-	sf::Vector2f* cachedScreenRatio;
-	std::string* path;
 };
 

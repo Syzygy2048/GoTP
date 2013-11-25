@@ -5,11 +5,11 @@
 class AssetManager
 {
 public:
-	//avoid calling these, sprite classes already know how to handle subscriptions/unsubscriptions
-	 sf::Texture* getTexture(std::string textureName);
-	 void unsubscribeToTexture(sf::Texture* unsubscribing);
+	static AssetManager* getInstance();
 
-	 static AssetManager* getInstance();
+	//Sprite classes already know how to handle subscriptions/unsubscriptions, dont call these.
+	 sf::Texture* subscribeToTexture(std::string textureName);
+	 void unsubscribeToTexture(sf::Texture* unsubscribing);
 
 private:
 	AssetManager(void);										

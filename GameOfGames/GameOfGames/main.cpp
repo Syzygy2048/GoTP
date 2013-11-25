@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Box2D\Box2D.h"
+#include "Enums.h"
 #include <SFML/Graphics.hpp>
 #include "FocusGroup.h"
 #include "SceneGraph\SpriteNode.h"
@@ -13,6 +14,7 @@
 #include "OptionsManager.h"
 #include "TestClickListener.h"
 #include "UIViewListener.h"
+#include "MainNodesManager.h"
 #include "InputHandlerSFML.h"
 
 
@@ -20,19 +22,21 @@
 #define WINDOW_TITLE "Game of Thrones"
 
 std::vector<SceneNode*> rootNodes;
-std::vector<FocusGroup*>* focusGroups;
+
 
 UIView* fpsCounter;
-SceneNode* baseView;
 sf::RenderWindow* window;
 OptionsManager* manager;
-FocusGroup* group;
-FocusGroup* group2;
+InputHandlerSFML* inputHandler;
+MainNodesManager* baseNodesManager;
 
 void testingShit()
 {
 	//SpriteNode* newChar = new SpriteNode();
 	//newChar->setTexture("Tileset.png");
+	std::vector<FocusGroup*>* focusGroups;
+	FocusGroup* group;
+	FocusGroup* group2;
 
 	TestClickListener* viewListener = new TestClickListener();
 
@@ -43,6 +47,8 @@ void testingShit()
 
 	//panel->setHoverable(true);
 	//panel2->setHoverable(true);
+	//panel3->setHoverable(true);
+	//panel4->setHoverable(true);
 
 	panel->setUIViewListener(viewListener);
 	panel->setDrawAsPanel(true);
@@ -74,7 +80,7 @@ void testingShit()
 	group2->insertFocusable(panel4);
 
 	InputHandlerSFML::getInstance()->setFocusGroupSet(focusGroups);
-	group2->forceFocusable(0);
+	group2->selectFocusable(panel3);
 
 	//panel->removeTexture();
 	//panel->setTintColor(255,0,0);
@@ -103,6 +109,8 @@ void testingShit()
 	panel3->setOffSet(new sf::Vector2i(75,50));
 	panel4->setOffSet(new sf::Vector2i(75,50));
 
+	SceneNode* baseView = baseNodesManager->getRootNode(RootNodeType::HUD);
+
 	baseView->addNode(panel,sf::Vector2f(0.f,0.f));
 	baseView->addNode(panel2,sf::Vector2f(0.f,100.f));
 
@@ -111,8 +119,6 @@ void testingShit()
 
 	/*baseView->addNode(miniChar,sf::Vector2f(125.f,0.f));
 	baseView->addNode(third,sf::Vector2f(150.f,0.f));*/
-
-
 }
 
 void initWindow()
@@ -142,16 +148,26 @@ void initWindow()
 int main()
 {
 	manager = OptionsManager::getInstance();
-
-	InputHandlerSFML* input = InputHandlerSFML::getInstance();
+	inputHandler = InputHandlerSFML::getInstance();
 
 	initWindow();
 
-	baseView = new SceneNode();
+	SceneNode* bgNode = new SceneNode();
+	SceneNode* scenarioNode = new SceneNode();
+	SceneNode* hudNode = new SceneNode();
+
+	baseNodesManager = MainNodesManager::getInstance();
+
+	baseNodesManager->setRootNode(bgNode, RootNodeType::BACKGROUND);
+	baseNodesManager->setRootNode(scenarioNode, RootNodeType::SCENARIO);
+	baseNodesManager->setRootNode(hudNode,RootNodeType::HUD);
+
 	fpsCounter = new UIView(new sf::Vector2i(100,50));
 
 	//Base elements. HUD, scenario, etc.
-	rootNodes.push_back(baseView);
+	rootNodes.push_back(bgNode);
+	rootNodes.push_back(scenarioNode);
+	rootNodes.push_back(hudNode);
 	rootNodes.push_back(fpsCounter);
 
 	sf::Font font = sf::Font();
@@ -166,7 +182,7 @@ int main()
 
 	fpsCounter->setText(text);
 
-	fpsCounter ->setOffSet(new sf::Vector2i(55,25));
+	fpsCounter->setOffSet(new sf::Vector2i(55,25));
 
 	//tests yo
 	testingShit();
@@ -182,7 +198,7 @@ int main()
 		rootNode->setScale(*manager->getCachedScreenRatio());
 	}
 
-	InputHandlerSFML::getInstance()->informMouseMoved(sf::Mouse::getPosition(*window));
+	inputHandler->informMouseMoved(sf::Mouse::getPosition(*window));
 
 	int framesDrawn = 0;
 	float minimumTimeBetweenDpadInputs = 0.02f;
@@ -225,7 +241,7 @@ int main()
 
 		sf::Event event;
 
-		InputHandlerSFML::getInstance()->clearOcurredEvents();
+		inputHandler->clearOcurredEvents();
 
 		float previousHdPad =0;
 		float previousVdPad =0;
@@ -236,32 +252,36 @@ int main()
 			{
 			case sf::Event::MouseButtonPressed :
 				{
-					InputHandlerSFML::getInstance()->informMouseClicked(event.key.code);
+					inputHandler->informMouseClicked(event.key.code);
 					break;
 				}
 			case sf::Event::KeyPressed:
 				{
 					if(sf::Keyboard::A == event.key.code)
 					{
-						input->informDpadChanged(LEFT);
+						inputHandler->informDpadChanged(LEFT);
 					}
 					else if (sf::Keyboard::W == event.key.code)
 					{
-						input->informDpadChanged(UP);
+						inputHandler->informDpadChanged(UP);
 					}
 					else if (sf::Keyboard::D == event.key.code)
 					{
-						input->informDpadChanged(RIGHT);
+						inputHandler->informDpadChanged(RIGHT);
 					}
 					else if (sf::Keyboard::S == event.key.code)
 					{
-						input->informDpadChanged(DOWN);
+						inputHandler->informDpadChanged(DOWN);
+					}
+					else if (sf::Keyboard::Return == event.key.code)
+					{
+						inputHandler->informConfirmPressed(ConfirmSource::KEYBOARD,event.key.code);
 					}
 					break;
 				}
 			case sf::Event::MouseMoved:
 				{
-					InputHandlerSFML::getInstance()->informMouseMoved(sf::Mouse::getPosition(*window));
+					inputHandler->informMouseMoved(sf::Mouse::getPosition(*window));
 					break;
 				}
 			case sf::Event::Closed :
@@ -272,12 +292,12 @@ int main()
 				}
 			case sf::Event::MouseLeft:
 				{
-					InputHandlerSFML::getInstance()->informMouseMoved(sf::Vector2i(-1,-1));
+					inputHandler->informMouseMoved(sf::Vector2i(-1,-1));
 					break;
 				}
 			case sf::Event::JoystickButtonPressed:
 				{
-					//std::cout<<event.joystickButton.button<<"\n";
+					inputHandler->informConfirmPressed(ConfirmSource::JOYSTICK,event.key.code);
 
 					break;
 				}
@@ -296,21 +316,21 @@ int main()
 
 						if(previousHdPad > -100 && sf::Joystick::getAxisPosition(0, sf::Joystick::PovY) == -100 )
 						{
-							input->informDpadChanged(LEFT);
+							inputHandler->informDpadChanged(LEFT);
 						}
 
 						else if(previousHdPad < 100 && sf::Joystick::getAxisPosition(0, sf::Joystick::PovY) == 100 )
 						{
-							input->informDpadChanged(RIGHT);
+							inputHandler->informDpadChanged(RIGHT);
 						}
 
 						if(previousVdPad > -100 && sf::Joystick::getAxisPosition(0, sf::Joystick::PovX) == -100 )
 						{
-							input->informDpadChanged(DOWN);
+							inputHandler->informDpadChanged(DOWN);
 						}
 						else if(previousVdPad < 100 && sf::Joystick::getAxisPosition(0, sf::Joystick::PovX) == 100 )
 						{
-							input->informDpadChanged(UP);
+							inputHandler->informDpadChanged(UP);
 						}
 					}
 
@@ -330,33 +350,39 @@ int main()
 			timeSinceLastDpadInput += elapsed.asSeconds();
 		}
 
-		float timeToConsume = remainingTime + elapsed.asSeconds();
-		float cachedTime = timeToConsume;
+		inputHandler->setMouseInteractive(NULL);
 
-		InputHandlerSFML::getInstance()->clearClickable();
+		/*float timeToConsume = remainingTime + elapsed.asSeconds();
+		float cachedTime = timeToConsume;
 
 		while(timeToConsume >= TIMESTEP)
 		{
-			timeToConsume -= TIMESTEP;
 
-			for(SceneNode* node : rootNodes)
-			{
-				node->tick(TIMESTEP);				
-			}
+		timeToConsume -= TIMESTEP;
+
+		for(SceneNode* node : rootNodes)
+		{
+		node->tick(TIMESTEP);				
+		}
 		}
 
-		remainingTime = timeToConsume;
+		remainingTime = timeToConsume;*/
+
+		for(SceneNode* node : rootNodes)
+		{
+			node->tick(elapsed.asSeconds());				
+		}
 
 		window->clear();
 
 		for(SceneNode* node : rootNodes)
 		{
-			node->draw(cachedTime-remainingTime, window, sf::Transform());
+			node->draw(elapsed.asSeconds(), window, sf::Transform());
 		}
 
 		framesDrawn ++;
 
-		InputHandlerSFML::getInstance()->checkOnClickable();
+		inputHandler->checkOnMouseInteractive();
 
 		window->display();
 
@@ -372,6 +398,9 @@ int main()
 	}
 
 	delete window;
+	delete baseNodesManager;
+	delete inputHandler;
+	delete manager;
 
 	return 0;
 }

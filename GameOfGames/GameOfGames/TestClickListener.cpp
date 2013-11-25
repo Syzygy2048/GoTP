@@ -42,24 +42,24 @@ void TestClickListener::viewFocused(UIView* sender, bool focusedState)
 	}
 }
 
-void TestClickListener::viewClicked(UIView* sender, int key)
+void TestClickListener::viewSelected(UIView* sender, ConfirmSource source, int key)
 {
-	if(key)
+	if(source == ConfirmSource::MOUSE && key == sf::Mouse::Left
+		|| source == ConfirmSource::KEYBOARD && key == sf::Keyboard::Return
+		|| source == ConfirmSource::JOYSTICK && !key)
 	{
-		return;
+		sf::Font font;
+
+		font.loadFromFile("Assets/Fonts/arial.ttf");
+
+		sf::Text* text = new sf::Text("hello", font);
+
+		text->setCharacterSize(30);
+
+		text->setStyle(sf::Text::Italic);
+
+		text->setColor(sf::Color::Red);
+
+		sender->setText(text);
 	}
-
-	sf::Font font;
-
-	font.loadFromFile("arial.ttf");
-
-	sf::Text* text = new sf::Text("hello", font);
-
-	text->setCharacterSize(30);
-
-	text->setStyle(sf::Text::Italic);
-
-	text->setColor(sf::Color::Red);
-
-	sender->setText(text);
 }

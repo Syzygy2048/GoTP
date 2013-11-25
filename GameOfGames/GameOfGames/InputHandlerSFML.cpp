@@ -8,29 +8,87 @@ InputHandlerSFML::InputHandlerSFML(void)
 
 }
 
-void InputHandlerSFML::setFocusGroupSet(std::vector<FocusGroup*>* set)
+InputHandlerSFML* InputHandlerSFML::getInstance()
 {
-	focusGroupSet = set;
+	static InputHandlerSFML* instance;
 
-	if(focusGroupSet)
+	if(!instance)
 	{
-		setActiveFocusGroup(focusGroupSet->at(0));
+		instance = new InputHandlerSFML();
 	}
-	else
-	{
-		if(activeFocusGroup)
-		{
-			activeFocusGroup->setActive(false);
 
-			activeFocusGroup = NULL;
-		}
-	}
+	return instance;
+}
+
+void InputHandlerSFML::clearOcurredEvents()
+{
+	mouseClicked = false;
+	mouseClickedKey = -1;
 }
 
 void InputHandlerSFML::informMouseClicked(int key)
 {
 	mouseClicked = true;
 	mouseClickedKey = key;
+}
+
+void InputHandlerSFML::informMouseMoved(sf::Vector2i location)
+{
+	mousePos = location;
+}
+
+void InputHandlerSFML::setMouseInteractive(UIView* clicked)
+{
+	mouseInteractive = clicked;
+}
+
+void InputHandlerSFML::checkOnMouseInteractive()
+{
+	if (mouseInteractive && mouseInteractive->getFocusable())
+	{
+		if(!mouseInteractive->getHoveredState() && mouseInteractive->isHoverable())
+		{
+			if (lastMouseInteractive)
+			{
+				lastMouseInteractive->setHoveredState(false);
+			}
+
+			lastMouseInteractive = mouseInteractive;
+
+			lastMouseInteractive->setHoveredState(true);
+		}
+		else if(mouseInteractive->getHoveredState() && !mouseInteractive->isHoverable())
+		{
+			mouseInteractive->setHoveredState(false);
+
+			lastMouseInteractive = NULL;
+		}
+		else if(lastMouseInteractive && lastMouseInteractive!= mouseInteractive)
+		{
+			lastMouseInteractive->setHoveredState(false);
+
+			lastMouseInteractive = NULL;
+		}
+
+		if(mouseClicked)
+		{
+			mouseInteractive->activated(ConfirmSource::MOUSE,mouseClickedKey);
+		}
+	}
+	else if(lastMouseInteractive)
+	{
+		lastMouseInteractive->setHoveredState(false);
+
+		lastMouseInteractive = NULL;
+	}
+}
+
+void InputHandlerSFML::informConfirmPressed(ConfirmSource source, int key)
+{
+	if(activeFocusGroup)
+	{
+		activeFocusGroup->focusableSelected(source, key);
+	}
 }
 
 void InputHandlerSFML::setActiveFocusGroup(unsigned int index)
@@ -43,66 +101,6 @@ void InputHandlerSFML::setActiveFocusGroup(unsigned int index)
 	{
 		std::cout<<"Couldnt set an active focus group by index because there isnt a focus group set or because the index is out of bounds of the set.\n";
 	}
-}
-
-void  InputHandlerSFML::informDpadChanged(DpadDirection direction)
-{
-	if(activeFocusGroup)
-	{
-		if((direction == UP || direction == DOWN)&& activeFocusGroup->getOrientation() == HORIZONTAL || 
-			(direction == LEFT || direction == RIGHT)&& activeFocusGroup->getOrientation() == VERTICAL )
-		{
-			if(focusGroupSet)
-			{
-				if(direction == UP || direction == LEFT)
-				{
-					if(activeFocusGroupIndex > 0)
-					{
-						setActiveFocusGroup(activeFocusGroupIndex--);
-					}
-				}
-				else if(activeFocusGroupIndex < focusGroupSet->size()-1)
-				{
-					setActiveFocusGroup(activeFocusGroupIndex++);
-				}
-			}
-			return;
-		}
-
-		if(activeFocusGroup->getOrientation()==VERTICAL)
-		{
-			activeFocusGroup->changeFocusable(direction == DOWN);
-		}
-		else
-		{
-			activeFocusGroup->changeFocusable(direction == LEFT);
-		}
-	}
-}
-
-void InputHandlerSFML::informMouseMoved(sf::Vector2i location)
-{
-	mouseMoved = true;
-
-	mousePos = location;
-
-}
-
-void InputHandlerSFML::clearOcurredEvents()
-{
-	mouseClicked = false;
-	mouseClickedKey = -1;
-	mouseMoved = false;
-}
-
-void InputHandlerSFML::clearClickable()
-{
-	drawnClickable = NULL;
-}
-
-void InputHandlerSFML::setDrawnClickable(UIView* clicked)
-{
-	drawnClickable = clicked;
 }
 
 void InputHandlerSFML::setActiveFocusGroup(FocusGroup* group)
@@ -132,59 +130,60 @@ void InputHandlerSFML::setActiveFocusGroup(FocusGroup* group)
 	}
 }
 
-void InputHandlerSFML::checkOnClickable()
+void InputHandlerSFML::setFocusGroupSet(std::vector<FocusGroup*>* set)
 {
-	if (drawnClickable && drawnClickable->getFocusable())
+	focusGroupSet = set;
+
+	if(focusGroupSet)
 	{
-		if(!drawnClickable->getHoveredState() && drawnClickable->isHoverable())
+		setActiveFocusGroup(focusGroupSet->at(0));
+	}
+	else
+	{
+		if(activeFocusGroup)
 		{
-			if (lastHovered)
+			activeFocusGroup->setActive(false);
+
+			activeFocusGroup = NULL;
+		}
+	}
+}
+
+void  InputHandlerSFML::informDpadChanged(DpadDirection direction)
+{
+	if(activeFocusGroup)
+	{
+		if((direction == UP || direction == DOWN)&& activeFocusGroup->getOrientation() == HORIZONTAL || 
+			(direction == LEFT || direction == RIGHT)&& activeFocusGroup->getOrientation() == VERTICAL )
+		{
+			if(focusGroupSet)
 			{
-				lastHovered->setHoveredState(false);
+				if(direction == UP || direction == LEFT)
+				{
+					if(activeFocusGroupIndex > 0)
+					{
+						setActiveFocusGroup(activeFocusGroupIndex--);
+					}
+				}
+				else if(activeFocusGroupIndex < focusGroupSet->size()-1)
+				{
+					setActiveFocusGroup(activeFocusGroupIndex++);
+				}
 			}
-
-			lastHovered = drawnClickable;
-
-			lastHovered->setHoveredState(true);
+			return;
 		}
-		else if(drawnClickable->getHoveredState() && !drawnClickable->isHoverable())
+
+		if(activeFocusGroup->getOrientation()==VERTICAL)
 		{
-			drawnClickable->setHoveredState(false);
-
-			lastHovered = NULL;
+			activeFocusGroup->iterateFocusables(direction == DOWN);
 		}
-		else if(lastHovered && lastHovered!= drawnClickable)
+		else
 		{
-			lastHovered->setHoveredState(false);
-
-			lastHovered = NULL;
+			activeFocusGroup->iterateFocusables(direction == LEFT);
 		}
-
-		if(mouseClicked)
-		{
-			drawnClickable->activated(mouseClickedKey);
-		}
-	}
-	else if(lastHovered)
-	{
-		lastHovered->setHoveredState(false);
-
-		lastHovered = NULL;
 	}
 }
 
-InputHandlerSFML* InputHandlerSFML::getInstance()
-{
-	static InputHandlerSFML* instance;
 
-	if(!instance)
-	{
-		instance = new InputHandlerSFML();
-	}
 
-	return instance;
-}
 
-InputHandlerSFML::~InputHandlerSFML(void)
-{
-}

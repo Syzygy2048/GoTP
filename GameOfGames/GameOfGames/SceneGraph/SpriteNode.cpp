@@ -24,7 +24,7 @@ void SpriteNode::setOffSet(sf::Vector2i* newOffset)
 
 void SpriteNode::setTexture(std::string textureName)
 {
-	sf::Texture* newTexture = AssetManager::getInstance()->getTexture(textureName);
+	sf::Texture* newTexture = AssetManager::getInstance()->subscribeToTexture(textureName);
 
 	if(!newTexture)
 	{

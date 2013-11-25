@@ -45,11 +45,17 @@ void UIView::setUIViewListener(UIViewListener* newListener)
 	listener = newListener;
 }
 
-void UIView::activated(int key)
+void UIView::activated(ConfirmSource source, int key)
 {
+	if(group)
+	{
+		InputHandlerSFML::getInstance()->setActiveFocusGroup(group);
+		group->selectFocusable(this);
+	}
+
 	if(listener)
 	{
-		listener->viewClicked(this,key);
+		listener->viewSelected(this, source,key);
 	}
 }
 
@@ -122,7 +128,7 @@ void UIView::onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform par
 		return;
 	}
 
-	sf::FloatRect rect = sf::FloatRect(float(-size->x)/2+offset->x,float(-size->y)/2,float(size->x),float(size->y)+offset->y);
+	sf::FloatRect rect = sf::FloatRect((float(-size->x)/2)+offset->x,(float(-size->y)/2)+offset->y,float(size->x),float(size->y));
 
 	sf::Transform inverse = parentTranform.getInverse();
 
@@ -132,7 +138,7 @@ void UIView::onDraw(float deltaTime, sf::RenderWindow* target, sf::Transform par
 
 	if(rect.contains(transformedPoint))
 	{
-		InputHandlerSFML::getInstance()->setDrawnClickable(this);
+		InputHandlerSFML::getInstance()->setMouseInteractive(this);
 	}
 }
 
@@ -141,7 +147,7 @@ void UIView::adjustBackGround()
 {
 	if (!drawAsPanel)
 	{
-		//it may be bugged as fuck.
+		//it may be bugged as fuck. Use the sprite node is possible.
 		sf::RenderTexture* destinationTexture = new sf::RenderTexture();
 
 		destinationTexture->create(size->x,size->y);
@@ -186,132 +192,134 @@ void UIView::adjustBackGround()
 
 		return;
 	}
-
-	sprite->setScale(1,1);
-
-	sf::RenderTexture* destinationTexture =new sf::RenderTexture();
-
-	destinationTexture->create(size->x,size->y);
-
-	destinationTexture->setSmooth(true);
-
-	if(texture)
+	else
 	{
-		int tileSize = texture->getSize().x/3;
+		sprite->setScale(1,1);
 
-		if (tileSize*2 > size->x || tileSize*2 > size->y)
+		sf::RenderTexture* destinationTexture =new sf::RenderTexture();
+
+		destinationTexture->create(size->x,size->y);
+
+		destinationTexture->setSmooth(true);
+
+		if(texture)
 		{
-			std::cout<< "Size of view too small for texture selected.\n";
-		}
-		else
-		{
-			destinationTexture->clear(sf::Color::Transparent);
+			int tileSize = texture->getSize().x/3;
 
-			sf::Sprite tempSprite = sf::Sprite();
-
-			tempSprite.setTexture(*texture);
-
-			int verticalFillSpace = size->y;
-			int verticalDrawingPoint = 0;
-
-			while (verticalFillSpace > 0)
+			if (tileSize*2 > size->x || tileSize*2 > size->y)
 			{
-				int referenceVerticalPoint = 0;
+				std::cout<< "Size of view too small for texture selected.\n";
+			}
+			else
+			{
+				destinationTexture->clear(sf::Color::Transparent);
 
-				//are we not filling the first line?
-				if(verticalDrawingPoint)
+				sf::Sprite tempSprite = sf::Sprite();
+
+				tempSprite.setTexture(*texture);
+
+				int verticalFillSpace = size->y;
+				int verticalDrawingPoint = 0;
+
+				while (verticalFillSpace > 0)
 				{
-					//are we filling the bottom?
-					if (verticalFillSpace <= tileSize)
+					int referenceVerticalPoint = 0;
+
+					//are we not filling the first line?
+					if(verticalDrawingPoint)
 					{
-						referenceVerticalPoint = tileSize*2;
+						//are we filling the bottom?
+						if (verticalFillSpace <= tileSize)
+						{
+							referenceVerticalPoint = tileSize*2;
+						}
+						else
+						{
+							referenceVerticalPoint = tileSize;
+						}
+					}
+
+					//we draw the left chunk
+					tempSprite.setPosition(0.f,float(verticalDrawingPoint));
+					tempSprite.setTextureRect(sf::IntRect(0,referenceVerticalPoint,tileSize,tileSize));
+					destinationTexture->draw(tempSprite);
+
+					//the right chunk
+					tempSprite.setPosition(float(size->x-tileSize),float(verticalDrawingPoint));
+					tempSprite.setTextureRect(sf::IntRect(tileSize*2,referenceVerticalPoint,tileSize,tileSize));
+					destinationTexture->draw(tempSprite);
+
+					int horizontalFillingSpace = size->x - (tileSize*2);
+					int horizontalDrawingPoint = tileSize;
+
+					tempSprite.setTextureRect(sf::IntRect(tileSize,referenceVerticalPoint,tileSize,tileSize));
+
+					//now we fill the horizontal gap
+					while (horizontalFillingSpace > 0)
+					{
+						//are we drawing the last one?
+						if (horizontalFillingSpace<tileSize)
+						{
+							tempSprite.setTextureRect(sf::IntRect(tileSize,referenceVerticalPoint,horizontalFillingSpace,tileSize));
+						}
+
+						tempSprite.setPosition(float(horizontalDrawingPoint),float(verticalDrawingPoint));
+						destinationTexture->draw(tempSprite);
+
+						horizontalDrawingPoint +=tileSize;
+						horizontalFillingSpace -= tileSize;
+					}
+
+					verticalFillSpace -= tileSize;
+
+					if (verticalFillSpace < tileSize)
+					{
+						verticalDrawingPoint += verticalFillSpace;
 					}
 					else
 					{
-						referenceVerticalPoint = tileSize;
+						verticalDrawingPoint += tileSize;
 					}
-				}
-
-				//we draw the left chunk
-				tempSprite.setPosition(0.f,float(verticalDrawingPoint));
-				tempSprite.setTextureRect(sf::IntRect(0,referenceVerticalPoint,tileSize,tileSize));
-				destinationTexture->draw(tempSprite);
-
-				//the right chunk
-				tempSprite.setPosition(float(size->x-tileSize),float(verticalDrawingPoint));
-				tempSprite.setTextureRect(sf::IntRect(tileSize*2,referenceVerticalPoint,tileSize,tileSize));
-				destinationTexture->draw(tempSprite);
-
-				int horizontalFillingSpace = size->x - (tileSize*2);
-				int horizontalDrawingPoint = tileSize;
-
-				tempSprite.setTextureRect(sf::IntRect(tileSize,referenceVerticalPoint,tileSize,tileSize));
-
-				//now we fill the horizontal gap
-				while (horizontalFillingSpace > 0)
-				{
-					//are we drawing the last one?
-					if (horizontalFillingSpace<tileSize)
-					{
-						tempSprite.setTextureRect(sf::IntRect(tileSize,referenceVerticalPoint,horizontalFillingSpace,tileSize));
-					}
-
-					tempSprite.setPosition(float(horizontalDrawingPoint),float(verticalDrawingPoint));
-					destinationTexture->draw(tempSprite);
-
-					horizontalDrawingPoint +=tileSize;
-					horizontalFillingSpace -= tileSize;
-				}
-
-				verticalFillSpace -= tileSize;
-
-				if (verticalFillSpace < tileSize)
-				{
-					verticalDrawingPoint += verticalFillSpace;
-				}
-				else
-				{
-					verticalDrawingPoint += tileSize;
 				}
 			}
 		}
-	}
-	else
-	{
-		if (alwaysUseClearBg)
-		{
-			destinationTexture->clear(sf::Color::Transparent);
-		}
 		else
 		{
-			destinationTexture->clear(sprite->getColor());
+			if (alwaysUseClearBg)
+			{
+				destinationTexture->clear(sf::Color::Transparent);
+			}
+			else
+			{
+				destinationTexture->clear(sprite->getColor());
+			}
+
 		}
 
+		if(text)
+		{
+			destinationTexture->draw(*text);
+		}
+
+		destinationTexture->display();
+
+		if(finalTexture)
+		{
+			sprite->move(float(finalTexture->getSize().x)/2,float((finalTexture->getSize().y)/2));
+
+			delete finalTexture;
+		}
+
+		finalTexture = new sf::Texture(destinationTexture->getTexture());
+
+		delete destinationTexture;
+
+		finalTexture->setSmooth(true);
+
+		sprite->setTexture(*finalTexture);
+
+		sprite->move(-float(finalTexture->getSize().x)/2,-float((finalTexture->getSize().y)/2));
 	}
-
-	if(text)
-	{
-		destinationTexture->draw(*text);
-	}
-
-	destinationTexture->display();
-
-	if(finalTexture)
-	{
-		sprite->move(float(finalTexture->getSize().x)/2,float((finalTexture->getSize().y)/2));
-
-		delete finalTexture;
-	}
-
-	finalTexture = new sf::Texture(destinationTexture->getTexture());
-
-	delete destinationTexture;
-
-	finalTexture->setSmooth(true);
-
-	sprite->setTexture(*finalTexture);
-
-	sprite->move(-float(finalTexture->getSize().x)/2,-float((finalTexture->getSize().y)/2));
 }
 
 void UIView::configInitialSettings(sf::Vector2i* newSize)

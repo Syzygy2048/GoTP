@@ -3,31 +3,19 @@
 #include "InputHandlerSFML.h"
 #include "SceneGraph\UIView.h"
 
-void AssetManager::unsubscribeToTexture(sf::Texture* texture)
+AssetManager* AssetManager::getInstance()
 {
-	for(unsigned int i = 0; i < texturesData->size();i++)
+	static AssetManager* instance;
+
+	if (!instance)
 	{
-		TextureData* data = texturesData->at(i);
-
-		if (texture == data->texture)
-		{
-			data->usersAmount--;
-
-			if (!data->usersAmount)
-			{
-				texturesData->erase(texturesData->begin()+i);
-
-				delete data->texture;
-
-				delete data->textureName;
-
-				delete data;
-			}
-		}
+		instance = new AssetManager();
 	}
+
+	return instance;
 }
 
-sf::Texture* AssetManager::getTexture(std::string textureName)
+sf::Texture* AssetManager::subscribeToTexture(std::string textureName)
 {
 	for each (TextureData* data in *texturesData)
 	{
@@ -68,19 +56,31 @@ sf::Texture* AssetManager::getTexture(std::string textureName)
 	}
 }
 
+void AssetManager::unsubscribeToTexture(sf::Texture* texture)
+{
+	for(unsigned int i = 0; i < texturesData->size();i++)
+	{
+		TextureData* data = texturesData->at(i);
+
+		if (texture == data->texture)
+		{
+			data->usersAmount--;
+
+			if (!data->usersAmount)
+			{
+				texturesData->erase(texturesData->begin()+i);
+
+				delete data->texture;
+
+				delete data->textureName;
+
+				delete data;
+			}
+		}
+	}
+}
+
 AssetManager::AssetManager()
 {
 	texturesData = new std::vector<TextureData*>();
-}
-
-AssetManager* AssetManager::getInstance()
-{
-	static AssetManager* instance;
-
-	if (!instance)
-	{
-		instance = new AssetManager();
-	}
-
-	return instance;
 }

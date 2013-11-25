@@ -1,5 +1,6 @@
 #include "FocusGroup.h"
 #include "SceneGraph\UIView.h"
+#include "InputHandlerSFML.h"
 
 FocusGroup::FocusGroup()
 {
@@ -8,7 +9,60 @@ FocusGroup::FocusGroup()
 	isActive = false;
 }
 
-void FocusGroup::changeFocusable(bool positiveAxis)
+FocusGroup::~FocusGroup(void)
+{
+	if(focusables)
+	{
+		for each (UIView* focusable in *focusables)
+		{
+			focusable->setFocusGroup(NULL);
+		}
+
+		delete focusables;
+	}
+}
+
+void FocusGroup::insertFocusable(UIView* newFocusable)
+{
+	newFocusable->setFocusGroup(this);
+
+	if (!focusables)
+	{
+		focusedIndex = 0;
+		focusables = new std::vector<UIView*>();
+		currentFocused = newFocusable;
+
+		if(isActive)
+		{
+			currentFocused->setFocusedState(true);
+		}
+	}
+
+	focusables->push_back(newFocusable);
+}
+
+void FocusGroup::removeFocusable(UIView* toRemove)
+{
+	if(focusables)
+	{
+		focusables->erase(std::remove(focusables->begin(), focusables->end(), toRemove), focusables->end());
+
+		if(focusedIndex == focusables->size())
+		{
+			focusedIndex--;
+		}
+	}
+}
+
+void FocusGroup::focusableSelected(ConfirmSource source, int key)
+{
+	if(currentFocused)
+	{
+		currentFocused->activated(source, key);
+	}
+}
+
+void FocusGroup::iterateFocusables(bool positiveAxis)
 {
 	if(focusables->size()==0)
 	{
@@ -48,39 +102,19 @@ void FocusGroup::changeFocusable(bool positiveAxis)
 	currentFocused->setFocusedState(true);
 }
 
-void FocusGroup::insertFocusable(UIView* newFocusable)
+void FocusGroup::selectFocusable(UIView* focusable)
 {
-	newFocusable->setFocusGroup(this);
-
-	if (!focusables)
+	for (int i = 0; i < focusables->size(); i++)
 	{
-		focusedIndex = 0;
-		focusables = new std::vector<UIView*>();
-		currentFocused = newFocusable;
-
-		if(isActive)
+		if (focusables->at(i) == focusable)
 		{
-			currentFocused->setFocusedState(true);
-		}
-	}
-
-	focusables->push_back(newFocusable);
-}
-
-void FocusGroup::removeFocusable(UIView* toRemove)
-{
-	if(focusables)
-	{
-		focusables->erase(std::remove(focusables->begin(), focusables->end(), toRemove), focusables->end());
-
-		if(focusedIndex == focusables->size())
-		{
-			focusedIndex--;
+			selectFocusable(i);
+			return;
 		}
 	}
 }
 
-void FocusGroup::forceFocusable(int index)
+void FocusGroup::selectFocusable(unsigned int index)
 {
 	if(currentFocused)
 	{
@@ -111,15 +145,3 @@ void FocusGroup::setActive(bool newisActive)
 	}
 }
 
-FocusGroup::~FocusGroup(void)
-{
-	if(focusables)
-	{
-		for each (UIView* focusable in *focusables)
-		{
-			focusable->setFocusGroup(NULL);
-		}
-
-		delete focusables;
-	}
-}
